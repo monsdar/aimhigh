@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="11.5.1">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>380</x>
+      <y>110</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>ITaskFactory
+--
++ createTask(text: string): Task
++ readTasks(): array&lt;Task&gt;
++ updateTask(task: Task)
++ deleteTask(task: Task)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>790</x>
+      <y>90</y>
+      <w>150</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>Task
+--
+c Task(id: integer)
++ setText(text: string)
++ getText(): string
++ getIndex(): integer
+--
+id : integer
+text : string
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>350</x>
+      <y>320</y>
+      <w>300</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>MysqlTaskFactory
+--
+c MysqlTaskFactory(mysql: MysqlConnector)
+--
++ createTask(text: string): Task
++ readTasks(): array&lt;Task&gt;
++ updateTask(task: Task)
++ deleteTask(task: Task)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>790</x>
+      <y>340</y>
+      <w>150</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>MysqlConnector
+--
+c MysqlConnector()
++ isConnected(): bool</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>470</x>
+      <y>180</y>
+      <w>50</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;140</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>580</x>
+      <y>140</y>
+      <w>230</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>210;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>620</x>
+      <y>350</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>170;30;30;30</additional_attributes>
+  </element>
+</diagram>
