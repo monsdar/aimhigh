@@ -4,12 +4,12 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>380</x>
-      <y>110</y>
+      <x>120</x>
+      <y>120</y>
       <w>230</w>
       <h>100</h>
     </coordinates>
-    <panel_attributes>ITaskFactory
+    <panel_attributes>ITaskStorage
 --
 + createTask(text: string): Task
 + readTasks(): array&lt;Task&gt;
@@ -20,39 +20,39 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>790</x>
-      <y>90</y>
-      <w>150</w>
-      <h>140</h>
+      <x>430</x>
+      <y>100</y>
+      <w>240</w>
+      <h>190</h>
     </coordinates>
     <panel_attributes>Task
 --
 c Task(id: integer)
+c Task(id: integer, text: string)
++ getIndex(): integer
 + setText(text: string)
 + getText(): string
-+ getIndex(): integer
++ getActivations(): array&lt;Activation&gt;
 --
-id : integer
+index : integer
 text : string
+activations: array&lt;Activation&gt;
 </panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>350</x>
-      <y>320</y>
+      <x>430</x>
+      <y>330</y>
       <w>300</w>
-      <h>120</h>
+      <h>70</h>
     </coordinates>
-    <panel_attributes>MysqlTaskFactory
+    <panel_attributes>MysqlTaskStorage
 --
-c MysqlTaskFactory(mysql: MysqlConnector)
+c MysqlTaskStorage(mysql: MysqlConnector)
 --
-+ createTask(text: string): Task
-+ readTasks(): array&lt;Task&gt;
-+ updateTask(task: Task)
-+ deleteTask(task: Task)</panel_attributes>
+Interface implementation</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
@@ -72,34 +72,175 @@ c MysqlConnector()
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>470</x>
-      <y>180</y>
-      <w>50</w>
-      <h>160</h>
+      <x>200</x>
+      <y>190</y>
+      <w>250</w>
+      <h>210</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>30;30;30;140</additional_attributes>
+    <additional_attributes>30;30;30;190;230;190</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>580</x>
-      <y>140</y>
-      <w>230</w>
+      <x>320</x>
+      <y>150</y>
+      <w>130</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>210;30;30;30</additional_attributes>
+    <additional_attributes>110;30;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>620</x>
+      <x>700</x>
       <y>350</y>
-      <w>190</w>
+      <w>110</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
-    <additional_attributes>170;30;30;30</additional_attributes>
+    <additional_attributes>90;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>730</x>
+      <y>100</y>
+      <w>210</w>
+      <h>150</h>
+    </coordinates>
+    <panel_attributes>Activation
+--
+c Activation()
+c Activation(id: integer)
++ getIndex(): integer
++ getTimestamp(): integer
++ setTimestamp(time: integer)
+--
+index : integer
+timestamp : integer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>980</x>
+      <y>70</y>
+      <w>190</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Initializes with
+index = 0
+timestamp = now()</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>640</x>
+      <y>150</y>
+      <w>110</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>700</x>
+      <y>440</y>
+      <w>180</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>160;70;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>910</x>
+      <y>100</y>
+      <w>90</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>70;30;30;80</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>430</x>
+      <y>430</y>
+      <w>300</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>MongoTaskStorage
+--
+c MongoTaskStorage()
+--
+Interface implementation</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>430</x>
+      <y>530</y>
+      <w>300</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>XmlTaskStorage
+--
+c XmlTaskStorage()
+--
+Interface implementation</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>700</x>
+      <y>500</y>
+      <w>180</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>160;30;30;70</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Note</type>
+    <coordinates>
+      <x>860</x>
+      <y>500</y>
+      <w>160</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>Just examples what
+would be possible</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>180</x>
+      <y>190</y>
+      <w>270</w>
+      <h>310</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;290;250;290</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>160</x>
+      <y>190</y>
+      <w>290</w>
+      <h>410</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>30;30;30;390;270;390</additional_attributes>
   </element>
 </diagram>
