@@ -6,6 +6,7 @@ require_once("MysqlConnector.php");
 
 //the connector holds the mysql-connection
 //$mysql = new MysqlConnector();
+//$storage = new MysqlTaskStorage($mysql);
 $storage = new TempTaskStorage($mysql);
 
 //create some tasks
