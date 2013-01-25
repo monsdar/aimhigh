@@ -1,30 +1,25 @@
 <?php
 
-require_once './MysqlConnector.php';
+require_once("TempTaskStorage.php");
+require_once("MysqlTaskStorage.php");
+require_once("MysqlConnector.php");
 
 //the connector holds the mysql-connection
-$mysql = new MysqlConnector();
+//$mysql = new MysqlConnector();
+$storage = new TempTaskStorage($mysql);
 
-echo("IsConnected: " . $mysql->isConnected() . "<br/>");
+//create some tasks
+$storage->createTask("This is the first task");
+$storage->createTask("This is the second task");
 
-//get the tasks
-$tasksQuery = "SELECT * FROM tasks";
-$tasksResult = mysql_query($tasksQuery);
+//read the tasks
+$tasks = $storage->readTasks();
 
-//check if there are any results
-if(!$tasksResult)
-{
-    echo("ERROR: Cannot get any tasks<br/>");
-}
-else
-{
-    echo("<br/>Tasks:<br/>");
-}
+//update a task
+$tasks[0]->setText("Im edited now!");
+$storage->updateTask($tasks[0]);
 
-//iterate through the results (if any) and print them
-while($row = mysql_fetch_array($tasksResult) )
-{
-    echo($row['TaskId'] . " - " . $row['text'] . "<br/>");
-}
+//finally, delete one of the tasks
+$storage->deleteTask($tasks[1]);
 
 ?>
