@@ -23,7 +23,7 @@
       <x>430</x>
       <y>100</y>
       <w>240</w>
-      <h>190</h>
+      <h>200</h>
     </coordinates>
     <panel_attributes>Task
 --
@@ -33,6 +33,7 @@ c Task(id: integer, text: string)
 + setText(text: string)
 + getText(): string
 + getActivations(): array&lt;Activation&gt;
++ addActivation()
 --
 index : integer
 text : string
