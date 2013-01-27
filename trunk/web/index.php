@@ -1,13 +1,11 @@
 <?php
 
-require_once("TempTaskStorage.php");
 require_once("MysqlTaskStorage.php");
 require_once("MysqlConnector.php");
 
 //the connector holds the mysql-connection
-//$mysql = new MysqlConnector();
-//$storage = new MysqlTaskStorage($mysql);
-$storage = new TempTaskStorage();
+$mysql = new MysqlConnector();
+$storage = new MysqlTaskStorage($mysql);
 
 //create some tasks
 $storage->createTask("This is the first task");
