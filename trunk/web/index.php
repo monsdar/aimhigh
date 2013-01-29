@@ -8,17 +8,22 @@ $mysql = new MysqlConnector();
 $storage = new MysqlTaskStorage($mysql);
 
 //create some tasks
-$storage->createTask("This is the first task");
-$storage->createTask("This is the second task");
+$storage->createTask("This is a new first task");
 
 //read the tasks
 $tasks = $storage->readTasks();
+foreach($tasks as $task)
+{
+    echo($task->getIndex() . ' - ' . $task->getText() . '<br/>');
+}
 
 //update a task
-$tasks[0]->setText("Im edited now!");
-$storage->updateTask($tasks[0]);
+$lastTaskIndex = count($tasks)-1;
+$tasks[$lastTaskIndex]->setText("Im edited now!");
+$tasks[$lastTaskIndex]->activate(0);
+$storage->updateTask($tasks[$lastTaskIndex]);
 
-//finally, delete one of the tasks
-$storage->deleteTask($tasks[1]);
+//finally, delete the lastly created task
+$storage->deleteTask($tasks[ $lastTaskIndex ]);
 
 ?>

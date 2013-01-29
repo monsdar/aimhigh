@@ -29,9 +29,13 @@ class Task
     {
         return $this->activations;
     }
-    public function addActivation()
+    public function activate()
     {
         $this->activations[] = new Activation(0);
+    }
+    public function addActivation($activation)
+    {
+        $this->activations[] = $activation;
     }
 }
 
