@@ -47,6 +47,7 @@ class MysqlTaskStorage implements ITaskStorage
         //TODO: Prevent SQL injection
         $removeTaskQuery = "DELETE FROM tasks WHERE TaskId=%d;";
         $removeTaskQuery = sprintf($removeTaskQuery, $task->getIndex());
+        echo($removeTaskQuery . '<br/>');
         mysql_query($removeTaskQuery);
         
         //delete all the activations belonging to the given task
@@ -58,13 +59,54 @@ class MysqlTaskStorage implements ITaskStorage
     public function readTasks()
     {
         $allTasks = array();
-        print("Reading all the tasks...");
+        
+        $readTasksQuery = "SELECT * FROM tasks";
+        $tasksResult = mysql_query($readTasksQuery);
+        while($taskRow = mysql_fetch_array($tasksResult) )
+        {
+            $newTask = new Task( $taskRow['TaskId'] );
+            $newTask->setText($taskRow['text']);
+            
+            $readActivations = "SELECT * FROM activations WHERE TaskId=%d";
+            $readActivations = sprintf($readActivations, $taskRow['TaskId']);
+            $actResult = mysql_query($readActivations);
+            while($actRow = mysql_fetch_array($actResult) )
+            {
+                $newAct = new Activation( $actRow['ActivationId'] );
+                $newAct->setTimestamp($actRow['ActivationTime']);
+                $newTask->addActivation($newAct);
+            }
+            
+            $allTasks[] = $newTask;
+        }
+        
         return $allTasks;
     }
 
     public function updateTask($task)
     {
-        print("Updating Task #" . $task->id);
+        //Update the given task (throw exception if ID is not existing)
+        $updateTask = "UPDATE tasks SET text=%s WHERE TaskId=%d";
+        $updateTask = sprintf($updateTask, $task->getText(), $task->getIndex());
+        mysql_query($updateTask);        
+        
+        //Update all the activations
+        foreach( $task->getActivations() as $activation )
+        {
+            //create a new activation if index==0
+            if( $activation->getIndex() == 0 )
+            {
+                $createAct = "INSERT INTO activations (TaskId, ActivationTime) VALUES (%d, FROM_UNIXTIME(%d));";
+                $createAct = sprintf($createAct, $task->getIndex(), $activation->getTimestamp());
+                mysql_query($createAct);
+            }
+            else //just update the activation
+            {
+                $updateAct = "UPDATE activations SET TaskId=%d, ActivationTime=FROM_UNIXTIME(%d) WHERE ActivationId=%d;";
+                $updateAct = sprintf($updateAct, $task->getIndex(), $activation->getTimestamp(), $activation->getIndex());
+                mysql_query($updateAct);
+            }
+        }
     }
 }
 
