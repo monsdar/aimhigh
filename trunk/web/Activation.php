@@ -2,8 +2,11 @@
 
 class Activation
 {
-    private $index = 0;
-    private $timestamp = 0;
+    //These are public to be able to use json_encode
+    //By design, they shouldn't be accessed directly (that's what Getter/Setter are for!!)
+    //TODO: This is a bad architecture and we certainly should keep up with something better in the future...
+    public $index = 0;
+    public $timestamp = 0;
     
     public function __construct($index)
     {
