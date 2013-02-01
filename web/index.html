@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>AimHigh-Test</title>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            $(document).ready(function()
+            {
+                var url="http://aimhigh.nilsbrinkmann.com/interface.php";
+                $.getJSON(url, function(json)
+                {
+                    $.each(json, function(i, item)
+                    {
+                        $('body').append('<div><p>' + item.text + '</p></div>');
+                    });
+                });
+            });
+	</script>
+    </body>
+</html>

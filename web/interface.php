@@ -7,6 +7,22 @@ require_once("MysqlConnector.php");
 $mysql = new MysqlConnector();
 $storage = new MysqlTaskStorage($mysql);
 
+//check the POST for incoming requests
+if( isset($_POST['getTasks']) )
+{
+    echo('Given content: ' . $_POST['getTasks'] . '<br/>');
+    $tasks = $storage->readTasks();
+    echo( json_encode($tasks) );
+    exit();
+}
+
+$tasks = $storage->readTasks();
+echo( json_encode($tasks) );
+exit();
+
+////////////////////////////////////
+//The following is just example-code
+
 //create some tasks
 $storage->createTask("This is a new first task");
 
