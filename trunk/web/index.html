@@ -2,9 +2,11 @@
     <head>
         <title>AimHigh-Test</title>
         <link type='text/css' rel='stylesheet' href='stylesheet.css'>
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
     </head>
     <body>
+        <div class='category'>
+        </div>
         <script type="text/javascript">
             $(document).ready(function()
             {
@@ -13,10 +15,23 @@
                 {
                     $.each(json, function(i, item)
                     {
-                        $('body').append('<p>' + item.text + '</p>');
+                        $('.category').append('<div class="task" id="#id' + item.index + '"><p>' + item.text + '</p></div>');
                     });
                 });
+                
+                $(document).on('mouseenter', '.task', function() {
+                    $(this).css('background-color', '#8BC48B');
+                });
+                
+                $(document).on('mouseleave', '.task', function() {
+                    $(this).css('background-color', '#dedede');
+                });
+                
+                $(document).on('click', '.task', function() {
+                    $(this).toggleClass('solvedTask');
+                });
             });
+                
 	</script>
     </body>
 </html>
