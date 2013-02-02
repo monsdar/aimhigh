@@ -7,8 +7,8 @@ class MysqlConnector
     public function __construct()
     {
         //init the MySQL-connection here
-        $username = "ks01495";
-        $password = "04ZWSuA7";
+        $username = "ks01495db3";
+        $password = "aimhigh!!";
         $address = "localhost";
         $database = "ks01495db3";
         mysql_connect($address, $username, $password);
