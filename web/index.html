@@ -1,6 +1,7 @@
 <html>
     <head>
         <title>AimHigh-Test</title>
+        <link type='text/css' rel='stylesheet' href='stylesheet.css'>
         <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
     </head>
     <body>
@@ -12,7 +13,7 @@
                 {
                     $.each(json, function(i, item)
                     {
-                        $('body').append('<div><p>' + item.text + '</p></div>');
+                        $('body').append('<p>' + item.text + '</p>');
                     });
                 });
             });
