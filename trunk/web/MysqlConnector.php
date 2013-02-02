@@ -6,6 +6,10 @@ class MysqlConnector
     
     public function __construct()
     {
+        //NOTE: This is just a DB for testing purposes, it does not contain any
+        //      valuable data..
+        //TODO: For further usage we should implement something which could be configured
+        //      by the end-user of this interface...
         //init the MySQL-connection here
         $username = "ks01495db3";
         $password = "aimhigh!!";
