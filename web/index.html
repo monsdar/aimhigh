@@ -11,8 +11,8 @@
             $(document).ready(function()
             {
                 var url="http://aimhigh.nilsbrinkmann.com/interface.php";
-                $.getJSON(url, function(json)
-                {
+                $.post(url, {request: 'getTasks'}, function(data) {
+                    var json = $.parseJSON(data);
                     $.each(json, function(i, item)
                     {
                         $('.category').append('<div class="task" id="#id' + item.index + '"><p>' + item.text + '</p></div>');

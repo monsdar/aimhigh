@@ -8,17 +8,19 @@ $mysql = new MysqlConnector();
 $storage = new MysqlTaskStorage($mysql);
 
 //check the POST for incoming requests
-if( isset($_POST['getTasks']) )
+if( isset($_POST['request']) )
 {
-    echo('Given content: ' . $_POST['getTasks'] . '<br/>');
-    $tasks = $storage->readTasks();
-    echo( json_encode($tasks) );
-    exit();
+    if($_POST['request'] == 'getTasks')
+    {
+        $tasks = $storage->readTasks();
+        echo( json_encode($tasks) );
+        exit();
+    }
+    else
+    {
+        echo('Given content: ' . $_POST['request'] . '<br/>');
+    }
 }
-
-$tasks = $storage->readTasks();
-echo( json_encode($tasks) );
-exit();
 
 ////////////////////////////////////
 //The following is just example-code
