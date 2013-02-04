@@ -29,6 +29,9 @@ if( isset($_POST['request']) )
 
 ////////////////////////////////////
 //The following is just example-code
+//It should not be run... (calling exit() is faster than commenting everything out...
+//TODO: Clean up!
+exit();
 
 //create some tasks
 $storage->createTask("This is a new first task");
