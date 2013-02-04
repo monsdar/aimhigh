@@ -2,7 +2,10 @@
     <head>
         <title>AimHigh-Test</title>
         <link type='text/css' rel='stylesheet' href='stylesheet.css'>
+        <!-- This includes jQuery 1.9.0 from Google -->
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <!-- Include other required scripts -->
+        <script type="text/javascript" src="extends.js"></script>
     </head>
     <body>
         <div class='category'>
@@ -10,8 +13,23 @@
         <script type="text/javascript">
             $(document).ready(function()
             {
-                var url="http://aimhigh.nilsbrinkmann.com/interface.php";
-                $.post(url, {request: 'getTasks'}, function(data) {
+                //get the userKey
+                var userKey = $.getUserKey();
+                if(userKey == 'index.html')
+                {
+                    userKey = '';
+                }
+                
+                //if the userkey is empty, we need to create a new user here
+                if(userKey == '')
+                {
+                    //TODO: Create a new user here
+                }
+                
+                //let's query the aimhigh-interface for content
+                var aimHigh="http://aimhigh.nilsbrinkmann.com/interface.php";
+                var postVars = {userkey: userKey, request: 'getTasks'};
+                $.post(aimHigh, postVars, function(data) {
                     var json = $.parseJSON(data);
                     $.each(json, function(i, item)
                     {
