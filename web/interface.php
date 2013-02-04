@@ -7,11 +7,6 @@ require_once("MysqlConnector.php");
 $mysql = new MysqlConnector();
 $storage = new MysqlTaskStorage($mysql);
 
-if( isset($_GET['key']) )
-{
-    echo('Key: ' . $_GET['key']);
-}
-
 //check the POST for incoming requests
 if( isset($_POST['request']) )
 {
