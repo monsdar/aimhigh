@@ -56,16 +56,17 @@ class MysqlTaskStorage implements ITaskStorage
         mysql_query($removeActQuery);        
     }
 
-    public function readTasks()
+    public function readTasks($user)
     {
         $allTasks = array();
         
-        $readTasksQuery = "SELECT * FROM tasks";
+        $readTasksQuery = "SELECT * FROM tasks, userkeys WHERE tasks.KeyId=userkeys.KeyId AND userkeys.UserKey='%s'";
+        $readTasksQuery = sprintf($readTasksQuery, $user);
         $tasksResult = mysql_query($readTasksQuery);
         while($taskRow = mysql_fetch_array($tasksResult) )
         {
             $newTask = new Task( $taskRow['TaskId'] );
-            $newTask->setText($taskRow['text']);
+            $newTask->setText($taskRow['Text']);
             
             $readActivations = "SELECT * FROM activations WHERE TaskId=%d";
             $readActivations = sprintf($readActivations, $taskRow['TaskId']);
@@ -86,7 +87,7 @@ class MysqlTaskStorage implements ITaskStorage
     public function updateTask($task)
     {
         //Update the given task (throw exception if ID is not existing)
-        $updateTask = "UPDATE tasks SET text=%s WHERE TaskId=%d";
+        $updateTask = "UPDATE tasks SET Text=%s WHERE TaskId=%d";
         $updateTask = sprintf($updateTask, $task->getText(), $task->getIndex());
         mysql_query($updateTask);        
         

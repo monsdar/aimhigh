@@ -15,15 +15,12 @@
             {
                 //get the userKey
                 var userKey = $.getUserKey();
-                if(userKey == 'index.html')
-                {
-                    userKey = '';
-                }
-                
+                                
                 //if the userkey is empty, we need to create a new user here
                 if(userKey == '')
                 {
                     //TODO: Create a new user here
+                    userKey = 'TestUser';
                 }
                 
                 //let's query the aimhigh-interface for content
