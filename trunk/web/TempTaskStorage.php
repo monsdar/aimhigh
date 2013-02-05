@@ -38,7 +38,7 @@ class TempTaskStorage implements ITaskStorage
         print("<br/>");
     }
 
-    public function readTasks()
+    public function readTasks($user)
     {
         print("Found " . count($this->tasks) . " Tasks...");
         print("<br/>");

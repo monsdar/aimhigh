@@ -9,7 +9,7 @@ interface ITaskStorage
     public function createTask($text);
     
     //reads all the tasks from database, returns them in an array
-    public function readTasks();
+    public function readTasks($user);
     
     //writes the given task to the DB
     public function updateTask($task);
