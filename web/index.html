@@ -35,15 +35,64 @@
                 });
                 
                 $(document).on('mouseenter', '.task', function() {
+                    //animate to the new size
+                    var newHeight = $(this).css('height','auto').height();
+                    $(this).animate({ height: 73 }, 'fast', 'swing', function() {
+                        $(this).css('height', 'auto');
+                    });
+                    
                     $(this).css('background-color', '#8BC48B');
+                    $(this).append('<span class="editLink">Edit</span>');
+                    $(this).append('<span class="deleteLink">Delete</span>');
+                    
                 });
-                
                 $(document).on('mouseleave', '.task', function() {
+                    //animate to the new size
+                    var newHeight = $(this).css('height','auto').height();
+                    $(this).animate({ height: 54 }, 'fast', 'swing', function() {
+                        $(this).css('height', 'auto');
+                    });
+                    
                     $(this).css('background-color', '#dedede');
+                    $('.editLink').remove();
+                    $('.deleteLink').remove();
                 });
-                
                 $(document).on('click', '.task', function() {
                     $(this).toggleClass('solvedTask');
+                });
+                
+                $(document).on('mouseenter', '.editLink', function() {
+                    $(this).toggleClass('linkHighlighted');
+                });
+                $(document).on('mouseleave', '.editLink', function() {
+                    $(this).toggleClass('linkHighlighted');
+                });
+                $(document).on('click', '.editLink', function() {
+                    var text = $(this).closest('.task').find('p');
+                    var newContent = '<div class="editForm">';
+                    newContent = newContent + '<input type="text" value="' + text.text() + '" />';
+                    newContent = newContent + '<button type="button" class="submitButton">Submit</button>';
+                    newContent = newContent + '</div>';
+                    text.replaceWith(newContent);
+                });
+                
+                $(document).on('mouseenter', '.deleteLink', function() {
+                    $(this).toggleClass('linkHighlighted');
+                });
+                $(document).on('mouseleave', '.deleteLink', function() {
+                    $(this).toggleClass('linkHighlighted');
+                });
+                $(document).on('click', '.deleteLink', function() {
+                    $(this).closest('.task').fadeTo('slow', 0, function() {
+                        $(this).closest('.task').slideUp();
+                    });
+                });
+                
+                $(document).on('click', '.submitButton', function() {
+                    var editForm = $(this).closest('.editForm');
+                    var input = editForm.find('input');
+                    var newContent = '<p>' + input.val() + '</p>';
+                    editForm.replaceWith(newContent);
                 });
             });
                 
