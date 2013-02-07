@@ -13,30 +13,22 @@ class MysqlTaskStorage implements ITaskStorage
         $this->mysql = $mysqlConnector;
     }
     
-    public function createTask($text)
-    {       
-        //get a valid primary key for the new task (higher than the current maximum key)
-        $maxId = 0;
-        $maxIdQuery = "SELECT MAX(TaskId) FROM tasks;";
-        $maxIdResult = mysql_query($maxIdQuery);
-        if( $maxIdResult && mysql_num_rows($maxIdResult) != 0 )
+    public function createTask($user, $newText)
+    {        
+        //get the ID of the given user
+        $userId = 0;
+        $userIdQuery = "SELECT KeyId FROM userkeys WHERE UserKey='%s';";
+        $userIdQuery = sprintf($userIdQuery, $user);
+        $userIdResult = mysql_query($userIdQuery);
+        if( $userIdResult && mysql_num_rows($userIdResult) != 0 )
         {
-            $maxId = (int)mysql_result($maxIdResult, 0, 0);
-            $maxId++; //increase the id for our new task
+            $userId = (int)mysql_result($userIdResult, 0, 0);
         }
-     
-        $newTask = new Task($maxId);
-        $newTask->setText($text);
-        
-        //add the task to the database
-        //
-        //TODO: Prevent SQL injection
-        $addTaskQuery = "INSERT INTO tasks VALUES (%d, '%s');";
-        $addTaskQuery = sprintf($addTaskQuery, $newTask->getIndex(), $newTask->getText());
-        mysql_query($addTaskQuery);
-        
-        //return it, so we can work with it
-        return $newTask;
+        else
+        {
+            //simply return nothing if the user does not exist
+            return;
+        }
     }
 
     public function deleteTask($user, $taskId)

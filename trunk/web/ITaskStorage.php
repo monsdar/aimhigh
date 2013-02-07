@@ -6,7 +6,7 @@ require_once("Activation.php");
 interface ITaskStorage
 {
     //creates a new task with the given text
-    public function createTask($text);
+    public function createTask($user, $newText);
     
     //reads all the tasks from database, returns them in an array
     public function readTasks($user);
