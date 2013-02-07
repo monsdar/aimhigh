@@ -27,5 +27,10 @@ else if($request == 'updateTask')
     $newText = $_POST['text'];
     $storage->updateTask($user, $taskId, $newText);
 }
+else if($request == 'createTask')
+{
+    $newText = $_POST['text'];
+    $storage->createTask($user, $newText);
+}
 
 ?>

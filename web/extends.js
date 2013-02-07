@@ -14,3 +14,19 @@ $.extend({
 });
 
 
+$.fn.refreshTasks = function(url, userkey) {
+    //clean up the calling element
+    $(this).empty();
+    
+    //let's query the aimhigh-interface for content
+    var postVars = {userkey: userkey, request: 'getTasks'};
+    $.post(url, postVars, function(data) {
+        var json = $.parseJSON(data);
+        $.each(json, function(i, item)
+        {
+            $(this).append('<div class="task" id="#id-' + item.index + '"><p>' + item.text + '</p></div>');
+        });
+    });
+}
+
+

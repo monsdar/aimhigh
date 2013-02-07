@@ -8,11 +8,18 @@
         <script type="text/javascript" src="extends.js"></script>
     </head>
     <body>
+        <div class='createTask'>
+            <input type="text" class="newTask" value="New Task..."/>
+            <button type="button" class="submitCreate">Create</button>
+        </div>
         <div class='category'>
         </div>
         <script type="text/javascript">
             $(document).ready(function()
             {
+                //this is the interface we're using
+                var aimHigh="http://aimhigh.nilsbrinkmann.com/interface.php";
+                
                 //get the userKey
                 var userKey = $.getUserKey();
                                 
@@ -23,16 +30,8 @@
                     userKey = 'TestUser';
                 }
                 
-                //let's query the aimhigh-interface for content
-                var aimHigh="http://aimhigh.nilsbrinkmann.com/interface.php";
-                var postVars = {userkey: userKey, request: 'getTasks'};
-                $.post(aimHigh, postVars, function(data) {
-                    var json = $.parseJSON(data);
-                    $.each(json, function(i, item)
-                    {
-                        $('.category').append('<div class="task" id="#id-' + item.index + '"><p>' + item.text + '</p></div>');
-                    });
-                });
+                //refresh the tasks
+                $('.category').refreshTasks(aimHigh, userKey);
                 
                 $(document).on('mouseenter', '.task', function() {
                     //animate to the new size
@@ -71,7 +70,7 @@
                     var text = $(this).closest('.task').find('p');
                     var newContent = '<div class="editForm">';
                     newContent = newContent + '<input type="text" value="' + text.text() + '" />';
-                    newContent = newContent + '<button type="button" class="submitButton">Submit</button>';
+                    newContent = newContent + '<button type="button" class="submitEdit">Done</button>';
                     newContent = newContent + '</div>';
                     text.replaceWith(newContent);
                 });
@@ -96,7 +95,7 @@
                     });
                 });
                 
-                $(document).on('click', '.submitButton', function() {
+                $(document).on('click', '.submitEdit', function() {
                     var editForm = $(this).closest('.editForm');
                     var input = editForm.find('input');
                     
@@ -109,6 +108,21 @@
                     //replace the input-form with the new task-content
                     var newContent = '<p>' + input.val() + '</p>';
                     editForm.replaceWith(newContent);
+                });
+                
+                $(document).on('click', '.submitCreate', function() {
+                    var createDiv = $(this).closest('.createTask');
+                    var input = createDiv.find('input');
+                    
+                    //send the interface that the task should be created
+                    var postVars = {userkey: userKey, request: 'createTask', text: input.val()};
+                    $.post(aimHigh, postVars, function(data) {
+                        //TODO: Add the task
+                        alert(data);
+                    });
+                    
+                    //reset the inputs value
+                    input.val('Test');
                 });
             });
                 
