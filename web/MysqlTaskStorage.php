@@ -39,21 +39,21 @@ class MysqlTaskStorage implements ITaskStorage
         return $newTask;
     }
 
-    public function deleteTask($task)
+    public function deleteTask($user, $taskId)
     {
-        //simply delete, if there is no such task, it won't harm...
+        //simply delete. If there is no such task, it won't harm...
         //so no checking needed
         //
         //TODO: Prevent SQL injection
-        $removeTaskQuery = "DELETE FROM tasks WHERE TaskId=%d;";
-        $removeTaskQuery = sprintf($removeTaskQuery, $task->getIndex());
-        echo($removeTaskQuery . '<br/>');
+        //TODO: How to prevent someone just deleting anything with a bruteforce? This would suck...
+        $removeTaskQuery = "DELETE tasks FROM tasks,userkeys WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
+        $removeTaskQuery = sprintf($removeTaskQuery, $taskId, $user);
         mysql_query($removeTaskQuery);
         
         //delete all the activations belonging to the given task
         $removeActQuery = "DELETE FROM activations WHERE TaskId=%d;";
-        $removeActQuery = sprintf($removeActQuery, $task->getIndex());
-        mysql_query($removeActQuery);        
+        $removeActQuery = sprintf($removeActQuery, $taskId);
+        mysql_query($removeActQuery);
     }
 
     public function readTasks($user)
@@ -84,30 +84,13 @@ class MysqlTaskStorage implements ITaskStorage
         return $allTasks;
     }
 
-    public function updateTask($task)
+    public function updateTask($user, $taskId, $newText)
     {
-        //Update the given task (throw exception if ID is not existing)
-        $updateTask = "UPDATE tasks SET Text=%s WHERE TaskId=%d";
-        $updateTask = sprintf($updateTask, $task->getText(), $task->getIndex());
-        mysql_query($updateTask);        
-        
-        //Update all the activations
-        foreach( $task->getActivations() as $activation )
-        {
-            //create a new activation if index==0
-            if( $activation->getIndex() == 0 )
-            {
-                $createAct = "INSERT INTO activations (TaskId, ActivationTime) VALUES (%d, FROM_UNIXTIME(%d));";
-                $createAct = sprintf($createAct, $task->getIndex(), $activation->getTimestamp());
-                mysql_query($createAct);
-            }
-            else //just update the activation
-            {
-                $updateAct = "UPDATE activations SET TaskId=%d, ActivationTime=FROM_UNIXTIME(%d) WHERE ActivationId=%d;";
-                $updateAct = sprintf($updateAct, $task->getIndex(), $activation->getTimestamp(), $activation->getIndex());
-                mysql_query($updateAct);
-            }
-        }
+        //Update the given task (do nothing if it does not work... who cares?)
+        //TODO: Prevent MySQL-injection here!
+        $updateTask = "UPDATE tasks, userkeys SET Text='%s' WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
+        $updateTask = sprintf($updateTask, $newText, $taskId, $user);
+        mysql_query($updateTask);
     }
 }
 

@@ -12,10 +12,10 @@ interface ITaskStorage
     public function readTasks($user);
     
     //writes the given task to the DB
-    public function updateTask($task);
+    public function updateTask($user, $taskId, $newText);
     
     //removes the given task from the DB
-    public function deleteTask($task);
+    public function deleteTask($user, $taskId);
 }
 
 ?>
