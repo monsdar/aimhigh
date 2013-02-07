@@ -15,7 +15,17 @@ if($request == 'getTasks')
 {
     $tasks = $storage->readTasks($user);
     echo( json_encode($tasks) );
-    exit();
+}
+else if($request == 'removeTask')
+{
+    $taskId = $_POST['taskid'];
+    $storage->deleteTask($user, $taskId);
+}
+else if($request == 'updateTask')
+{
+    $taskId = $_POST['taskid'];
+    $newText = $_POST['text'];
+    $storage->updateTask($user, $taskId, $newText);
 }
 
 ?>

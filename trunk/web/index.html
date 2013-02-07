@@ -30,7 +30,7 @@
                     var json = $.parseJSON(data);
                     $.each(json, function(i, item)
                     {
-                        $('.category').append('<div class="task" id="#id' + item.index + '"><p>' + item.text + '</p></div>');
+                        $('.category').append('<div class="task" id="#id-' + item.index + '"><p>' + item.text + '</p></div>');
                     });
                 });
                 
@@ -83,14 +83,30 @@
                     $(this).toggleClass('linkHighlighted');
                 });
                 $(document).on('click', '.deleteLink', function() {
-                    $(this).closest('.task').fadeTo('slow', 0, function() {
-                        $(this).closest('.task').slideUp();
+                    var task = $(this).closest('.task');
+                    
+                    //send the interface that the task should be deleted
+                    var taskId = task.attr('id').split('-')[1];
+                    var postVars = {userkey: userKey, request: 'removeTask', taskid: taskId};
+                    $.post(aimHigh, postVars);
+                                        
+                    //remove the task visually
+                    task.fadeTo('fast', 0, function() {
+                        task.slideUp();
                     });
                 });
                 
                 $(document).on('click', '.submitButton', function() {
                     var editForm = $(this).closest('.editForm');
                     var input = editForm.find('input');
+                    
+                    //send the interface that the task should be updated
+                    var task = $(this).closest('.task');
+                    var taskId = task.attr('id').split('-')[1];
+                    var postVars = {userkey: userKey, request: 'updateTask', taskid: taskId, text: input.val()};
+                    $.post(aimHigh, postVars);
+                    
+                    //replace the input-form with the new task-content
                     var newContent = '<p>' + input.val() + '</p>';
                     editForm.replaceWith(newContent);
                 });
