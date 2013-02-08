@@ -73,6 +73,13 @@
                 $(document).on('click', '.taskText', function() {
                     var task = $(this).closest('.task');
                     task.toggleClass('solvedTask');
+                    
+                    //de/activate the task in the DB
+                    var taskId = task.attr('id').split('-')[1];
+                    var postVars = {userkey: userKey, request: 'toggleTask', taskid: taskId};
+                    $.post(aimHigh, postVars, function(data) {
+                        console.log("Toggled task #" + taskId + ", received the following response: " + data);
+                    });
                 });
                 
                 $(document).on('mouseenter', '.editLink', function() {
