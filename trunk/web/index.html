@@ -30,6 +30,12 @@
                     userKey = 'TestUser';
                 }
                 
+                //call the user, it will be created if not already existing
+                var postVars = {userkey: userKey, request: 'touchUser'};
+                $.post(aimHigh, postVars, function(data) {
+                    console.log("Touched the user, received the following response: " + data);
+                });
+                
                 //refresh the tasks
                 $('.category').refreshTasks(aimHigh, userKey);
                 
@@ -87,7 +93,9 @@
                     //send the interface that the task should be deleted
                     var taskId = task.attr('id').split('-')[1];
                     var postVars = {userkey: userKey, request: 'removeTask', taskid: taskId};
-                    $.post(aimHigh, postVars);
+                    $.post(aimHigh, postVars, function(data) {
+                        console.log("Removed task #" + taskId + ", received the following response: " + data);
+                    });
                                         
                     //remove the task visually
                     task.fadeTo('fast', 0, function() {
@@ -103,7 +111,9 @@
                     var task = $(this).closest('.task');
                     var taskId = task.attr('id').split('-')[1];
                     var postVars = {userkey: userKey, request: 'updateTask', taskid: taskId, text: input.val()};
-                    $.post(aimHigh, postVars);
+                    $.post(aimHigh, postVars, function(data) {
+                        console.log("Edited Task #" + taskId + ", received the following response: " + data);
+                    });
                     
                     //replace the input-form with the new task-content
                     var newContent = '<p>' + input.val() + '</p>';
@@ -125,7 +135,7 @@
                     $('.category').refreshTasks(aimHigh, userKey);
                     
                     //reset the inputs value
-                    input.val('Test');
+                    input.val('New Task...');
                 });
             });
                 

@@ -32,5 +32,14 @@ else if($request == 'createTask')
     $newText = $_POST['text'];
     $storage->createTask($user, $newText);
 }
+else if($request == 'touchUser')
+{
+    //HAHA, That's an awkward name :D
+    //The Linux' touch command is meant:
+    //  It creates a file if it does not exist
+    //  and opens it, if it exists...
+    //So this command just creates a new user if it does not exist yet...
+    $storage->touchUser($user);
+}
 
 ?>

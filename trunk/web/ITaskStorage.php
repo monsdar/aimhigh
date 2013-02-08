@@ -16,6 +16,8 @@ interface ITaskStorage
     
     //removes the given task from the DB
     public function deleteTask($user, $taskId);
+    
+    public function touchUser($user);
 }
 
 ?>

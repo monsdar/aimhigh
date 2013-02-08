@@ -27,8 +27,16 @@ class MysqlTaskStorage implements ITaskStorage
         else
         {
             //simply return nothing if the user does not exist
+            echo("User " . $user . " does not exist");
             return;
         }
+        
+        //add the new task
+        $createTaskQuery = "INSERT INTO tasks (KeyId, Text) VALUES (%d, '%s')";
+        $createTaskQuery = sprintf($createTaskQuery, $userId, $newText);
+        mysql_query($createTaskQuery);
+        
+        echo("New task created successfully");
     }
 
     public function deleteTask($user, $taskId)
@@ -46,6 +54,8 @@ class MysqlTaskStorage implements ITaskStorage
         $removeActQuery = "DELETE FROM activations WHERE TaskId=%d;";
         $removeActQuery = sprintf($removeActQuery, $taskId);
         mysql_query($removeActQuery);
+        
+        echo("Everything deleted without any problems...");
     }
 
     public function readTasks($user)
@@ -83,6 +93,25 @@ class MysqlTaskStorage implements ITaskStorage
         $updateTask = "UPDATE tasks, userkeys SET Text='%s' WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
         $updateTask = sprintf($updateTask, $newText, $taskId, $user);
         mysql_query($updateTask);
+        
+        echo("Updated task # " . $taskId . " of user " . $user . " successfully");
+    }
+    
+    public function touchUser($user)
+    {
+        //TODO: Prevent MySQL-injection here!
+        $createUser = "INSERT INTO userkeys (UserKey) VALUES ('%s')";
+        $createUser = sprintf($createUser, $user);
+        $createResult = mysql_query($createUser);
+        if(!$createResult)
+        {
+            echo("User " . $user . " already exists...");
+        }
+        else
+        {
+            echo("Created user " . $user . "...");
+        }
+        
     }
 }
 
