@@ -6,6 +6,7 @@
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <!-- Include other required scripts -->
         <script type="text/javascript" src="extends.js"></script>
+        <script type="text/javascript" src="md5.js"></script>
     </head>
     <body>
         <div class='createTask'>
@@ -19,15 +20,15 @@
             {
                 //this is the interface we're using
                 var aimHigh="http://aimhigh.nilsbrinkmann.com/interface.php";
+                $.ajaxSetup({async:false});
                 
-                //get the userKey
+                //get the userKey, create a new user if there is no given user
                 var userKey = $.getUserKey();
-                                
-                //if the userkey is empty, we need to create a new user here
                 if(userKey == '')
                 {
-                    //TODO: Create a new user here
-                    userKey = 'TestUser';
+                    //TODO: Update the page with a random username
+                    console.log(md5( Math.random().toString() ));
+                    userKey = "TestUser"; //Currently we're using TestUser here
                 }
                 
                 //call the user, it will be created if not already existing
