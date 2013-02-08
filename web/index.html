@@ -117,9 +117,12 @@
                     //send the interface that the task should be created
                     var postVars = {userkey: userKey, request: 'createTask', text: input.val()};
                     $.post(aimHigh, postVars, function(data) {
-                        //TODO: Add the task
-                        alert(data);
+                        console.log("Created new task, received the following response: ");
+                        console.log(data);
                     });
+                    
+                    //refresh the tasks
+                    $('.category').refreshTasks(aimHigh, userKey);
                     
                     //reset the inputs value
                     input.val('Test');
