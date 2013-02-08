@@ -34,6 +34,16 @@
     margin-bottom: 5px;
     margin-right: 20px;
 }
+.taskText {
+    font-weight:bold;
+    font-size: 18px;
+    font-family: Arial;
+    padding: 20px;
+}
+.taskTextSelected {
+    text-decoration:underline;
+    cursor: pointer;
+}
 .solvedTask {
     background-color: #1eb31e !important;
 }
@@ -89,13 +99,4 @@ input[type=text] {
       inset 0 0 8px  rgba(0,0,0,0.1),
             0 0 16px rgba(0,0,0,0.1);
     background: rgba(255,255,255,0.5);
-}
-p {   
-    font-weight:bold;
-    font-size: 14px;
-    font-family: Arial;
-    padding-left: 20px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 20px;
 }

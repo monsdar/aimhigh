@@ -29,7 +29,7 @@ $.fn.refreshTasks = function(url, userkey) {
         $.each(json, function(i, item)
         {
             console.log('New Task: ' + item.text + '(' + item.index + ')');
-            category.append('<div class="task" id="#id-' + item.index + '"><p>' + item.text + '</p></div>');
+            category.append('<div class="task" id="#id-' + item.index + '"><p><a class="taskText">' + item.text + '</a></p></div>');
         });
     });
 }
