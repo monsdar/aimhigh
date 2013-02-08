@@ -48,8 +48,8 @@
                     });
                     
                     $(this).css('background-color', '#8BC48B');
-                    $(this).append('<span class="editLink">Edit</span>');
-                    $(this).append('<span class="deleteLink">Delete</span>');
+                    $(this).append('<a class="editLink">Edit</a>');
+                    $(this).append('<a class="deleteLink">Delete</a>');
                     
                 });
                 $(document).on('mouseleave', '.task', function() {
@@ -63,8 +63,16 @@
                     $('.editLink').remove();
                     $('.deleteLink').remove();
                 });
-                $(document).on('click', '.task', function() {
-                    $(this).toggleClass('solvedTask');
+                
+                $(document).on('mouseenter', '.taskText', function() {
+                    $(this).toggleClass('taskTextSelected');
+                });
+                $(document).on('mouseleave', '.taskText', function() {
+                    $(this).toggleClass('taskTextSelected');
+                });
+                $(document).on('click', '.taskText', function() {
+                    var task = $(this).closest('.task');
+                    task.toggleClass('solvedTask');
                 });
                 
                 $(document).on('mouseenter', '.editLink', function() {
@@ -117,7 +125,7 @@
                     });
                     
                     //replace the input-form with the new task-content
-                    var newContent = '<p>' + input.val() + '</p>';
+                    var newContent = '<p><a class="taskText">' + input.val() + '</a></p>';
                     editForm.replaceWith(newContent);
                 });
                 
