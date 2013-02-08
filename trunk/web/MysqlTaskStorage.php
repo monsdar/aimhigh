@@ -110,8 +110,13 @@ class MysqlTaskStorage implements ITaskStorage
         else
         {
             echo("Created user " . $user . "...");
+            
+            //add some example tasks to the new user
+            $this->createTask($user, "Eat fruits or vegetables");
+            $this->createTask($user, "Exercise for 30 minutes or more");
+            $this->createTask($user, "Talk to a friend");
+            echo("Added some sample-tasks...");
         }
-        
     }
 }
 
