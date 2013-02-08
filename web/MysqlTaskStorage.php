@@ -70,7 +70,7 @@ class MysqlTaskStorage implements ITaskStorage
             $newTask = new Task( $taskRow['TaskId'] );
             $newTask->setText($taskRow['Text']);
             
-            $readActivations = "SELECT * FROM activations WHERE TaskId=%d";
+            $readActivations = "SELECT UNIX_TIMESTAMP(ActivationTime) AS ActivationTime FROM activations WHERE TaskId=%d";
             $readActivations = sprintf($readActivations, $taskRow['TaskId']);
             $actResult = mysql_query($readActivations);
             while($actRow = mysql_fetch_array($actResult) )

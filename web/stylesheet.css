@@ -34,6 +34,9 @@
     margin-bottom: 5px;
     margin-right: 20px;
 }
+.solvedTask {
+    background-color: #1eb31e !important;
+}
 .taskText {
     font-weight:bold;
     font-size: 18px;
@@ -43,9 +46,6 @@
 .taskTextSelected {
     text-decoration:underline;
     cursor: pointer;
-}
-.solvedTask {
-    background-color: #1eb31e !important;
 }
 .deleteLink {
     font-family: Arial;

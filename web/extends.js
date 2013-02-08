@@ -17,6 +17,12 @@ $.extend({
 $.fn.refreshTasks = function(url, userkey) {
     //let's store the object into a variable, so that we can use it in the $.each
     var category = $(this);
+    var todayDate = new Date();
+    var tomorrowDate = new Date(todayDate.getTime() + 24 * 60 * 60 * 1000);
+    todayDate.setHours(0, 0, 0, 0);
+    tomorrowDate.setHours(0, 0, 0, 0);
+    var todayUTC = todayDate.getTime() / 1000;
+    var tomorrowUTC = tomorrowDate.getTime() / 1000;
     
     //clean up the calling element
     category.empty();    
@@ -29,7 +35,13 @@ $.fn.refreshTasks = function(url, userkey) {
         $.each(json, function(i, item)
         {
             console.log('New Task: ' + item.text + '(' + item.index + ')');
-            category.append('<div class="task" id="#id-' + item.index + '"><p><a class="taskText">' + item.text + '</a></p></div>');
+            var taskActivated = '';
+            $.each(item.activations, function(i, act) {
+                if(act.timestamp >= todayUTC && act.timestamp < tomorrowUTC ) {
+                    taskActivated = 'solvedTask';
+                }       
+            });
+            category.append('<div class="task ' + taskActivated + '" id="#id-' + item.index + '"><p><a class="taskText">' + item.text + '</a></p></div>');
         });
     });
 }
