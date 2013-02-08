@@ -17,7 +17,11 @@ interface ITaskStorage
     //removes the given task from the DB
     public function deleteTask($user, $taskId);
     
+    //Checks if a user exists. If not, the user will be created
     public function touchUser($user);
+    
+    //de/activates a task
+    public function toggleTask($user, $taskId);
 }
 
 ?>

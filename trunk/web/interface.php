@@ -41,5 +41,10 @@ else if($request == 'touchUser')
     //So this command just creates a new user if it does not exist yet...
     $storage->touchUser($user);
 }
+else if($request == 'toggleTask')
+{
+    $taskId = $_POST['taskid'];
+    $storage->toggleTask($user, $taskId);
+}
 
 ?>
