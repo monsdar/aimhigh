@@ -4,17 +4,21 @@
         <link type='text/css' rel='stylesheet' href='stylesheet.css'>
         <!-- This includes jQuery 1.9.0 from Google -->
         <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        
         <!-- Include other required scripts -->
         <script type="text/javascript" src="extends.js"></script>
         <script type="text/javascript" src="md5.js"></script>
+        <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+        <script type="text/javascript" src="http://code.highcharts.com/themes/gray.js"></script>
     </head>
     <body>
-        <div class='scoreContainer'>Your score: <span class="score">0</span></div>
         <div class='category'></div>
+        <div class='scoreContainer'>Daily score: <span class="score">0</span></div>
         <div class='createTask'>
             <input type="text" class="newTask" value="New Task..."/>
             <button type="button" class="submitCreate">Create</button>
         </div>
+        <div class="graph" id="scoreGraph" ></div>
         <script type="text/javascript">
             $(document).ready(function()
             {
@@ -27,10 +31,10 @@
                 if(userKey == '')
                 {
                     //TODO: Update the page with a random username
-                    console.log(md5( Math.random().toString() ));
+                    var randomMd5 = md5( Math.random().toString() );
                     userKey = "TestUser"; //Currently we're using TestUser here
                 }
-                
+                                
                 //call the user, it will be created if not already existing
                 var postVars = {userkey: userKey, request: 'touchUser'};
                 $.post(aimHigh, postVars, function(data) {
@@ -38,8 +42,12 @@
                 });
                 
                 //refresh the tasks
-                $('.category').refreshTasks(aimHigh, userKey);
+                var tasks = $.getTasks(aimHigh, userKey);
+                $('.category').showTasks(tasks);
                 $('.score').updateScore( $('.category') );
+                
+                //refresh the chart
+                $('.graph').drawChart(tasks);
                 
                 $(document).on('mouseenter', '.task', function() {
                     //animate to the new size
@@ -84,6 +92,10 @@
                     
                     //update the score
                     $('.score').updateScore( $('.category') );
+                    
+                    //refresh the chart
+                    var tasks = $.getTasks(aimHigh, userKey);
+                    $('.graph').drawChart(tasks);
                 });
                 
                 $(document).on('mouseenter', '.editLink', function() {
@@ -121,6 +133,10 @@
                     task.fadeTo('fast', 0, function() {
                         task.slideUp();
                     });
+                    
+                    //refresh the chart
+                    var tasks = $.getTasks(aimHigh, userKey);
+                    $('.graph').drawChart(tasks);
                 });
                 
                 $(document).on('click', '.submitEdit', function() {
@@ -148,7 +164,8 @@
                     if(code == 13) { //<Enter> keycode
                         //create the task, refresh them afterwards
                         $('').createTask(aimHigh, userKey, $(this).val());
-                        $('.category').refreshTasks(aimHigh, userKey);
+                        var tasks = $.getTasks(aimHigh, userKey);
+                        $('.category').showTasks(tasks);
                         $(this).val('New Task...');
                     }
                 });
@@ -159,8 +176,8 @@
                     var text = input.val();
                                         
                     //create the task, refresh them afterwards
-                    $('').createTask(aimHigh, userKey, text);
-                    $('.category').refreshTasks(aimHigh, userKey);
+                    var tasks = $.getTasks(aimHigh, userKey);
+                    $('.category').showTasks(tasks);
                     
                     //reset the inputs value
                     input.val('New Task...');
