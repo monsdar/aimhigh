@@ -1,11 +1,18 @@
-.scoreContainer {
-    width: 320px;
-    height: 40px;
+.mainContainer {
+    width: 50%;
+    height: auto;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    padding: 20px;
+    
+    position: relative;
+}
+.sideContainer {
+    width: 50%;
+    position: absolute;
+    right: 0px;
+}
+
+.scoreContainer {
     border-width: 2px;
     border-style: solid;
     border-color: black;
@@ -17,13 +24,15 @@
 }
 .createTask {
     background-color: #dedede;
-    width: 320px;
-    height: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 20px;
+    height: 60px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    border-radius:25px;
+}
+.changeDate {
+    background-color: #dedede;
+    height: 60px;
     border-width: 2px;
     border-style: solid;
     border-color: black;
@@ -31,17 +40,18 @@
 }
 .category {
     background-color: #a3a3a3;
-    width: 400px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 50%;
+    position: absolute;
+    left: 0px;
 }
 .graph {
-    width: 600px;
+    width: 80%;
     height: auto;
     margin-left: auto;
     margin-right: auto;
+    
+    position: absolute;
+    top: 400px;
 }
 .score {
     font-weight:bold;
@@ -91,14 +101,7 @@
 .editForm {
     overflow: hidden;
 }
-.submitEdit {
-    font-family: Arial;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    margin: 15px;
-    overflow: hidden;
-}
-.submitCreate {
+button {
     font-family: Arial;
     padding-top: 5px;
     padding-bottom: 5px;

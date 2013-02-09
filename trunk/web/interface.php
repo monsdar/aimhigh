@@ -44,7 +44,8 @@ else if($request == 'touchUser')
 else if($request == 'toggleTask')
 {
     $taskId = $_POST['taskid'];
-    $storage->toggleTask($user, $taskId);
+    $date = $_POST['date'];
+    $storage->toggleTask($user, $taskId, $date);
 }
 
 ?>

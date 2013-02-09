@@ -1,8 +1,5 @@
 <?php
 
-require_once("Task.php");
-require_once("Activation.php");
-
 interface ITaskStorage
 {
     //creates a new task with the given text
@@ -21,7 +18,7 @@ interface ITaskStorage
     public function touchUser($user);
     
     //de/activates a task
-    public function toggleTask($user, $taskId);
+    public function toggleTask($user, $taskId, $date);
 }
 
 ?>
