@@ -42,6 +42,9 @@
                 var userKey = $.getUserKey();
                 if(userKey == '')
                 {
+                    //The following code redirects to the new users page...
+                    //Perhaps there is a better way to load the URL for a new user,
+                    //but I couldn't find it...
                     var randomMd5 = md5( Math.random().toString() );
                     window.location.replace("http://aimhigh.nilsbrinkmann.com/" + randomMd5);
                 }
