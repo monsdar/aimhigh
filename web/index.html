@@ -2,8 +2,11 @@
     <head>
         <title>AimHigh-Test</title>
         <link type='text/css' rel='stylesheet' href='stylesheet.css'>
-        <!-- This includes jQuery 1.9.0 from Google -->
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" />
+        <!-- This includes jQuery 1.9.1 from Google -->
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+        
         
         <!-- Include other required scripts -->
         <script type="text/javascript" src="extends.js"></script>
@@ -12,13 +15,22 @@
         <script type="text/javascript" src="http://code.highcharts.com/themes/gray.js"></script>
     </head>
     <body>
-        <div class='category'></div>
-        <div class='scoreContainer'>Daily score: <span class="score">0</span></div>
-        <div class='createTask'>
-            <input type="text" class="newTask" value="New Task..."/>
-            <button type="button" class="submitCreate">Create</button>
+        <div class="mainContainer">
+            <div class='category'></div>
+            <div class="sideContainer">
+                <div class='scoreContainer'>Daily score: <span class="score">0</span></div>
+                <div class='createTask'>
+                    <input type="text" class="newTask" value="New Task..."/>
+                    <button type="button" class="submitCreate">Create</button>
+                </div>
+                <div class='changeDate'>
+                    <input type="text" class="selectedDate" id="dateEdit" value=""/>
+                    <button type="button" class="buttonToday" id="buttonToday">Today</button>
+                </div>
+            </div>
         </div>
         <div class="graph" id="scoreGraph" ></div>
+        
         <script type="text/javascript">
             $(document).ready(function()
             {
@@ -30,11 +42,14 @@
                 var userKey = $.getUserKey();
                 if(userKey == '')
                 {
-                    //TODO: Update the page with a random username
                     var randomMd5 = md5( Math.random().toString() );
-                    userKey = "TestUser"; //Currently we're using TestUser here
+                    window.location.replace("http://aimhigh.nilsbrinkmann.com/" + randomMd5);
                 }
-                                
+
+                //setup the Datepicker
+                $("#dateEdit").val( $.datepicker.formatDate('yy-mm-dd', new Date()) );
+                $("#dateEdit").datepicker({ dateFormat: 'yy-mm-dd' });
+                
                 //call the user, it will be created if not already existing
                 var postVars = {userkey: userKey, request: 'touchUser'};
                 $.post(aimHigh, postVars, function(data) {
@@ -43,7 +58,7 @@
                 
                 //refresh the tasks
                 var tasks = $.getTasks(aimHigh, userKey);
-                $('.category').showTasks(tasks);
+                $('.category').showTasks(tasks, $.getCurrentDate());
                 $('.score').updateScore( $('.category') );
                 
                 //refresh the chart
@@ -85,7 +100,9 @@
                     
                     //de/activate the task in the DB
                     var taskId = task.attr('id').split('-')[1];
-                    var postVars = {userkey: userKey, request: 'toggleTask', taskid: taskId};
+                    var selectedDate = $.getCurrentDate();
+                    console.log("Toggling for the following date: " + selectedDate);
+                    var postVars = {userkey: userKey, request: 'toggleTask', taskid: taskId, date: selectedDate};
                     $.post(aimHigh, postVars, function(data) {
                         console.log("Toggled task #" + taskId + ", received the following response: " + data);
                     });
@@ -96,6 +113,18 @@
                     //refresh the chart
                     var tasks = $.getTasks(aimHigh, userKey);
                     $('.graph').drawChart(tasks);
+                });
+                
+                
+                $(document).on('click', '#buttonToday', function() {
+                    $("#dateEdit").val( $.datepicker.formatDate('yy-mm-dd', new Date()) );
+                    $("#dateEdit").trigger('change');
+                });
+                $(document).on('change', '#dateEdit', function() {
+                    console.log("Date changed to " + $('#dateEdit').val() );
+                    //refresh the tasks with the given date
+                    var tasks = $.getTasks(aimHigh, userKey);
+                    $('.category').showTasks(tasks, $.getCurrentDate());
                 });
                 
                 $(document).on('mouseenter', '.editLink', function() {
@@ -162,11 +191,7 @@
                 $(document).on('keypress', '.newTask', function(e) {
                     var code = (e.keyCode ? e.keyCode : e.which);
                     if(code == 13) { //<Enter> keycode
-                        //create the task, refresh them afterwards
-                        $('').createTask(aimHigh, userKey, $(this).val());
-                        var tasks = $.getTasks(aimHigh, userKey);
-                        $('.category').showTasks(tasks);
-                        $(this).val('New Task...');
+                        $('.submitEdit').trigger('click');
                     }
                 });
                 
@@ -176,8 +201,9 @@
                     var text = input.val();
                                         
                     //create the task, refresh them afterwards
+                    $('').createTask(aimHigh, userKey, text);
                     var tasks = $.getTasks(aimHigh, userKey);
-                    $('.category').showTasks(tasks);
+                    $('.category').showTasks(tasks, $.getCurrentDate());
                     
                     //reset the inputs value
                     input.val('New Task...');

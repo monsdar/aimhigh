@@ -67,17 +67,19 @@ class MysqlTaskStorage implements ITaskStorage
         $tasksResult = mysql_query($readTasksQuery);
         while($taskRow = mysql_fetch_array($tasksResult) )
         {
-            $newTask = new Task( $taskRow['TaskId'] );
-            $newTask->setText($taskRow['Text']);
+            $newTask = new Task();
+            $newTask->index = $taskRow['TaskId'];
+            $newTask->text = $taskRow['Text'];
             
-            $readActivations = "SELECT UNIX_TIMESTAMP(ActivationTime) AS ActivationTime FROM activations WHERE TaskId=%d";
+            $readActivations = "SELECT ActivationId, ActivationDate FROM activations WHERE TaskId=%d";
             $readActivations = sprintf($readActivations, $taskRow['TaskId']);
             $actResult = mysql_query($readActivations);
             while($actRow = mysql_fetch_array($actResult) )
             {
-                $newAct = new Activation( $actRow['ActivationId'] );
-                $newAct->setTimestamp($actRow['ActivationTime']);
-                $newTask->addActivation($newAct);
+                $newAct = new Activation();
+                $newAct->index = $actRow['ActivationId'];
+                $newAct->date = $actRow['ActivationDate'];
+                $newTask->activations[] = $newAct;
             }
             
             $allTasks[] = $newTask;
@@ -103,13 +105,13 @@ class MysqlTaskStorage implements ITaskStorage
         $createUser = "INSERT INTO userkeys (UserKey) VALUES ('%s')";
         $createUser = sprintf($createUser, $user);
         $createResult = mysql_query($createUser);
-        if($createResult && mysql_num_rows($createResult) != 0)
+        if($createResult)
         {
             echo("Created user " . $user . "...<br/>");
             
             //add some example tasks to the new user
             $this->createTask($user, "Eat fruits or vegetables");
-            $this->createTask($user, "Exercise for 30 minutes or more");
+            $this->createTask($user, "30 minutes of Exercise");
             $this->createTask($user, "Talk to a friend");
             echo("Added some sample-tasks...<br/>");
         }
@@ -119,7 +121,7 @@ class MysqlTaskStorage implements ITaskStorage
         }
     }
     
-    public function toggleTask($user, $taskId)
+    public function toggleTask($user, $taskId, $date)
     {
         //check if the user has a task with taskId
         $getTaskQuery = "SELECT * FROM tasks, userkeys WHERE TaskId=%d AND UserKey='%s' AND tasks.KeyId=userkeys.KeyId";
@@ -131,13 +133,10 @@ class MysqlTaskStorage implements ITaskStorage
             return;
         }
         
-        //check if there is an activation for today
-        //TODO: Support other dates than today
-        $today = strtotime("today");
-        $tomorrow = strtotime("tomorrow");
-        //echo("Today: " . $today . ", Current: " . time() . ", Tomorrow: " . $tomorrow . "<br/>");
-        $getAct = "SELECT ActivationId FROM activations WHERE activations.TaskId=%d AND UNIX_TIMESTAMP(ActivationTime)>=%d AND UNIX_TIMESTAMP(ActivationTime)<=%d";
-        $getAct = sprintf($getAct, $taskId, $today, $tomorrow);
+        //check if there is an activation for the given day
+        echo('Received the following date: ' . $date);
+        $getAct = "SELECT ActivationId FROM activations WHERE activations.TaskId=%d AND ActivationDate='%s'";
+        $getAct = sprintf($getAct, $taskId, $date);
         $actResult = mysql_query($getAct);
         if($actResult && mysql_num_rows($actResult) != 0)
         {
@@ -145,15 +144,15 @@ class MysqlTaskStorage implements ITaskStorage
             $deleteAct = "DELETE FROM activations WHERE ActivationId=%d";
             $deleteAct = sprintf($deleteAct, mysql_result($actResult, 0, 0));
             mysql_query($deleteAct);
-            echo("Deactivated task #" . $taskId);
+            echo("Deactivated task #" . $taskId . ' for ' . $date);
         }
         else
         {
             //create a new Activation if there isn't one yet
-            $createAct = "INSERT INTO activations (TaskId) VALUES (%d)";
-            $createAct = sprintf($createAct, $taskId);
+            $createAct = "INSERT INTO activations (TaskId, ActivationDate) VALUES (%d, '%s')";
+            $createAct = sprintf($createAct, $taskId, $date);
             mysql_query($createAct);
-            echo("Activated task #" . $taskId);
+            echo("Activated task #" . $taskId . ' for ' . $date);
         }
     }
 }

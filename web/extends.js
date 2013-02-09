@@ -14,6 +14,13 @@ $.extend({
     }
 });
 
+$.extend({
+    //Returns the currently selected date (string in form yy-mm-dd)
+    getCurrentDate: function(){
+        return $('#dateEdit').val();
+    } 
+});
+
 console.log("Extending jQuery with getActivations()");
 $.extend({
     //Returns the summed up activations for the last x days
@@ -21,30 +28,28 @@ $.extend({
         //this object will be returned
         var dailyActivations = new Object();
 
-        //prefill the activations with the the midnights of the requested dates
-        var dayDuration = 60 * 60 * 24 * 1000;
-        var startday = new Date();
-        startday.setHours(0, 0, 0, 0);
-        startday.setDate(startday.getDate() - (lastXDays-1));
-        startday = startday.getTime();
+        //prefill the activations with the requested dates
+        var date = $.datepicker.parseDate('yy-mm-dd', $.datepicker.formatDate('yy-mm-dd', new Date()));
+        date.setDate( date.getDate() - lastXDays ); //start from the first day
         for (var index=0; index<lastXDays; index++)
         { 
-            var currentDay = startday + (index * dayDuration);
-            dailyActivations[ currentDay ] = 0;
+            date.setDate(date.getDate() + 1); //add a day
+            var currentDate = $.datepicker.formatDate('yy-mm-dd', date)
+            dailyActivations[ currentDate ] = 0;
         }
 
         //sum up the activations
         $.each(tasks, function(i, task) {
             $.each(task.activations, function(i, act) {
-                var midnight = new Date(act.timestamp * 1000);
-                midnight.setHours(0,0,0,0);
-                if(midnight.getTime() in dailyActivations)
+                if(act.date in dailyActivations)
                 {
-                    dailyActivations[midnight.getTime()] = dailyActivations[midnight.getTime()] + 1;
+                    dailyActivations[act.date] = dailyActivations[act.date] + 1;
+                    console.log('Another score for ' + act.date + ', now ' + dailyActivations[act.date]);
                 }
             });
         });
 
+        console.log(dailyActivations);
         return dailyActivations;
     }
 });
@@ -98,10 +103,14 @@ $.fn.drawChart = function(tasks) {
         
     //push the activations into the graph
     var activations = $.getActivations(tasks, 7);
+    console.log("drawChart() received the following acts: ");
+    console.log(activations);
     var data = [];
     $.each(activations, function(i, act) {
         data.push(act);
     });
+    console.log('Created data: ');
+    console.log(data);
     options.series.push( { name: 'Daily Score', data: data } );
     
     //get the maximum score
@@ -138,20 +147,13 @@ $.fn.createTask = function(url, userkey, text) {
 }
 
 console.log("Defining function showTasks()");
-$.fn.showTasks = function(tasks) {
-    console.log("showTasks() received the following tasks:");
-    console.log(tasks);
+$.fn.showTasks = function(tasks, date) {
     //let's store the object into a variable, so that we can use it in the $.each
     var category = $(this);
     
-    //we need to know when the current day started and ended
-    var todayDate = new Date();
-    var tomorrowDate = new Date(todayDate.getTime() + 24 * 60 * 60 * 1000);
-    todayDate.setHours(0, 0, 0, 0);
-    tomorrowDate.setHours(0, 0, 0, 0);
-    var todayUTC = todayDate.getTime() / 1000;
-    var tomorrowUTC = tomorrowDate.getTime() / 1000;
-    
+    //let's log the date which we're going to show
+    console.log('Refreshing tasks for the following date: ' + date);
+        
     //clean up the calling element
     category.empty();    
     
@@ -162,7 +164,7 @@ $.fn.showTasks = function(tasks) {
         console.log('New Task: ' + item.text + '(' + item.index + ')');
         var taskActivated = '';
         $.each(item.activations, function(i, act) {
-            if(act.timestamp >= todayUTC && act.timestamp < tomorrowUTC ) {
+            if(act.date == date ) {
                 taskActivated = 'solvedTask';
             }       
         });
