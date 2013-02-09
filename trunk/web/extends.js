@@ -25,6 +25,15 @@ $.fn.updateScore = function(container) {
     $(this).text(counter);
 }
 
+$.fn.createTask = function(url, userkey, text) {
+    //send the interface that the task should be created
+    var postVars = {userkey: userkey, request: 'createTask', text: text};
+    $.post(url, postVars, function(data) {
+        console.log("Created new task, received the following response: ");
+        console.log(data);
+    });
+}
+
 $.fn.refreshTasks = function(url, userkey) {
     //let's store the object into a variable, so that we can use it in the $.each
     var category = $(this);

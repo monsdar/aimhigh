@@ -140,18 +140,26 @@
                     editForm.replaceWith(newContent);
                 });
                 
+                $(document).on('click', '.newTask', function() {
+                    $(this).val('');
+                });
+                $(document).on('keypress', '.newTask', function(e) {
+                    var code = (e.keyCode ? e.keyCode : e.which);
+                    if(code == 13) { //<Enter> keycode
+                        //create the task, refresh them afterwards
+                        $('').createTask(aimHigh, userKey, $(this).val());
+                        $('.category').refreshTasks(aimHigh, userKey);
+                        $(this).val('New Task...');
+                    }
+                });
+                
                 $(document).on('click', '.submitCreate', function() {
                     var createDiv = $(this).closest('.createTask');
                     var input = createDiv.find('input');
-                    
-                    //send the interface that the task should be created
-                    var postVars = {userkey: userKey, request: 'createTask', text: input.val()};
-                    $.post(aimHigh, postVars, function(data) {
-                        console.log("Created new task, received the following response: ");
-                        console.log(data);
-                    });
-                    
-                    //refresh the tasks
+                    var text = input.val();
+                                        
+                    //create the task, refresh them afterwards
+                    $('').createTask(aimHigh, userKey, text);
                     $('.category').refreshTasks(aimHigh, userKey);
                     
                     //reset the inputs value
