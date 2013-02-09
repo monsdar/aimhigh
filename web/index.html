@@ -9,11 +9,11 @@
         <script type="text/javascript" src="md5.js"></script>
     </head>
     <body>
+        <div class='scoreContainer'>Your score: <span class="score">0</span></div>
+        <div class='category'></div>
         <div class='createTask'>
             <input type="text" class="newTask" value="New Task..."/>
             <button type="button" class="submitCreate">Create</button>
-        </div>
-        <div class='category'>
         </div>
         <script type="text/javascript">
             $(document).ready(function()
@@ -39,6 +39,7 @@
                 
                 //refresh the tasks
                 $('.category').refreshTasks(aimHigh, userKey);
+                $('.score').updateScore( $('.category') );
                 
                 $(document).on('mouseenter', '.task', function() {
                     //animate to the new size
@@ -80,6 +81,9 @@
                     $.post(aimHigh, postVars, function(data) {
                         console.log("Toggled task #" + taskId + ", received the following response: " + data);
                     });
+                    
+                    //update the score
+                    $('.score').updateScore( $('.category') );
                 });
                 
                 $(document).on('mouseenter', '.editLink', function() {

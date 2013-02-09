@@ -13,6 +13,17 @@ $.extend({
     }
 });
 
+$.fn.updateScore = function(container) {
+    var tasks = container.children('.task');
+    var counter = 0;
+    $.each(tasks, function(i, task) {
+        var classList = $(task).attr('class');
+        if (classList.indexOf('solvedTask') >= 0) {
+            counter = counter + 1;
+        }
+    });
+    $(this).text(counter);
+}
 
 $.fn.refreshTasks = function(url, userkey) {
     //let's store the object into a variable, so that we can use it in the $.each
