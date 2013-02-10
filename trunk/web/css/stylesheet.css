@@ -1,95 +1,46 @@
-.mainContainer {
-    width: 50%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    
-    position: relative;
-}
-.sideContainer {
-    width: 50%;
-    position: absolute;
-    right: 0px;
-}
-
-.scoreContainer {
-    border-width: 2px;
-    border-style: solid;
-    border-color: black;
-    border-radius:25px;
+#scoreContainer {
     text-align: center;
-    
     font-size: 20px;
     font-family: Arial;
 }
-.createTask {
+#createTask {
     background-color: #dedede;
-    height: 60px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: black;
-    border-radius:25px;
 }
-.changeDate {
+#changeDate {
     background-color: #dedede;
-    height: 60px;
-    border-width: 2px;
-    border-style: solid;
-    border-color: black;
-    border-radius:25px;
 }
-.category {
+#category {
     background-color: #a3a3a3;
-    width: 50%;
-    position: absolute;
-    left: 0px;
 }
-.graph {
-    width: 80%;
-    height: auto;
-    margin-left: auto;
-    margin-right: auto;
-    
-    position: absolute;
-    top: 400px;
-}
-.score {
+#scoreGraph {}
+#score {
     font-weight:bold;
     font-size: 32px;
 }
-.task {
-    background-color: #dedede;
-    width: 80%;
-    height: auto;
+.border {
     border-width: 2px;
     border-style: solid;
     border-color: black;
     border-radius:25px;
-    
-    margin-left: 20px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-right: 20px;
+}
+.task {
+    background-color: #dedede;
 }
 .solvedTask {
     background-color: #1eb31e !important;
 }
-.taskText {
+#taskText {
     font-weight:bold;
     font-size: 18px;
     font-family: Arial;
     padding: 20px;
 }
-.taskTextSelected {
-    text-decoration:underline;
-    cursor: pointer;
-}
-.deleteLink {
+#deleteLink {
     font-family: Arial;
     margin: 20px;
     padding: 20px;
 }
-.editLink {
+#editLink {
     font-family: Arial;
     margin: 20px;
     padding: 20px;
@@ -98,15 +49,11 @@
     text-decoration:underline;
     cursor: pointer;
 }
-.editForm {
-    overflow: hidden;
-}
 button {
     font-family: Arial;
     padding-top: 5px;
     padding-bottom: 5px;
     margin: 15px;
-    overflow: hidden;
 }
 input[type=text] {
     font-size: 14px;
@@ -115,8 +62,6 @@ input[type=text] {
     padding-bottom: 5px;
     padding-left: 5px;
     margin: 15px;
-    width: auto;
-    float: left;
     
     border: 5px solid white;
     -webkit-box-shadow:
