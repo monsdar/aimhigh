@@ -7,6 +7,12 @@ require_once("MysqlTaskStorage.php");
 $mysql = new MysqlConnector();
 $storage = new MysqlTaskStorage($mysql);
 
+//escape any incoming MySQL-code at first...
+foreach($_POST as $name => $value)
+{
+    $_POST[$name] = mysql_real_escape_string($value);
+}
+
 //check the POST for incoming requests
 $user = $_POST['userkey'];
 $request = $_POST['request'];
@@ -25,12 +31,14 @@ else if($request == 'updateTask')
 {
     $taskId = $_POST['taskid'];
     $newText = $_POST['text'];
-    $storage->updateTask($user, $taskId, $newText);
+    $category = $_POST['category'];
+    $storage->updateTask($user, $taskId, $newText, $category);
 }
 else if($request == 'createTask')
 {
     $newText = $_POST['text'];
-    $storage->createTask($user, $newText);
+    $category = $_POST['category'];
+    $storage->createTask($user, $newText, $category);
 }
 else if($request == 'touchUser')
 {

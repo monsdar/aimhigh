@@ -13,7 +13,7 @@ class MysqlTaskStorage implements ITaskStorage
         $this->mysql = $mysqlConnector;
     }
     
-    public function createTask($user, $newText)
+    public function createTask($user, $newText, $category)
     {        
         //get the ID of the given user
         $userId = 0;
@@ -44,7 +44,6 @@ class MysqlTaskStorage implements ITaskStorage
         //simply delete. If there is no such task, it won't harm...
         //so no checking needed
         //
-        //TODO: Prevent SQL injection
         //TODO: How to prevent someone just deleting anything with a bruteforce? This would suck...
         $removeTaskQuery = "DELETE tasks FROM tasks,userkeys WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
         $removeTaskQuery = sprintf($removeTaskQuery, $taskId, $user);
@@ -88,10 +87,9 @@ class MysqlTaskStorage implements ITaskStorage
         return $allTasks;
     }
 
-    public function updateTask($user, $taskId, $newText)
+    public function updateTask($user, $taskId, $newText, $category)
     {
         //Update the given task (do nothing if it does not work... who cares?)
-        //TODO: Prevent MySQL-injection here!
         $updateTask = "UPDATE tasks, userkeys SET Text='%s' WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
         $updateTask = sprintf($updateTask, $newText, $taskId, $user);
         mysql_query($updateTask);
@@ -101,7 +99,6 @@ class MysqlTaskStorage implements ITaskStorage
     
     public function touchUser($user)
     {
-        //TODO: Prevent MySQL-injection here!
         $createUser = "INSERT INTO userkeys (UserKey) VALUES ('%s')";
         $createUser = sprintf($createUser, $user);
         $createResult = mysql_query($createUser);
