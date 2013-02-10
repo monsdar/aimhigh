@@ -168,7 +168,7 @@ $.fn.showTasks = function(tasks, date) {
                 taskActivated = 'solvedTask';
             }       
         });
-        category.append('<div class="task ' + taskActivated + '" id="#id-' + item.index + '"><p><a class="taskText">' + item.text + '</a></p></div>');
+        category.append('<div class="task ' + taskActivated + ' border" id="#id-' + item.index + '"><p><a id="taskText">' + item.text + '</a></p></div>');
     });
 }
 
