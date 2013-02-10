@@ -31,9 +31,25 @@ class MysqlTaskStorage implements ITaskStorage
             return;
         }
         
+        //get the categoryId
+        $catId = 0;
+        $catIdQuery = "SELECT CategoryId FROM categories WHERE Name='%s';";
+        $catIdQuery = sprintf($catIdQuery, $category);
+        $catIdResult = mysql_query($catIdQuery);
+        if( $catIdResult && mysql_num_rows($catIdResult) != 0 )
+        {
+            $catId = (int)mysql_result($catIdResult, 0, 0);
+        }
+        else
+        {
+            //simply return nothing if the user does not exist
+            echo("Category " . $category . " does not exist<br/>");
+            return;
+        }
+        
         //add the new task
-        $createTaskQuery = "INSERT INTO tasks (KeyId, Text) VALUES (%d, '%s')";
-        $createTaskQuery = sprintf($createTaskQuery, $userId, $newText);
+        $createTaskQuery = "INSERT INTO tasks (KeyId, CategoryId, Text) VALUES (%d, %d, '%s')";
+        $createTaskQuery = sprintf($createTaskQuery, $userId, $catId, $newText);
         mysql_query($createTaskQuery);
         
         echo("New task created successfully<br/>");
@@ -61,7 +77,7 @@ class MysqlTaskStorage implements ITaskStorage
     {
         $allTasks = array();
         
-        $readTasksQuery = "SELECT * FROM tasks, userkeys WHERE tasks.KeyId=userkeys.KeyId AND userkeys.UserKey='%s'";
+        $readTasksQuery = "SELECT * FROM tasks, userkeys, categories WHERE tasks.KeyId=userkeys.KeyId AND userkeys.UserKey='%s' AND tasks.CategoryId=categories.CategoryId";
         $readTasksQuery = sprintf($readTasksQuery, $user);
         $tasksResult = mysql_query($readTasksQuery);
         while($taskRow = mysql_fetch_array($tasksResult) )
@@ -69,6 +85,7 @@ class MysqlTaskStorage implements ITaskStorage
             $newTask = new Task();
             $newTask->index = $taskRow['TaskId'];
             $newTask->text = $taskRow['Text'];
+            $newTask->category = $taskRow['Name'];
             
             $readActivations = "SELECT ActivationId, ActivationDate FROM activations WHERE TaskId=%d";
             $readActivations = sprintf($readActivations, $taskRow['TaskId']);
@@ -89,9 +106,25 @@ class MysqlTaskStorage implements ITaskStorage
 
     public function updateTask($user, $taskId, $newText, $category)
     {
+        //get the categoryId
+        $catId = 0;
+        $catIdQuery = "SELECT CategoryId FROM categories WHERE Name='%s';";
+        $catIdQuery = sprintf($catIdQuery, $category);
+        $catIdResult = mysql_query($catIdQuery);
+        if( $catIdResult && mysql_num_rows($catIdResult) != 0 )
+        {
+            $catId = (int)mysql_result($catIdResult, 0, 0);
+        }
+        else
+        {
+            //simply return nothing if the user does not exist
+            echo("Category " . $category . " does not exist<br/>");
+            return;
+        }
+        
         //Update the given task (do nothing if it does not work... who cares?)
-        $updateTask = "UPDATE tasks, userkeys SET Text='%s' WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
-        $updateTask = sprintf($updateTask, $newText, $taskId, $user);
+        $updateTask = "UPDATE tasks, userkeys SET Text='%s', CategoryId=%d WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
+        $updateTask = sprintf($updateTask, $newText, $catId, $taskId, $user);
         mysql_query($updateTask);
         
         echo("Updated task # " . $taskId . " of user " . $user . " successfully<br/>");
@@ -107,9 +140,9 @@ class MysqlTaskStorage implements ITaskStorage
             echo("Created user " . $user . "...<br/>");
             
             //add some example tasks to the new user
-            $this->createTask($user, "Eat fruits or vegetables");
-            $this->createTask($user, "30 minutes of Exercise");
-            $this->createTask($user, "Talk to a friend");
+            $this->createTask($user, "Eat fruits or vegetables", "Food");
+            $this->createTask($user, "30 minutes of exercise", "Sport");
+            $this->createTask($user, "Talk to a friend", "Social");
             echo("Added some sample-tasks...<br/>");
         }
         else

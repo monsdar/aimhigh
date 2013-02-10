@@ -139,7 +139,7 @@ $.fn.updateScore = function(container) {
 console.log("Defining function createTask()");
 $.fn.createTask = function(url, userkey, text) {
     //send the interface that the task should be created
-    var postVars = {userkey: userkey, request: 'createTask', text: text};
+    var postVars = {userkey: userkey, request: 'createTask', text: text, category: 'Social'};
     $.post(url, postVars, function(data) {
         console.log("Created new task, received the following response: ");
         console.log(data);
