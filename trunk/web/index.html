@@ -178,7 +178,7 @@
                     //send the interface that the task should be updated
                     var task = $(this).closest('.task');
                     var taskId = task.attr('id').split('-')[1];
-                    var postVars = {userkey: userKey, request: 'updateTask', taskid: taskId, text: input.val()};
+                    var postVars = {userkey: userKey, request: 'updateTask', taskid: taskId, text: input.val(), category: 'Social'};
                     $.post(aimHigh, postVars, function(data) {
                         console.log("Edited Task #" + taskId + ", received the following response: " + data);
                     });
