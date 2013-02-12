@@ -1,0 +1,43 @@
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+.align-right {
+  position:absolute;
+  right: 10px;
+}
+
+@media all and (min-width: 850px) {
+  .category {
+    width: 400px;
+    float: left;
+    margin-right: 10px;
+  }
+}
+
+.date {
+  width: 160px !important;
+}
+
+.positiveTask {
+  background-color: #BED9BA;
+}
+
+.negativeTask {
+  background-color: #F5CCB0;
+}
+
+.positiveTaskDone {
+  background-color: #7DD672;
+}
+
+.negativeTaskDone {
+  background-color: #FCBA8D;
+}
+
+#introduction {
+  margin: 20;
+}
