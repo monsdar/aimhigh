@@ -16,26 +16,37 @@
     float: left;
     margin-right: 10px;
   }
+  .catList {
+    width: 380px;
+  }
 }
+@media all and (max-width: 849px) {
+  .category {
+    padding-bottom: 20px;
+  }
+}
+
 
 .date {
   width: 160px !important;
 }
 
 .positiveTask {
-  background-color: #BED9BA;
+  border-left: 10px solid #9ED989;
 }
 
 .negativeTask {
-  background-color: #F5CCB0;
+  border-left: 10px solid #F5C7A2;
 }
 
 .positiveTaskDone {
-  background-color: #7DD672;
+  background-color: #9ED989;
+  border-left: 10px solid #9ED989;
 }
 
 .negativeTaskDone {
-  background-color: #FCBA8D;
+  background-color: #F5C7A2;
+  border-left: 10px solid #F5C7A2;
 }
 
 #introduction {
