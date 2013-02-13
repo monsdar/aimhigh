@@ -77,6 +77,18 @@ $.extend({
     getCurrentDate: function(){
         var date = $('#selectedDate').val();
         return date;
+    },
+    
+    //Returns if the given task is currently activated
+    getActivationState: function(task) {
+        var currentDate = $.getCurrentDate();
+        var result = false;
+        $.each(task.activations, function(i, act) {
+            if(act.date == currentDate){
+                result = true;
+            }   
+        });
+        return result;
     }
 });
 
@@ -130,14 +142,21 @@ $.fn.showTasks = function(tasks, date) {
     //add the tasks to the categories
     $.each(tasks, function(i, task) {
         
-        //TODO: get activation-state
         //TODO: get streak
         
+        //get activation-state
+        var isActivated = $.getActivationState(task);
+        
         var type = 'positiveTask';
-        if(task.isNegative == '1') {
+        if(task.isNegative == '1' && !isActivated) {
             type = 'negativeTask';    
         }
-        
+        else if(task.isNegative == '1' && isActivated) {
+            type = 'negativeTaskDone';    
+        }
+        else if(task.isNegative == '0' && isActivated) {
+            type = 'positiveTaskDone';    
+        }        
         
         var newTask = "";
         newTask +=  "<li class='" + type + "'>";
