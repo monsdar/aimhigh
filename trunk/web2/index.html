@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css" />
-<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
-<meta charset=utf-8 />
-<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    <meta charset=utf-8 />
+    
+    <!-- jQuery and jQuery Mobile includes -->
+    <link href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 
-<!-- custom CSS file -->
-<link href="style.css" rel="stylesheet" type="text/css" />
-
-<title>AimHigh Prototype</title>
+    <!-- Custom content -->
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script src="script/script.js"></script>
+    <script src="script/md5.js"></script>
+    
+    <title>AimHigh Prototype</title>
 </head>
 <body>
   
@@ -35,16 +39,22 @@
         <h3>Health</h3>
         <ul data-role="listview" class="catList">
           <li class="positiveTask">
-            <h3>Stairwalker</h3>
+            <div class="ui-grid-a">
+              <div class="ui-block-a"><h3>Stairwalker</h3></div>
+              <div class="ui-block-b text-right"></div>
+            </div>
             <p>You've taken the stairs instead of the elevator. Faster is better!</p></li>
           <li class="positiveTask">
-            <h3>Bicycler</h3>
+            <div class="ui-grid-a">
+              <div class="ui-block-a"><h3>Bicycler</h3></div>
+              <div class="ui-block-b text-right"></div>
+            </div>
             <p>Instead of hitting the road with your car, you drove by bike!</p>
           </li>
           <li class="negativeTaskDone">
             <div class="ui-grid-a">
               <div class="ui-block-a"><h3>Couch Potato</h3></div>
-              <div class="ui-block-b text-right">Done</div>
+              <div class="ui-block-b text-right">Streak+2</div>
             </div>
             <p>You skipped your exercise routine!</p>
           </li>
@@ -55,19 +65,25 @@
         <h3>Food</h3>
         <ul data-role="listview" class="catList">
           <li class="negativeTask">
-            <h3>Super Size Me</h3>
+            <div class="ui-grid-a">
+              <div class="ui-block-a"><h3>Super Size Me</h3></div>
+              <div class="ui-block-b text-right"></div>
+            </div>
             <p>Eating Fast Food does not help your diet plans</p>
           </li>
           <li class="positiveTaskDone">
             <div class="ui-grid-a">
               <div class="ui-block-a"><h3>Herbivore</h3></div>
-              <div class="ui-block-b text-right">Done</div>
+              <div class="ui-block-b text-right">Streak+1</div>
             </div>
             <p>Eat vegetables - Carrots help you see in the dark</p>
       
           </li>
           <li class="positiveTask">
-            <h3>Eating fruit</h3>
+            <div class="ui-grid-a">
+              <div class="ui-block-a"><h3>Eating fruit</h3></div>
+              <div class="ui-block-b text-right">Streak+5</div>
+            </div>
             <p>One apple a day keeps the doctor away</p></li>
         </ul>
       </div>
