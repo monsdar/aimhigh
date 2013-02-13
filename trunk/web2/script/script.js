@@ -37,13 +37,15 @@ $(document).ready( function () {
     console.log("Build the following date: " + dateStr);
     $("#selectedDate").val( dateStr );
     
+    //update the categories/tasks
+    $.refreshTasks(aimHigh, userkey);
+    
     
 });
 
 ///////////////////////////////////////
 //   Specific Extensions
 ///////////////////////////////////////
-console.log("Extending jQuery with getUserKey()");
 $.extend({
     //Returns the userkey-portion of the URL
     //Returns '' if a file is given (the given URL contains '.' at the end))
@@ -55,6 +57,26 @@ $.extend({
              userKey = '';
          }
          return userKey;
+    },
+    
+    //queries and returns the tasks of the given user
+    refreshTasks: function(url, userkey) {
+        var postVars = {userkey: userkey, request: 'getTasks'};
+        $.post(url, postVars, function(data) {
+            var tasks = $.parseJSON(data);
+            
+            console.log("getTasks() received the following tasks:");
+            console.log(tasks);
+            
+            //refresh everything
+            $('#categories').showTasks(tasks, $.getCurrentDate());
+        });
+    },
+    
+    //Returns the currently selected date (string in form yy-mm-dd)
+    getCurrentDate: function(){
+        var date = $('#selectedDate').val();
+        return date;
     }
 });
 
@@ -67,3 +89,68 @@ $.extend({
         return (number < 10 ? '0' : '') + number;
     }
 });
+
+///////////////////////////////////////
+//   Custom functions
+///////////////////////////////////////
+$.fn.showTasks = function(tasks, date) {
+    //let's store the container into a variable, so that we can use it later
+    //it seems as if javascript is overwriting the this-pointer somewhere in $.each
+    var categories = $(this);
+    
+    //let's log the date which we're going to show
+    console.log('Refreshing tasks for the following date: ' + date);
+        
+    //clean up the calling element
+    categories.empty();    
+    
+    //gather the categories
+    var givenCategories = [];
+    $.each(tasks, function(i, item)
+    {
+        var currentCat = item.category;
+        if( $.inArray(currentCat, givenCategories) == -1 )
+        {
+            givenCategories.push(currentCat);
+        }
+    });
+    console.log('Found the following categories: ');
+    console.log(givenCategories);   
+    
+    //add the category-divs
+    $.each(givenCategories, function(i, cat) {
+        var newCat = "";
+        newCat += "<div class='category'>";
+        newCat +=   "<h3>" + cat + "</h3>";
+        newCat +=   "<ul data-role='listview' class='catList' id='" + cat + "List'></ul>";
+        newCat += "</div>";
+        categories.append(newCat);
+    });
+    
+    //add the tasks to the categories
+    $.each(tasks, function(i, task) {
+        
+        //TODO: get activation-state
+        //TODO: get streak
+        
+        var type = 'positiveTask';
+        if(task.isNegative == '1') {
+            type = 'negativeTask';    
+        }
+        
+        
+        var newTask = "";
+        newTask +=  "<li class='" + type + "'>";
+        newTask +=      "<div class='ui-grid-a'>";
+        newTask +=          "<div class='ui-block-a'><h3>" + task.title + "</h3></div>";
+        newTask +=          "<div class='ui-block-b text-right'>Streak+1</div>";
+        newTask +=      "</div>";
+        newTask +=      "<p>" + task.text + "</p>";
+        newTask +=  "</li>";
+        $('#' + task.category + 'List').append(newTask);
+    });
+    
+    //refresh the page (this causes jQuery Mobile to update the UI elements)
+    $('#mainPage').trigger('create');
+}
+

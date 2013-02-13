@@ -18,7 +18,7 @@
 </head>
 <body>
   
-  <div data-role="page">
+  <div data-role="page" id="mainPage">
 	<div data-role="header" data-position="fixed">
 	  <h1>AimHigh</h1>
       <a href="index.html" class="ui-btn-right" data-icon="plus">New Task</a>
@@ -35,57 +35,59 @@
     
       <p id="introduction">AimHigh helps to build habits by giving you a daily score. Simply enter what you want to do on a daily basis. Mark what you've done and see your progress over time.</p>
       
-      <div class="category">
-        <h3>Health</h3>
-        <ul data-role="listview" class="catList">
-          <li class="positiveTask">
-            <div class="ui-grid-a">
-              <div class="ui-block-a"><h3>Stairwalker</h3></div>
-              <div class="ui-block-b text-right"></div>
-            </div>
-            <p>You've taken the stairs instead of the elevator. Faster is better!</p></li>
-          <li class="positiveTask">
-            <div class="ui-grid-a">
-              <div class="ui-block-a"><h3>Bicycler</h3></div>
-              <div class="ui-block-b text-right"></div>
-            </div>
-            <p>Instead of hitting the road with your car, you drove by bike!</p>
-          </li>
-          <li class="negativeTaskDone">
-            <div class="ui-grid-a">
-              <div class="ui-block-a"><h3>Couch Potato</h3></div>
-              <div class="ui-block-b text-right">Streak+2</div>
-            </div>
-            <p>You skipped your exercise routine!</p>
-          </li>
-        </ul>
-      </div>
-      
-      <div class="category">
-        <h3>Food</h3>
-        <ul data-role="listview" class="catList">
-          <li class="negativeTask">
-            <div class="ui-grid-a">
-              <div class="ui-block-a"><h3>Super Size Me</h3></div>
-              <div class="ui-block-b text-right"></div>
-            </div>
-            <p>Eating Fast Food does not help your diet plans</p>
-          </li>
-          <li class="positiveTaskDone">
-            <div class="ui-grid-a">
-              <div class="ui-block-a"><h3>Herbivore</h3></div>
-              <div class="ui-block-b text-right">Streak+1</div>
-            </div>
-            <p>Eat vegetables - Carrots help you see in the dark</p>
-      
-          </li>
-          <li class="positiveTask">
-            <div class="ui-grid-a">
-              <div class="ui-block-a"><h3>Eating fruit</h3></div>
-              <div class="ui-block-b text-right">Streak+5</div>
-            </div>
-            <p>One apple a day keeps the doctor away</p></li>
-        </ul>
+      <div id="categories">
+        <div class="category">
+          <h3>Health</h3>
+          <ul data-role="listview" class="catList" id="HealthList">
+            <li class="positiveTask">
+              <div class="ui-grid-a">
+                <div class="ui-block-a"><h3>Stairwalker</h3></div>
+                <div class="ui-block-b text-right"></div>
+              </div>
+              <p>You've taken the stairs instead of the elevator. Faster is better!</p></li>
+            <li class="positiveTask">
+              <div class="ui-grid-a">
+                <div class="ui-block-a"><h3>Bicycler</h3></div>
+                <div class="ui-block-b text-right"></div>
+              </div>
+              <p>Instead of hitting the road with your car, you drove by bike!</p>
+            </li>
+            <li class="negativeTaskDone">
+              <div class="ui-grid-a">
+                <div class="ui-block-a"><h3>Couch Potato</h3></div>
+                <div class="ui-block-b text-right">Streak+2</div>
+              </div>
+              <p>You skipped your exercise routine!</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="category">
+          <h3>Food</h3>
+          <ul data-role="listview" class="catList" id="FoodList">
+            <li class="negativeTask">
+              <div class="ui-grid-a">
+                <div class="ui-block-a"><h3>Super Size Me</h3></div>
+                <div class="ui-block-b text-right"></div>
+              </div>
+              <p>Eating Fast Food does not help your diet plans</p>
+            </li>
+            <li class="positiveTaskDone">
+              <div class="ui-grid-a">
+                <div class="ui-block-a"><h3>Herbivore</h3></div>
+                <div class="ui-block-b text-right">Streak+1</div>
+              </div>
+              <p>Eat vegetables - Carrots help you see in the dark</p>
+
+            </li>
+            <li class="positiveTask">
+              <div class="ui-grid-a">
+                <div class="ui-block-a"><h3>Eating fruit</h3></div>
+                <div class="ui-block-b text-right">Streak+5</div>
+              </div>
+              <p>One apple a day keeps the doctor away</p></li>
+          </ul>
+        </div>
       </div>
     </div>
     
