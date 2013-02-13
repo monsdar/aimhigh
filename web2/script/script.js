@@ -1,21 +1,22 @@
 
 
+////////////////////////////////////////////////////////
+//      Global variables
+////////////////////////////////////////////////////////
+
+
 
 $(document).ready( function () {
     
     ////////////////////////////////////////////////////////
     //      Initialization of the page
     ////////////////////////////////////////////////////////
-    
-    //this is the interface we're using
-    var aimHigh="http://aimhigh2.nilsbrinkmann.com/interface/interface.php";
-    
+        
     //TODO: This is not elegant, we should change the design to support async queries
     $.ajaxSetup({async:false});
     
-    //get the userkey, create a new user if there is no given user
-    var userkey = $.getUserKey();
-    if(userkey == '')
+    //This checks if the user exists or if a new one must be created (via redirect)
+    if($.getUserkey() == '')
     {
         //The following code redirects to the new users page...
         //Perhaps there is a better way to load the URL for a new user,
@@ -26,21 +27,67 @@ $(document).ready( function () {
     }
     
     //call the user, it will be created if not already existing
-    var postVars = {userkey: userkey, request: 'touchUser'};
-    $.post(aimHigh, postVars, function(data) {
+    var postVars = {userkey: $.getUserkey(), request: 'touchUser'};
+    $.post($.getInterfaceUrl(), postVars, function(data) {
         console.log("Touched the user, received the following response: " + data);
     });
     
     //setup the Datepicker
     var currentDate = new Date();
-    var dateStr = currentDate.getFullYear() + "-" + $.pad2(currentDate.getMonth()+1) + "-" + $.pad2(currentDate.getDate());
+    var dateStr = $.getDateString(new Date());
     console.log("Build the following date: " + dateStr);
     $("#selectedDate").val( dateStr );
     
     //update the categories/tasks
-    $.refreshTasks(aimHigh, userkey);
+    $.refreshTasks();
     
     
+});
+
+///////////////////////////////////////
+//   Events
+///////////////////////////////////////
+$(document).on('mouseenter', '.task', function() {
+    $(this).addClass('linkPointer');
+    $(this).find('h3').addClass('underlined');
+});
+$(document).on('mouseleave', '.task', function() {
+    $(this).removeClass('linkPointer');
+    $(this).find('h3').removeClass('underlined');
+});
+
+$(document).on('click', '.task', function() {
+    var task = $(this);
+    
+    //set the new state
+    var classList = task.attr('class').split(/\s+/);
+    $.each( classList, function(index, item){
+        if ( item === 'positiveTask') {
+           task.removeClass('positiveTask').addClass('positiveTaskDone');
+        }
+        else if ( item === 'positiveTaskDone') {
+           task.removeClass('positiveTaskDone').addClass('positiveTask');
+        }
+        else if ( item === 'negativeTask') {
+           task.removeClass('negativeTask').addClass('negativeTaskDone');
+        }
+        else if ( item === 'negativeTaskDone') {
+           task.removeClass('negativeTaskDone').addClass('negativeTask');
+        }
+    });
+
+    //de/activate the task in the DB
+    var taskId = task.attr('id').split('-')[1];
+    var selectedDate = $.getCurrentDate();
+    console.log("Toggling for the following date: " + selectedDate);
+    var postVars = {userkey: $.getUserkey(), request: 'toggleTask', taskid: taskId, date: selectedDate};
+    $.post($.getInterfaceUrl(), postVars, function(data) {
+        console.log("Toggled task #" + taskId + ", received the following response: " + data);
+    });
+
+    //TODO: update the score
+    //TODO: update the streak
+    //TODO: Refresh statistics
 });
 
 ///////////////////////////////////////
@@ -49,7 +96,7 @@ $(document).ready( function () {
 $.extend({
     //Returns the userkey-portion of the URL
     //Returns '' if a file is given (the given URL contains '.' at the end))
-    getUserKey: function(){
+    getUserkey: function(){
          var urlParts = window.location.href.split('/');
          var userKey = urlParts[ urlParts.length - 1 ];
          if(userKey.indexOf('.') !== -1)
@@ -60,9 +107,9 @@ $.extend({
     },
     
     //queries and returns the tasks of the given user
-    refreshTasks: function(url, userkey) {
-        var postVars = {userkey: userkey, request: 'getTasks'};
-        $.post(url, postVars, function(data) {
+    refreshTasks: function() {
+        var postVars = {userkey: $.getUserkey(), request: 'getTasks'};
+        $.post($.getInterfaceUrl(), postVars, function(data) {
             var tasks = $.parseJSON(data);
             
             console.log("getTasks() received the following tasks:");
@@ -73,10 +120,28 @@ $.extend({
         });
     },
     
+    getInterfaceUrl: function() {
+        return "http://aimhigh2.nilsbrinkmann.com/interface/interface.php";
+    },
+    
+    //Returns the given date as a string (yy-mm-dd)
+    getDateString: function(givenDate) {
+        return givenDate.getFullYear() + "-" + $.pad2(givenDate.getMonth()+1) + "-" + $.pad2(givenDate.getDate());  
+    },
+    
     //Returns the currently selected date (string in form yy-mm-dd)
     getCurrentDate: function(){
         var date = $('#selectedDate').val();
         return date;
+    },
+    
+    //Subtracts x days from the given date (yy-mm-dd)
+    subtractDays: function(currentDate, days) {
+        console.log("Given date: " + currentDate);
+        var utc = Date.parse(currentDate);
+        var date = new Date(utc - (1000 * 60 * 60 * 24 * days));
+        console.log("Subtracted date: " + $.getDateString(date));
+        return $.getDateString(date);       
     },
     
     //Returns if the given task is currently activated
@@ -89,6 +154,43 @@ $.extend({
             }   
         });
         return result;
+    },
+    
+    //Returns the current streak as a string "Streak+5"
+    getStreak: function(task) {
+        var currentDate = $.getCurrentDate();
+        var streak = 0;
+        var todayBonus = 0;
+        
+        //let's search for the current date
+        $.each(task.activations, function(i, act) {
+            if(act.date == currentDate) {
+                todayBonus = 1;
+            }
+        });
+        
+        //now we get backwards in time until we cannot find an activation
+        while(true) {
+            currentDate = $.subtractDays(currentDate, 1);
+            var dateFound = false;
+            $.each(task.activations, function(index, act) {
+                if(act.date == currentDate) {
+                    streak += 1;
+                    dateFound = true;
+                }
+            });
+            
+            //if no activation could be found
+            if(!dateFound) {
+                break;
+            }
+        }
+        
+        if(streak + todayBonus <= 0){
+            return "";
+        }
+        
+        return "Streak+" + (streak + todayBonus);
     }
 });
 
@@ -142,7 +244,8 @@ $.fn.showTasks = function(tasks, date) {
     //add the tasks to the categories
     $.each(tasks, function(i, task) {
         
-        //TODO: get streak
+        //calculate the streak
+        var streak = $.getStreak(task);
         
         //get activation-state
         var isActivated = $.getActivationState(task);
@@ -159,10 +262,10 @@ $.fn.showTasks = function(tasks, date) {
         }        
         
         var newTask = "";
-        newTask +=  "<li class='" + type + "'>";
+        newTask +=  "<li class='task " + type + "' id='task-" + task.index + "'>";
         newTask +=      "<div class='ui-grid-a'>";
         newTask +=          "<div class='ui-block-a'><h3>" + task.title + "</h3></div>";
-        newTask +=          "<div class='ui-block-b text-right'>Streak+1</div>";
+        newTask +=          "<div class='ui-block-b text-right'>" + streak + "</div>";
         newTask +=      "</div>";
         newTask +=      "<p>" + task.text + "</p>";
         newTask +=  "</li>";
