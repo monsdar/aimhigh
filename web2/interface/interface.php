@@ -30,15 +30,19 @@ else if($request == 'removeTask')
 else if($request == 'updateTask')
 {
     $taskId = $_POST['taskid'];
+    $newTitle = $_POST['title'];
     $newText = $_POST['text'];
+    $isNegative = $_POST['isnegative'];
     $category = $_POST['category'];
-    $storage->updateTask($user, $taskId, $newText, $category);
+    $storage->updateTask($user, $taskId, $newTitle, $newText, $category, $isNegative);
 }
 else if($request == 'createTask')
 {
+    $newTitle = $_POST['title'];
     $newText = $_POST['text'];
     $category = $_POST['category'];
-    $storage->createTask($user, $newText, $category);
+    $isNegative = $_POST['isnegative'];
+    $storage->createTask($user, $newTitle, $newText, $category, $isNegative);
 }
 else if($request == 'touchUser')
 {
