@@ -13,7 +13,7 @@ class MysqlTaskStorage implements ITaskStorage
         $this->mysql = $mysqlConnector;
     }
     
-    public function createTask($user, $newText, $category)
+    public function createTask($user, $newTitle, $newText, $category, $isNegative)
     {        
         //get the ID of the given user
         $userId = 0;
@@ -48,8 +48,8 @@ class MysqlTaskStorage implements ITaskStorage
         }
         
         //add the new task
-        $createTaskQuery = "INSERT INTO tasks (KeyId, CategoryId, Text) VALUES (%d, %d, '%s')";
-        $createTaskQuery = sprintf($createTaskQuery, $userId, $catId, $newText);
+        $createTaskQuery = "INSERT INTO tasks (KeyId, CategoryId, Title, Text, IsNegative) VALUES (%d, %d, '%s', '%s', %d)";
+        $createTaskQuery = sprintf($createTaskQuery, $userId, $catId, $newTitle, $newText, $isNegative);
         mysql_query($createTaskQuery);
         
         echo("New task created successfully<br/>");
@@ -84,8 +84,10 @@ class MysqlTaskStorage implements ITaskStorage
         {
             $newTask = new Task();
             $newTask->index = $taskRow['TaskId'];
+            $newTask->title = $taskRow['Title'];
             $newTask->text = $taskRow['Text'];
             $newTask->category = $taskRow['Name'];
+            $newTask->isNegative = $taskRow['IsNegative'];
             
             $readActivations = "SELECT ActivationId, ActivationDate FROM activations WHERE TaskId=%d";
             $readActivations = sprintf($readActivations, $taskRow['TaskId']);
@@ -104,7 +106,7 @@ class MysqlTaskStorage implements ITaskStorage
         return $allTasks;
     }
 
-    public function updateTask($user, $taskId, $newText, $category)
+    public function updateTask($user, $taskId, $newTitle, $newText, $category, $isNegative)
     {
         //get the categoryId
         $catId = 0;
@@ -123,8 +125,8 @@ class MysqlTaskStorage implements ITaskStorage
         }
         
         //Update the given task (do nothing if it does not work... who cares?)
-        $updateTask = "UPDATE tasks, userkeys SET Text='%s', CategoryId=%d WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
-        $updateTask = sprintf($updateTask, $newText, $catId, $taskId, $user);
+        $updateTask = "UPDATE tasks, userkeys SET Title='%s', Text='%s', CategoryId=%d, IsNegative=%d WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
+        $updateTask = sprintf($updateTask, $newTitle, $newText, $catId, $isNegative, $taskId, $user);
         mysql_query($updateTask);
         
         echo("Updated task # " . $taskId . " of user " . $user . " successfully<br/>");
@@ -140,9 +142,18 @@ class MysqlTaskStorage implements ITaskStorage
             echo("Created user " . $user . "...<br/>");
             
             //add some example tasks to the new user
-            $this->createTask($user, "Eat fruits or vegetables", "Food");
-            $this->createTask($user, "30 minutes of exercise", "Sport");
-            $this->createTask($user, "Talk to a friend", "Social");
+            $this->createTask($user, "Stairwalker", "You've taken the stairs instead of the elevator. Faster is better!", "Health", false);
+            $this->createTask($user, "Bicycler", "Instead of hitting the road with your car, you drove by bike!", "Health", false);
+            $this->createTask($user, "Couch Potato", "You skipped your exercise routine!", "Health", true);
+            $this->createTask($user, "Super Size Me", "Eating Fast Food does not help your diet plans", "Food", true);
+            $this->createTask($user, "Cook a meal", "You created Haute Cuisine just by yourself!", "Food", false);
+            $this->createTask($user, "Eat fruit", "One apple a day keeps the doctor away", "Food", false);
+            $this->createTask($user, "Herbivore", "Eat vegetables - Carrots help you see in the dark", "Food", false);
+            $this->createTask($user, "Doing the Dishes", "It's easier if you do it more often", "Productivity", false);
+            $this->createTask($user, "Vacuum it all", "Vacuum all the rooms in your house", "Productivity", false);
+            $this->createTask($user, "Do it yourself", "Spend some time on your personal projects", "Productivity", false);
+            $this->createTask($user, "Ping a friend", "Contact someone who you haven't talked to in a while", "Social", false);
+            $this->createTask($user, "Explain something", "Explain something to someone. Anything counts.", "Social", false);
             echo("Added some sample-tasks...<br/>");
         }
         else
