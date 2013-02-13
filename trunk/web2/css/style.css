@@ -27,6 +27,12 @@
   }
 }
 
+.linkPointer {
+    cursor: pointer;
+}
+.underlined {
+    text-decoration:underline;
+}
 
 .date {
   width: 160px !important;
