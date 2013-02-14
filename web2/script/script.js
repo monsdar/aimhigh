@@ -64,15 +64,19 @@ $(document).on('click', '.task', function() {
     $.each( classList, function(index, item){
         if ( item === 'positiveTask') {
            task.removeClass('positiveTask').addClass('positiveTaskDone');
+           task.find('.streak').text( $.increaseStreak(task.find('.streak').text()) );
         }
         else if ( item === 'positiveTaskDone') {
            task.removeClass('positiveTaskDone').addClass('positiveTask');
+           task.find('.streak').text( $.decreaseStreak(task.find('.streak').text()) );
         }
         else if ( item === 'negativeTask') {
            task.removeClass('negativeTask').addClass('negativeTaskDone');
+           task.find('.streak').text( $.increaseStreak(task.find('.streak').text()) );
         }
         else if ( item === 'negativeTaskDone') {
            task.removeClass('negativeTaskDone').addClass('negativeTask');
+           task.find('.streak').text( $.decreaseStreak(task.find('.streak').text()) );
         }
     });
 
@@ -85,8 +89,9 @@ $(document).on('click', '.task', function() {
         console.log("Toggled task #" + taskId + ", received the following response: " + data);
     });
 
-    //TODO: update the score
-    //TODO: update the streak
+    //update the score
+    $.updateScore();
+    
     //TODO: Refresh statistics
 });
 
@@ -156,6 +161,34 @@ $.extend({
         return result;
     },
     
+    //increases a given streak by 1 (Format: Streak+n)
+    increaseStreak: function(givenStreak) {
+        if(givenStreak == '') {
+            return 'Streak+1';
+        }
+        
+        var parts = givenStreak.split('+');
+        var newStreak = 'Streak+' + (parseInt(parts[1]) + 1);
+        
+        console.log("Increasing streak of <" + givenStreak + "> to <" + newStreak + ">");
+        return newStreak;
+    },
+    //decreases a given streak by 1 (Format: Streak+n)
+    decreaseStreak: function(givenStreak) {
+        if(givenStreak == 'Streak+1') {
+            return '';
+        }
+        else if(givenStreak == '') {
+            return '';
+        }
+        
+        var parts = givenStreak.split('+');
+        var newStreak = 'Streak+' + (parseInt(parts[1]) - 1);
+        
+        console.log("Decreasing streak of <" + givenStreak + "> to <" + newStreak + ">");
+        return newStreak;
+    },
+    
     //Returns the current streak as a string "Streak+5"
     getStreak: function(task) {
         var currentDate = $.getCurrentDate();
@@ -191,6 +224,13 @@ $.extend({
         }
         
         return "Streak+" + (streak + todayBonus);
+    },
+    
+    updateScore: function() {
+        var score = $('#score');
+        var numNegative = $('#categories').find('.negativeTaskDone').length;
+        var numPositive = $('#categories').find('.positiveTaskDone').length;
+        score.text( numPositive - numNegative);
     }
 });
 
@@ -265,7 +305,7 @@ $.fn.showTasks = function(tasks, date) {
         newTask +=  "<li class='task " + type + "' id='task-" + task.index + "'>";
         newTask +=      "<div class='ui-grid-a'>";
         newTask +=          "<div class='ui-block-a'><h3>" + task.title + "</h3></div>";
-        newTask +=          "<div class='ui-block-b text-right'>" + streak + "</div>";
+        newTask +=          "<div class='ui-block-b text-right streak'>" + streak + "</div>";
         newTask +=      "</div>";
         newTask +=      "<p>" + task.text + "</p>";
         newTask +=  "</li>";
@@ -274,5 +314,6 @@ $.fn.showTasks = function(tasks, date) {
     
     //refresh the page (this causes jQuery Mobile to update the UI elements)
     $('#mainPage').trigger('create');
+    $.updateScore();
 }
 
