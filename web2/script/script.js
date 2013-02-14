@@ -70,7 +70,7 @@ $(document).on('tap', '.taskMoreLink', function(event) {
     //store the current task into the window-cache (global cache)
     //this is needed for allowing the dialog communicate with the page
     window.selectedTask = $(this).closest('.task');
-    //TODO: Store the category
+    window.selectedCategory = $(this).closest('.category').find('.catName').text();    
     
     //Open Edit/Delete dialog
     $.mobile.changePage($('#editTask'), {transition: 'pop', role: 'dialog'});
@@ -154,18 +154,19 @@ $(document).on('click', '#newTaskSubmit', function() {
 
 $(document).on('pageinit', '#editTask', function() {
     var task = window.selectedTask;
+    var category = window.selectedCategory;
     var dialog = $(this);
     
-    //TODO: Fill in category
-    //TODO: Fill in IsNegative
+    //TODO: Fill in if the task is negative or not
     
     dialog.find('#editTitle').val( task.find('.taskTitle').text() );
     dialog.find('#editText').val( task.find('.taskText').text() );
+    dialog.find('#editCategory').val( category );
 });
 
-$(document).on('click', '#editTaskSubmit', function() {    
-    var page = $(this).closest('#createTask');
-    var id = 0; //TODO: Get the ID
+$(document).on('click', '#editTaskSubmit', function() {
+    var page = $(this).closest('#editTask');
+    var taskId = $.getTaskId(window.selectedTask);
     var title = page.find('#editTitle').val();
     var text = page.find('#editText').val();
     var category = page.find('#editCategory').val();
@@ -179,8 +180,7 @@ $(document).on('click', '#editTaskSubmit', function() {
     }
     
     //edit the task, refresh the tasks after that
-    //TODO: Write the editTask-method (shouldn't be a problem, copy most stuff from createTask)
-    //$.editTask(id, title, text, category, isNegative);
+    $.editTask(taskId, title, text, category, isNegative);
 });
 
 $(document).on('click', '#deleteTaskSubmit', function() {    
@@ -239,6 +239,19 @@ $.extend({
         var postVars = {userkey: $.getUserkey(), request: 'removeTask', taskid: taskId};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Removed task #" + taskId + ", received the following response: " + data);
+            
+            //update the categories/tasks
+            $.refreshTasks();
+        });
+    },
+    
+    //edits a given task
+    editTask: function(taskId, title, text, category, isNegative) {
+        //send the interface that the task should be created
+        var postVars = {userkey: $.getUserkey(), request: 'updateTask', taskid: taskId, title: title, text: text, category: category, isnegative: isNegative};
+        $.post($.getInterfaceUrl(), postVars, function(data) {
+            console.log("Edited task " + taskId + ", received the following response: ");
+            console.log(data);
             
             //update the categories/tasks
             $.refreshTasks();
@@ -406,7 +419,7 @@ $.fn.showTasks = function(tasks, date) {
     $.each(givenCategories, function(i, cat) {
         var newCat = "";
         newCat += "<div class='category'>";
-        newCat +=   "<h3>" + cat + "</h3>";
+        newCat +=   "<h3 class='catName' >" + cat + "</h3>";
         newCat +=   "<ul data-role='listview' class='catList' id='" + cat + "List'></ul>";
         newCat += "</div>";
         categories.append(newCat);
