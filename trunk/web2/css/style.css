@@ -39,21 +39,21 @@
 }
 
 .positiveTask {
-  border-left: 10px solid #9ED989;
+  border-left: 10px solid #75A365;
 }
 
 .negativeTask {
-  border-left: 10px solid #F5C7A2;
+  border-left: 10px solid #ED813E;
 }
 
 .positiveTaskDone {
   background-color: #9ED989;
-  border-left: 10px solid #9ED989;
+  border-left: 10px solid #75A365;
 }
 
 .negativeTaskDone {
-  background-color: #F5C7A2;
-  border-left: 10px solid #F5C7A2;
+  background-color: #F2BC9B;
+  border-left: 10px solid #ED813E;
 }
 
 #introduction {
