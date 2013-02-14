@@ -452,7 +452,7 @@ $.fn.showTasks = function(tasks, date) {
         newTask +=          "<div class='ui-block-b text-right streak'>" + streak + "</div>";
         newTask +=      "</div>";
         newTask +=      "<div class='ui-grid-a'>";
-        newTask +=          "<div class='ui-block-a' style='width:85%;'><p class='taskText' style='padding:10px;'>" + task.text + "</p></div>";
+        newTask +=          "<div class='ui-block-a' style='width:85%;'><p class='taskText' style='padding:3px;'>" + task.text + "</p></div>";
         newTask +=          "<div class='ui-block-b text-right moreDiv' style='width:15%;'></div>";
         newTask +=      "</div>";
         newTask +=  "</li>";
