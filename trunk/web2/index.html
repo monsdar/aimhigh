@@ -57,18 +57,18 @@
     <div data-role="content">
         <p>Let's create a new Task!</p>
         <label for="title" class="ui-hidden-accessible">Title:</label>
-        <input type="text" id="title" placeholder="Title"  />
+        <input type="text" id="createTitle" placeholder="Title"  />
         <label for="text" class="ui-hidden-accessible">Text:</label>
-        <input type="text" id="text" placeholder="Text"  />
+        <input type="text" id="createText" placeholder="Text"  />
         <div class="ui-grid-a">
             <div class="ui-block-a">
                 <label for="category" class="ui-hidden-accessible">Category:</label>
-                <input type="text" id="category" placeholder="Category"  />
+                <input type="text" id="createCategory" placeholder="Category"  />
             </div>
             <div class="ui-block-b">
                 <div class="align-right">
                     <label for="isNegative">Negative Task?</label>
-                    <select id="isNegative" data-role="slider">
+                    <select id="createIsNegative" data-role="slider">
                             <option value="positive" selected>No</option>
                             <option value="negative">Yes</option>
                     </select>
@@ -78,6 +78,47 @@
         <span style="padding:10px;"></span>
         <hr>
         <a href="#" data-role="button" data-rel="back" id="newTaskSubmit" data-theme="b">Submit</a>
+        <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
+    </div>
+</div>
+    
+<div data-role="page" id="editTask">
+    <div data-role="header" data-position="fixed">
+        <h1>Edit Task</h1>
+    </div>
+    <div data-role="content">
+        <p>Change the Task!</p>
+        <label for="title" class="ui-hidden-accessible">Title:</label>
+        <input type="text" id="editTitle" placeholder="Title"  />
+        <label for="text" class="ui-hidden-accessible">Text:</label>
+        <input type="text" id="editText" placeholder="Text"  />
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <label for="category" class="ui-hidden-accessible">Category:</label>
+                <input type="text" id="editCategory" placeholder="Category"  />
+            </div>
+            <div class="ui-block-b">
+                <div class="align-right">
+                    <label for="isNegative">Negative Task?</label>
+                    <select id="editIsNegative" data-role="slider">
+                            <option value="positive" selected>No</option>
+                            <option value="negative">Yes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <span style="padding:10px;"></span>
+        <hr>
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <a href="#" data-role="button" data-rel="back" id="deleteTaskSubmit" data-theme="b">Delete</a>
+            </div>
+            <div class="ui-block-b">
+                <div class="align-right">
+                    <a href="#" data-role="button" data-rel="back" id="editTaskSubmit" data-theme="b">Edit</a>
+                </div>
+            </div>
+        </div>
         <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
     </div>
 </div>
