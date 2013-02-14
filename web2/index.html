@@ -17,11 +17,11 @@
     <title>AimHigh Prototype</title>
 </head>
 <body>
-  
+      
 <div data-role="page" id="mainPage">
     <div data-role="header" data-position="fixed">
         <h1>AimHigh</h1>
-        <a href="index.html" class="ui-btn-right" data-icon="plus">New Task</a>
+        <a href="#createTask" class="ui-btn-right" data-rel="dialog" data-transition="pop" data-icon="plus">New Task</a>
     </div>
     <div data-role="content">
         <div class="ui-grid-a">
@@ -49,6 +49,15 @@
         </div>
     </div>
 </div> 
+    
+<div data-role="page" id="createTask">
+    <div data-role="header" data-position="fixed">
+        <h1>New Task</h1>
+    </div>
+    <div data-role="content">
+        <p>Test</p>
+    </div>
+</div>
     
 </body>
 </html>

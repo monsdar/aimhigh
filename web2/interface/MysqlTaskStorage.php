@@ -31,25 +31,9 @@ class MysqlTaskStorage implements ITaskStorage
             return;
         }
         
-        //get the categoryId
-        $catId = 0;
-        $catIdQuery = "SELECT CategoryId FROM categories WHERE Name='%s';";
-        $catIdQuery = sprintf($catIdQuery, $category);
-        $catIdResult = mysql_query($catIdQuery);
-        if( $catIdResult && mysql_num_rows($catIdResult) != 0 )
-        {
-            $catId = (int)mysql_result($catIdResult, 0, 0);
-        }
-        else
-        {
-            //simply return nothing if the user does not exist
-            echo("Category " . $category . " does not exist<br/>");
-            return;
-        }
-        
         //add the new task
-        $createTaskQuery = "INSERT INTO tasks (KeyId, CategoryId, Title, Text, IsNegative) VALUES (%d, %d, '%s', '%s', %d)";
-        $createTaskQuery = sprintf($createTaskQuery, $userId, $catId, $newTitle, $newText, $isNegative);
+        $createTaskQuery = "INSERT INTO tasks (KeyId, Category, Title, Text, IsNegative) VALUES (%d, '%s', '%s', '%s', %d)";
+        $createTaskQuery = sprintf($createTaskQuery, $userId, $category, $newTitle, $newText, $isNegative);
         mysql_query($createTaskQuery);
         
         echo("New task created successfully<br/>");
@@ -77,7 +61,7 @@ class MysqlTaskStorage implements ITaskStorage
     {
         $allTasks = array();
         
-        $readTasksQuery = "SELECT * FROM tasks, userkeys, categories WHERE tasks.KeyId=userkeys.KeyId AND userkeys.UserKey='%s' AND tasks.CategoryId=categories.CategoryId";
+        $readTasksQuery = "SELECT * FROM tasks, userkeys WHERE tasks.KeyId=userkeys.KeyId AND userkeys.UserKey='%s'";
         $readTasksQuery = sprintf($readTasksQuery, $user);
         $tasksResult = mysql_query($readTasksQuery);
         while($taskRow = mysql_fetch_array($tasksResult) )
@@ -86,7 +70,7 @@ class MysqlTaskStorage implements ITaskStorage
             $newTask->index = $taskRow['TaskId'];
             $newTask->title = $taskRow['Title'];
             $newTask->text = $taskRow['Text'];
-            $newTask->category = $taskRow['Name'];
+            $newTask->category = $taskRow['Category'];
             $newTask->isNegative = $taskRow['IsNegative'];
             
             $readActivations = "SELECT ActivationId, ActivationDate FROM activations WHERE TaskId=%d";
@@ -107,26 +91,10 @@ class MysqlTaskStorage implements ITaskStorage
     }
 
     public function updateTask($user, $taskId, $newTitle, $newText, $category, $isNegative)
-    {
-        //get the categoryId
-        $catId = 0;
-        $catIdQuery = "SELECT CategoryId FROM categories WHERE Name='%s';";
-        $catIdQuery = sprintf($catIdQuery, $category);
-        $catIdResult = mysql_query($catIdQuery);
-        if( $catIdResult && mysql_num_rows($catIdResult) != 0 )
-        {
-            $catId = (int)mysql_result($catIdResult, 0, 0);
-        }
-        else
-        {
-            //simply return nothing if the user does not exist
-            echo("Category " . $category . " does not exist<br/>");
-            return;
-        }
-        
+    {        
         //Update the given task (do nothing if it does not work... who cares?)
-        $updateTask = "UPDATE tasks, userkeys SET Title='%s', Text='%s', CategoryId=%d, IsNegative=%d WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
-        $updateTask = sprintf($updateTask, $newTitle, $newText, $catId, $isNegative, $taskId, $user);
+        $updateTask = "UPDATE tasks, userkeys SET Title='%s', Text='%s', Category='%s', IsNegative=%d WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
+        $updateTask = sprintf($updateTask, $newTitle, $newText, $category, $isNegative, $taskId, $user);
         mysql_query($updateTask);
         
         echo("Updated task # " . $taskId . " of user " . $user . " successfully<br/>");
