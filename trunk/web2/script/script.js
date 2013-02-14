@@ -39,8 +39,6 @@ $(document).ready( function () {
     
     //update the categories/tasks
     $.refreshTasks();
-    
-    
 });
 
 ///////////////////////////////////////
@@ -107,6 +105,29 @@ $(document).on('change', '#selectedDate', function() {
     $.refreshTasks();
 });
 
+$(document).on('click', '#newTaskSubmit', function() {
+    var page = $(this).closest('#createTask');
+    var title = page.find('#title').val();
+    var text = page.find('#text').val();
+    var category = page.find('#category').val();
+    var isNegative = page.find('#isNegative').val();
+    
+    if(isNegative == 'positive') {
+        isNegative = 0;
+    }
+    else {
+        isNegative = 1;
+    }
+    
+    //create the task, refresh them afterwards
+    $.createTask(title, text, category, isNegative);
+
+    //reset the inputs value
+    page.find('#title').val('');
+    page.find('#text').val('');
+    page.find('#category').val('');
+});
+
 ///////////////////////////////////////
 //   Specific Extensions
 ///////////////////////////////////////
@@ -115,12 +136,20 @@ $.extend({
     //Returns '' if a file is given (the given URL contains '.' at the end))
     getUserkey: function(){
          var urlParts = window.location.href.split('/');
-         var userKey = urlParts[ urlParts.length - 1 ];
-         if(userKey.indexOf('.') !== -1)
-         {
-             userKey = '';
+         var userkey = urlParts[ urlParts.length - 1 ];
+         
+         //don't return a user if a page is selected
+         //NOTE: Why do we implement that? Does this ever happen?
+         if(userkey.indexOf('.') !== -1) {
+             userkey = '';
          }
-         return userKey;
+         
+         //don't return any GET-variables
+         if(userkey.indexOf('#') !== -1) {
+             userkey = userkey.split('#')[0];
+         }
+         
+         return userkey;
     },
     
     //queries and returns the tasks of the given user
@@ -134,6 +163,18 @@ $.extend({
             
             //refresh everything
             $('#categories').showTasks(tasks, $.getCurrentDate());
+        });
+    },
+
+    createTask: function(title, text, category, isNegative) {
+        //send the interface that the task should be created
+        var postVars = {userkey: $.getUserkey(), request: 'createTask', title: title, text: text, category: category, isnegative: isNegative};
+        $.post($.getInterfaceUrl(), postVars, function(data) {
+            console.log("Created new task, received the following response: ");
+            console.log(data);
+            
+            //update the categories/tasks
+            $.refreshTasks();
         });
     },
     
@@ -154,10 +195,8 @@ $.extend({
     
     //Subtracts x days from the given date (yy-mm-dd)
     subtractDays: function(currentDate, days) {
-        console.log("Given date: " + currentDate);
         var utc = Date.parse(currentDate);
         var date = new Date(utc - (1000 * 60 * 60 * 24 * days));
-        console.log("Subtracted date: " + $.getDateString(date));
         return $.getDateString(date);       
     },
     
