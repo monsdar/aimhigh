@@ -53,7 +53,36 @@ $(document).on('mouseleave', '.task', function() {
     $(this).find('h3').removeClass('underlined');
 });
 
-$(document).on('click', '.task', function() {
+$(document).on('swipeleft swiperight', '.task', function() {
+    //Open Edit/Delete dialog
+    $.mobile.changePage($('#editTask'), {transition: 'pop', role: 'dialog'});
+});
+
+$(document).on('mouseenter', '.taskMoreLink', function() {
+    $(this).addClass('underlined');
+});
+$(document).on('mouseleave', '.taskMoreLink', function() {
+    $(this).removeClass('underlined');
+});
+$(document).on('tap', '.taskMoreLink', function(event) {
+    event.stopPropagation();
+    
+    //store the current task into the window-cache (global cache)
+    //this is needed for allowing the dialog communicate with the page
+    window.selectedTask = $(this).closest('.task');
+    //TODO: Store the category
+    
+    //Open Edit/Delete dialog
+    $.mobile.changePage($('#editTask'), {transition: 'pop', role: 'dialog'});
+});
+
+$(document).on('mouseenter', '.task', function() {
+    $(this).find('.moreDiv').append("<a href='#' class='taskMoreLink'>More</a>");
+});
+$(document).on('mouseleave', '.task', function() {
+   $('.taskMoreLink').remove();
+});
+$(document).on('tap', '.task', function() {
     var task = $(this);
     
     //set the new state
@@ -107,10 +136,10 @@ $(document).on('change', '#selectedDate', function() {
 
 $(document).on('click', '#newTaskSubmit', function() {
     var page = $(this).closest('#createTask');
-    var title = page.find('#title').val();
-    var text = page.find('#text').val();
-    var category = page.find('#category').val();
-    var isNegative = page.find('#isNegative').val();
+    var title = page.find('#createTitle').val();
+    var text = page.find('#createText').val();
+    var category = page.find('#createCategory').val();
+    var isNegative = page.find('#createIsNegative').val();
     
     if(isNegative == 'positive') {
         isNegative = 0;
@@ -119,13 +148,47 @@ $(document).on('click', '#newTaskSubmit', function() {
         isNegative = 1;
     }
     
-    //create the task, refresh them afterwards
+    //create the task, refresh the tasks after that
     $.createTask(title, text, category, isNegative);
+});
 
-    //reset the inputs value
-    page.find('#title').val('');
-    page.find('#text').val('');
-    page.find('#category').val('');
+$(document).on('pageinit', '#editTask', function() {
+    var task = window.selectedTask;
+    var dialog = $(this);
+    
+    //TODO: Fill in category
+    //TODO: Fill in IsNegative
+    
+    dialog.find('#editTitle').val( task.find('.taskTitle').text() );
+    dialog.find('#editText').val( task.find('.taskText').text() );
+});
+
+$(document).on('click', '#editTaskSubmit', function() {    
+    var page = $(this).closest('#createTask');
+    var id = 0; //TODO: Get the ID
+    var title = page.find('#editTitle').val();
+    var text = page.find('#editText').val();
+    var category = page.find('#editCategory').val();
+    var isNegative = page.find('#editIsNegative').val();
+    
+    if(isNegative == 'positive') {
+        isNegative = 0;
+    }
+    else {
+        isNegative = 1;
+    }
+    
+    //edit the task, refresh the tasks after that
+    //TODO: Write the editTask-method (shouldn't be a problem, copy most stuff from createTask)
+    //$.editTask(id, title, text, category, isNegative);
+});
+
+$(document).on('click', '#deleteTaskSubmit', function() {    
+    var task = window.selectedTask;
+    var id = $.getTaskId(task);
+    
+    //delete the task, refresh the tasks after that
+    $.deleteTask(id);
 });
 
 ///////////////////////////////////////
@@ -152,6 +215,11 @@ $.extend({
          return userkey;
     },
     
+    //returns the taskId of a given task
+    getTaskId: function(task) {
+        return task.attr('id').split('-')[1];
+    },
+    
     //queries and returns the tasks of the given user
     refreshTasks: function() {
         var postVars = {userkey: $.getUserkey(), request: 'getTasks'};
@@ -166,6 +234,18 @@ $.extend({
         });
     },
 
+    //deletes a task by its taskId
+    deleteTask: function(taskId) {
+        var postVars = {userkey: $.getUserkey(), request: 'removeTask', taskid: taskId};
+        $.post($.getInterfaceUrl(), postVars, function(data) {
+            console.log("Removed task #" + taskId + ", received the following response: " + data);
+            
+            //update the categories/tasks
+            $.refreshTasks();
+        });
+    },
+    
+    //creates a task
     createTask: function(title, text, category, isNegative) {
         //send the interface that the task should be created
         var postVars = {userkey: $.getUserkey(), request: 'createTask', title: title, text: text, category: category, isnegative: isNegative};
@@ -355,10 +435,13 @@ $.fn.showTasks = function(tasks, date) {
         var newTask = "";
         newTask +=  "<li class='task " + type + "' id='task-" + task.index + "'>";
         newTask +=      "<div class='ui-grid-a'>";
-        newTask +=          "<div class='ui-block-a'><h3>" + task.title + "</h3></div>";
+        newTask +=          "<div class='ui-block-a'><h3 class='taskTitle'>" + task.title + "</h3></div>";
         newTask +=          "<div class='ui-block-b text-right streak'>" + streak + "</div>";
         newTask +=      "</div>";
-        newTask +=      "<p>" + task.text + "</p>";
+        newTask +=      "<div class='ui-grid-a'>";
+        newTask +=          "<div class='ui-block-a' style='width:85%;'><p class='taskText' style='padding:10px;'>" + task.text + "</p></div>";
+        newTask +=          "<div class='ui-block-b text-right moreDiv' style='width:15%;'></div>";
+        newTask +=      "</div>";
         newTask +=  "</li>";
         $('#' + task.category + 'List').append(newTask);
     });

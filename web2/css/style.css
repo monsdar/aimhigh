@@ -1,3 +1,10 @@
+
+
+.taskMoreLink {
+    color: black;
+    text-decoration: none;
+}
+
 .text-center {
   text-align: center;
 }
@@ -31,7 +38,7 @@
     cursor: pointer;
 }
 .underlined {
-    text-decoration:underline;
+    text-decoration:underline !important;
 }
 
 .date {
