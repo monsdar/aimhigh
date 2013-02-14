@@ -33,7 +33,6 @@ $(document).ready( function () {
     });
     
     //setup the Datepicker
-    var currentDate = new Date();
     var dateStr = $.getDateString(new Date());
     console.log("Build the following date: " + dateStr);
     $("#selectedDate").val( dateStr );
@@ -93,6 +92,19 @@ $(document).on('click', '.task', function() {
     $.updateScore();
     
     //TODO: Refresh statistics
+});
+
+
+$(document).on('change', '#selectedDate', function() {
+    var dateEdit = $('#selectedDate');
+    if(dateEdit.val() == '') {
+        dateEdit.val( $.getDateString(new Date()) );
+    }
+    
+    console.log("Date changed to " + $('#selectedDate').val() );
+    
+    //update the categories/tasks
+    $.refreshTasks();
 });
 
 ///////////////////////////////////////
