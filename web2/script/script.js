@@ -8,11 +8,12 @@
 
 $(document).ready( function () {
     
-    ////////////////////////////////////////////////////////
+    //////////////////////////////////////////////
     //      Initialization of the page
     ////////////////////////////////////////////////////////
         
     //TODO: This is not elegant, we should change the design to support async queries
+    //We're using async callbacks, but the page is loading "cleaner", so I'll let this in here for first...
     $.ajaxSetup({async:false});
     
     //This checks if the user exists or if a new one must be created (via redirect)
@@ -135,7 +136,7 @@ $(document).on('change', '#selectedDate', function() {
 
 $(document).on('pagebeforeshow', '#createTask', function() {
     console.log("Opened CreateTask dialog");
-    var page = $(this);    
+    var page = $(this);
     page.find('#createTitle').val('');
     page.find('#createText').val('');
     page.find('#createCategory').val('');
