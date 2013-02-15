@@ -54,8 +54,7 @@ $(document).on('mouseleave', '.task', function() {
 });
 
 $(document).on('swipeleft swiperight', '.task', function() {
-    //Open Edit/Delete dialog
-    $.mobile.changePage($('#editTask'), {transition: 'pop', role: 'dialog'});
+    '.taskMoreLink'.trigger('tap');
 });
 
 $(document).on('mouseenter', '.taskMoreLink', function() {
@@ -134,6 +133,16 @@ $(document).on('change', '#selectedDate', function() {
     $.refreshTasks();
 });
 
+$(document).on('pagebeforeshow', '#createTask', function() {
+    console.log("Opened CreateTask dialog");
+    var page = $(this);    
+    page.find('#createTitle').val('');
+    page.find('#createText').val('');
+    page.find('#createCategory').val('');
+    page.find('#createIsNegative').val('positive');
+});
+
+
 $(document).on('click', '#newTaskSubmit', function() {
     var page = $(this).closest('#createTask');
     var title = page.find('#createTitle').val();
@@ -152,13 +161,13 @@ $(document).on('click', '#newTaskSubmit', function() {
     $.createTask(title, text, category, isNegative);
 });
 
-$(document).on('pageinit', '#editTask', function() {
+$(document).on('pagebeforeshow', '#editTask', function() {
+    console.log("Opened EditTask dialog");
     var task = window.selectedTask;
     var category = window.selectedCategory;
     var dialog = $(this);
     
     //TODO: Fill in if the task is negative or not
-    
     dialog.find('#editTitle').val( task.find('.taskTitle').text() );
     dialog.find('#editText').val( task.find('.taskText').text() );
     dialog.find('#editCategory').val( category );
