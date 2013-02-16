@@ -9,6 +9,9 @@
     <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 
+    <!-- Highcharts -->
+    <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+    
     <!-- Custom content -->
     <link href="css/style.css" rel="stylesheet" type="text/css" />
     <script src="script/script.js"></script>
@@ -42,7 +45,7 @@
                 <h1 class="text-center">Daily Score: <span id="score"></span></h1>
             </div>
             <div class="ui-block-b">
-                <a href="#" class="align-right" data-role="button" data-inline="true">Graph</a>
+                <a href="#pageStats" class="align-right" id="statsButton" data-role="button" data-rel="dialog" data-transition="pop" data-icon="search" data-inline="true">Statistics</a>
             </div>
         </div>
         <p id="introduction">AimHigh helps to build habits by giving you a daily score. Simply enter what you want to do on a daily basis. Mark what you've done and see your progress over time.</p>
@@ -94,6 +97,16 @@
         <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
     </div>
 </div>
+    
+<div data-role="page" id="pageStats">
+    <div data-role="header" data-position="fixed">
+        <h1>Statistics</h1>
+    </div>
+    <div data-role="content">
+        <div id="graph" class="align-center"></div>
+        <a href="#" data-role="button" data-rel="back" data-theme="b">Ok!</a>
+    </div>
+</div>        
     
 <div data-role="page" id="editTask">
     <div data-role="header" data-position="fixed">

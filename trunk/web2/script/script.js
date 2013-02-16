@@ -40,6 +40,9 @@ $(document).ready( function () {
     
     //update the categories/tasks
     $.refreshTasks();
+    
+    //update and display the graph
+    $('#graph').showGraph();
 });
 
 ///////////////////////////////////////
@@ -115,10 +118,11 @@ $(document).on('tap', '.task', function() {
         console.log("Toggled task #" + taskId + ", received the following response: " + data);
     });
 
-    //update the score
-    $.updateScore();
+    //update the categories/tasks
+    $.refreshTasks();
     
-    //TODO: Refresh statistics
+    //update and display the graph
+    $('#graph').showGraph();
 });
 
 
@@ -235,9 +239,11 @@ $.extend({
         var postVars = {userkey: $.getUserkey(), request: 'getTasks'};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             var tasks = $.parseJSON(data);
-            
             console.log("getTasks() received the following tasks:");
             console.log(tasks);
+            
+            //store the tasks
+            window.tasks = tasks;
             
             //refresh everything
             $('#categories').showTasks(tasks, $.getCurrentDate());
@@ -385,6 +391,37 @@ $.extend({
         var numNegative = $('#categories').find('.negativeTaskDone').length;
         var numPositive = $('#categories').find('.positiveTaskDone').length;
         score.text( numPositive - numNegative);
+    },
+    
+    //Returns the summed up activations for the last x days
+    getActivations: function(tasks, lastXDays) {
+        //this object will be returned
+        var dailyActivations = new Object();
+
+        //prefill the activations with the requested dates
+        var date = new Date();
+        date.setDate( date.getDate() - lastXDays ); //start from the first day
+        for (var index=0; index<lastXDays; index++)
+        { 
+            date.setDate(date.getDate() + 1); //add a day
+            var dateStr = $.getDateString(date);
+            dailyActivations[ dateStr ] = 0;
+        }
+
+        //sum up the activations
+        $.each(tasks, function(i, task) {
+            $.each(task.activations, function(i, act) {
+                if(act.date in dailyActivations)
+                {
+                    if(task.isNegative == "1") {
+                        dailyActivations[act.date] = dailyActivations[act.date] - 1;
+                    } else {
+                        dailyActivations[act.date] = dailyActivations[act.date] + 1;
+                    }
+                }
+            });
+        });
+        return dailyActivations;
     }
 });
 
@@ -393,14 +430,58 @@ $.extend({
 //   Common Extensions
 ///////////////////////////////////////
 $.extend({
+    //Sets a given single-digit number to double digits (leading 0)
     pad2: function(number) {
         return (number < 10 ? '0' : '') + number;
+    },
+    //Returns the maximum value from a given list
+    getMaximum: function(items) {
+        var maximum = 0;
+        $.each(items, function(i, item) {
+            if(item > maximum){
+                maximum = item;
+            }
+        });
+        return maximum;
+    },
+    //Returns the minimum value from a given list (must be lower than 0)
+    getMinimum: function(items) {
+        var minimum = 0;
+        $.each(items, function(i, item) {
+            if(item < minimum){
+                minimum = item;
+            }
+        });
+        return minimum;      
     }
 });
 
 ///////////////////////////////////////
 //   Custom functions
 ///////////////////////////////////////
+$.fn.showGraph = function() {
+    var options = {};
+    options.chart = { renderTo: $(this).attr('id'), type: 'line' };
+    options.title = { text: 'Score History' };
+    options.series = [];
+        
+    //push the activations into the graph
+    var activations = $.getActivations(window.tasks, 7);
+    var data = [];
+    $.each(activations, function(i, act) {
+        data.push(act);
+    });
+    options.series.push( { name: 'Daily Score', data: data } );
+    
+    //get the maximum score
+    var maxScore = $.getMaximum(activations);
+    var minScore = $.getMinimum(activations);
+    
+    options.yAxis = { title: { text: 'Score'}, allowDecimals: false, min: minScore, minTickInterval: 1, max: maxScore};
+    options.xAxis = { title: { text: 'Time'}, allowDecimals: false, labels: { enabled: false }};
+    
+    return new Highcharts.Chart(options);
+};
 $.fn.showTasks = function(tasks, date) {
     //let's store the container into a variable, so that we can use it later
     //it seems as if javascript is overwriting the this-pointer somewhere in $.each
@@ -472,5 +553,4 @@ $.fn.showTasks = function(tasks, date) {
     //refresh the page (this causes jQuery Mobile to update the UI elements)
     $('#mainPage').trigger('create');
     $.updateScore();
-}
-
+};

@@ -1,4 +1,8 @@
-
+#graph {
+    width: 75%;
+    max-width: 400px;
+    height: 200px;
+}
 
 .taskMoreLink {
     color: black;
@@ -15,6 +19,10 @@
 .align-right {
   position:absolute;
   right: 10px;
+}
+.align-center {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media all and (min-width: 850px) {
