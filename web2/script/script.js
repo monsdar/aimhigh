@@ -57,35 +57,30 @@ $(document).on('mouseleave', '.task', function() {
     $(this).find('h3').removeClass('underlined');
 });
 
-$(document).on('swipeleft swiperight', '.task', function() {
-    '.taskMoreLink'.trigger('tap');
+$(document).on('contextmenu', '.task', function(event) {
+    event.preventDefault();
+});
+$(document).on('mouseup', '.task', function(event) {
+    if(event.which == 3) {
+        $.openEditDialog($(this));
+    }
 });
 
-$(document).on('mouseenter', '.taskMoreLink', function() {
-    $(this).addClass('underlined');
-});
-$(document).on('mouseleave', '.taskMoreLink', function() {
-    $(this).removeClass('underlined');
-});
-$(document).on('tap', '.taskMoreLink', function(event) {
-    event.stopPropagation();
-    
-    //store the current task into the window-cache (global cache)
-    //this is needed for allowing the dialog communicate with the page
-    window.selectedTask = $(this).closest('.task');
-    window.selectedCategory = $(this).closest('.category').find('.catName').text();    
-    
-    //Open Edit/Delete dialog
-    $.mobile.changePage($('#editTask'), {transition: 'pop', role: 'dialog'});
-});
-
-$(document).on('mouseenter', '.task', function() {
-    $(this).find('.moreDiv').append("<a href='#' class='taskMoreLink'>More</a>");
-});
-$(document).on('mouseleave', '.task', function() {
-   $('.taskMoreLink').remove();
+var ignoreTaskTapOnce = false;
+$(document).on('taphold', '.task', function() {
+    //After TapHold the Tap-Event is thrown on some devices
+    //To avoid that the global variable ignoreTaskTapOnce is used
+    //If it's set, the Tap-Event will be ignored
+    ignoreTaskTapOnce = true;
+    $.openEditDialog($(this));
 });
 $(document).on('tap', '.task', function() {
+    //See comment on Task.Taphold why this code is here
+    if(ignoreTaskTapOnce) {
+        ignoreTaskTapOnce = false;
+        return;
+    }    
+    
     var task = $(this);
     
     //set the new state
@@ -232,6 +227,16 @@ $.extend({
     //returns the taskId of a given task
     getTaskId: function(task) {
         return task.attr('id').split('-')[1];
+    },
+    
+    openEditDialog: function(taskHtml) {
+        //store the current task into the window-cache (global cache)
+        //this is needed for allowing the dialog communicate with the page
+        window.selectedTask = taskHtml.closest('.task');
+        window.selectedCategory = taskHtml.closest('.category').find('.catName').text();    
+    
+        //Open Edit/Delete dialog
+        $.mobile.changePage($('#editTask'), {transition: 'pop', role: 'dialog'});  
     },
     
     //queries and returns the tasks of the given user
@@ -542,10 +547,7 @@ $.fn.showTasks = function(tasks, date) {
         newTask +=          "<div class='ui-block-a'><h3 class='taskTitle'>" + task.title + "</h3></div>";
         newTask +=          "<div class='ui-block-b text-right streak'>" + streak + "</div>";
         newTask +=      "</div>";
-        newTask +=      "<div class='ui-grid-a'>";
-        newTask +=          "<div class='ui-block-a' style='width:85%;'><p class='taskText' style='padding:3px;'>" + task.text + "</p></div>";
-        newTask +=          "<div class='ui-block-b text-right moreDiv' style='width:15%;'></div>";
-        newTask +=      "</div>";
+        newTask +=      "<p class='taskText'>" + task.text + "</p>";
         newTask +=  "</li>";
         $('#' + task.category + 'List').append(newTask);
     });
