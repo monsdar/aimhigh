@@ -1,0 +1,14 @@
+
+
+- Create a new DB for AimHigh
+- Use database/createDatabase.sql to create the necessary DB layout
+- Enter the MySQL-details in web2/interface/MysqlConnector.php
+- Enter your Google Analytics Key in web2/script/googleanalytics.js (Line 3)
+- Upload anything from web2 onto your Webserver
+
+AimHigh should now run as expected.
+
+For any further questions or requests contact us via http://code.google.com/p/aimhigh/
+
+    
+
