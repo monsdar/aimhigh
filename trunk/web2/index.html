@@ -33,15 +33,19 @@
         <a href="#createTask" class="ui-btn-right" data-rel="dialog" data-transition="pop" data-icon="plus">New Task</a>
     </div>
     <div data-role="content">
-        <div class="ui-grid-a">
-            <div class="ui-block-a">
-                <h1 class="text-center">Daily Score: <span id="score"></span></h1>
-            </div>
-            <div class="ui-block-b">
-                <a href="#pageStats" class="align-right" id="statsButton" data-role="button" data-rel="dialog" data-transition="pop" data-icon="search" data-inline="true">Statistics</a>
+        <div id="scoreSign">
+            <h1 class="text-center">Daily Score: <span id="score"></span></h1>
+        </div>
+        <div id="navBar" data-role="controlgroup" data-type="horizontal">
+            <a href="#pageStats" id="statsButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="grid" data-inline="true">Statistics</a>
+            <a href="#pageTasks" id="tasksButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="star" data-inline="true">Tasks</a>
+            <a href="#pageAbout" id="aboutButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="search" data-inline="true">About</a>
+        </div>
+        <div class="ui-grid-solo">
+            <div id="introContainer" class="ui-block-a">
+                <p id="introduction">AimHigh helps to build habits by giving you a daily score. Feel free to <a href="" id="bookmark">bookmark this page</a> and enter your progress daily.</p>
             </div>
         </div>
-        <p id="introduction">AimHigh helps to build habits by giving you a daily score. Feel free to <a href="" id="bookmark">bookmark this page</a> and enter your progress daily.</p>
         
         <div id="categories"></div>
     </div>
