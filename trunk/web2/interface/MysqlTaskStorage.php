@@ -110,13 +110,12 @@ class MysqlTaskStorage implements ITaskStorage
             echo("Created user " . $user . "...<br/>");
             
             //add some example tasks to the new user
-            $this->createTask($user, "Stairwalker", "You\\'ve taken the stairs instead of the elevator", "Health", false);
+            $this->createTask($user, "Elevator", "You took the elevator when you could take the stairs instead", "Health", true);
             $this->createTask($user, "Bicycler", "Instead of hitting the road with your car, you drove by bike!", "Health", false);
             $this->createTask($user, "Couch Potato", "You skipped your exercise routine!", "Health", true);
             $this->createTask($user, "Super Size Me", "Eating Fast Food does not help your diet plans", "Food", true);
             $this->createTask($user, "Cook a meal", "You created Haute Cuisine just by yourself!", "Food", false);
             $this->createTask($user, "Eat fruit", "One apple a day keeps the doctor away", "Food", false);
-            $this->createTask($user, "Herbivore", "Eat vegetables - Carrots help you see in the dark", "Food", false);
             $this->createTask($user, "Do the Dishes", "It\\'s easier if you do it more often", "Productivity", false);
             $this->createTask($user, "Vacuum it all", "Vacuum all the rooms in your house", "Productivity", false);
             $this->createTask($user, "Do it yourself", "Spend some time on your personal projects", "Productivity", false);
