@@ -24,7 +24,7 @@ $(document).ready( function () {
     $("#selectedDate").val( dateStr );
     
     //update the categories/tasks
-    $.queryTasks();
+    $.refreshCategories();
 });
 
 ///////////////////////////////////////
@@ -158,7 +158,7 @@ $(document).on('click', '#newTaskSubmit', function() {
     
     //create the task, refresh the tasks after that
     $.createTask(title, text, category, isNegative);
-    $.queryTasks();
+    $.refreshCategories();
 });
 
 //Initializes the EditTaskDialog with value from the selected task
@@ -196,7 +196,7 @@ $(document).on('click', '#editTaskSubmit', function() {
     
     //edit the task, refresh the tasks after that
     $.editTask(taskId, title, text, category, isNegative);
-    $.queryTasks();
+    $.refreshCategories();
 });
 
 $(document).on('click', '#deleteTaskSubmit', function() {
@@ -204,7 +204,7 @@ $(document).on('click', '#deleteTaskSubmit', function() {
     
     //delete the task, refresh the tasks after that
     $.deleteTask(taskId);
-    $.queryTasks();
+    $.refreshCategories();
 });
 
 ///////////////////////////////////////
@@ -214,6 +214,16 @@ $.extend({
     //returns the taskId of a given task
     getTaskId: function(task) {
         return task.attr('id').split('-')[1];
+    },
+    
+    //queries the interface for tasks and fills them into the categories-div
+    refreshCategories: function() {
+        var callback = function (tasks) {
+            $('#categories').showTasks(tasks);
+        };
+        var callbacks = new Array();
+        callbacks.push(callback);
+        $.queryTasks(callbacks);  
     },
     
     openEditDialog: function(taskHtml) {
