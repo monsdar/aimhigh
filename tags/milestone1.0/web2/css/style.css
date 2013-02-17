@@ -1,0 +1,76 @@
+#graph {
+    width: 75%;
+    max-width: 400px;
+    height: 200px;
+}
+
+.taskMoreLink {
+    color: black;
+    text-decoration: none;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+.align-right {
+  position:absolute;
+  right: 10px;
+}
+.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media all and (min-width: 850px) {
+  .category {
+    width: 400px;
+    float: left;
+    margin-right: 10px;
+    padding-bottom: 20px;
+  }
+  .catList {
+    width: 380px;
+  }
+}
+@media all and (max-width: 849px) {
+  .category {
+    padding-bottom: 20px;
+  }
+}
+
+.linkPointer {
+    cursor: pointer;
+}
+.underlined {
+    text-decoration:underline !important;
+}
+
+.date {
+  width: 160px !important;
+}
+
+.positiveTask {
+  border-left: 10px solid #75A365;
+}
+
+.negativeTask {
+  border-left: 10px solid #ED813E;
+}
+
+.positiveTaskDone {
+  background-color: #9ED989;
+  border-left: 10px solid #75A365;
+}
+
+.negativeTaskDone {
+  background-color: #F2BC9B;
+  border-left: 10px solid #ED813E;
+}
+
+#introduction {
+  margin: 20;
+}

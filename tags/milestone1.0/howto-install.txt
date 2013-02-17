@@ -1,0 +1,12 @@
+
+
+- Create a new DB for AimHigh
+- Use database/createDatabase.sql to create the necessary DB layout
+- Enter the MySQL-details in web2/interface/MysqlConnector.php
+
+AimHigh should now run as expected.
+
+For any further questions or requests contact us via http://code.google.com/p/aimhigh/
+
+    
+
