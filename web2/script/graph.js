@@ -44,7 +44,7 @@ $.fn.showGraph = function(taskContainer) {
     options.series = [];
         
     //get the tasks from the container
-    var tasks;
+    var tasks = new Array();
     var htmlTasks = $(taskContainer).find('.task');
     $.each(htmlTasks, function(i, htmlTask) {
         var taskId = "#" + htmlTask.id;
