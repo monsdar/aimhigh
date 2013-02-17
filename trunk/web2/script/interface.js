@@ -11,7 +11,7 @@ $.extend({
     
     //Returns the URL to the PHP interface
     getInterfaceUrl: function() {
-        return "http://aimhigh2.nilsbrinkmann.com/interface/interface.php";
+        return "http://" + document.domain + '/' + "interface/interface.php";
     },
     
     //Touches the user, gets the userkey via $.getUserKey
