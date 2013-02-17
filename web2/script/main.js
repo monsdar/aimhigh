@@ -11,7 +11,7 @@ $(document).ready( function () {
         //Perhaps there is a better way to load the URL for a new user,
         //but I couldn't find it...
         var randomMd5 = md5( Math.random().toString() );
-        window.location.replace("http://aimhigh2.nilsbrinkmann.com/" + randomMd5);
+        window.location.replace("http://" + document.domain + '/' + randomMd5);
         return;
     }
     
