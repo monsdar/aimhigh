@@ -24,8 +24,9 @@ $.extend({
     },
     
     //Queries and returns the tasks of the given user
-    //After data is received it calls showTasks of $('categories')
-    queryTasks: function() {
+    //After the data is received it will call the given callback via#
+    //  callback(tasks);
+    queryTasks: function(callbacks) {
         var tasks;
         var postVars = {userkey: $.getUserkey(), request: 'getTasks'};
         $.post($.getInterfaceUrl(), postVars, function(data) {
@@ -33,11 +34,10 @@ $.extend({
             console.log("queryTasks() received the following tasks:");
             console.log(tasks);
             
-            //TODO: Do not store the tasks globally (currently needed by graph)
-            window.tasks = tasks;
-            
-            //TODO: This method should not know about the following, use callbacks instead
-            $('#categories').showTasks(tasks);
+            //call the callbacks
+            $.each( callbacks, function(i, callback) {
+                callback(tasks);
+            });
         });
     },
     
