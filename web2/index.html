@@ -39,7 +39,7 @@
         <div id="navBar" data-role="controlgroup" data-type="horizontal">
             <a href="#pageStats" id="statsButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="grid" data-inline="true">Statistics</a>
             <a href="#pageTasks" id="tasksButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="star" data-inline="true">Tasks</a>
-            <a href="#pageAbout" id="aboutButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="search" data-inline="true">About</a>
+            <a href="#aboutDialog" id="aboutButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="search" data-inline="true">About</a>
         </div>
         <div class="ui-grid-solo">
             <div id="introContainer" class="ui-block-a">
@@ -101,7 +101,7 @@
     </div>
     <div data-role="content">
         <div id="graph" class="align-center"></div>
-        <a href="#" data-role="button" data-rel="back" data-theme="b">Ok!</a>
+        <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
     </div>
 </div>        
     
@@ -134,14 +134,39 @@
         <hr>
         <div class="ui-grid-a">
             <div class="ui-block-a">
-                <a href="#" data-role="button" data-rel="back" id="deleteTaskSubmit" data-theme="b">Delete</a>
+                <a href="#" data-role="button" data-rel="back" id="deleteTaskSubmit" data-theme="b" data-inline="true">Delete</a>
             </div>
             <div class="ui-block-b">
                 <div class="align-right">
-                    <a href="#" data-role="button" data-rel="back" id="editTaskSubmit" data-theme="b">Edit</a>
+                    <a href="#" data-role="button" data-rel="back" id="editTaskSubmit" data-theme="b" data-inline="true">Edit</a>
                 </div>
             </div>
         </div>
+        <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
+    </div>
+</div>
+    
+<div data-role="page" id="aboutDialog">
+    <div data-role="header">
+        <h1>About</h1>
+    </div>
+    <div data-role="content">
+        <p>You are using <b>AimHigh Milestone 2.0 (work in progress)</b></p>
+        
+        <hr>
+        <p>AimHigh is <a href="http://code.google.com/p/aimhigh/" target="_blank">Open Source</a> Software and actively developed. You can submit <a href="https://groups.google.com/forum/?fromgroups#!forum/aimhigh-discuss" target="_blank">Feedback and Requests</a> to the AimHigh Google Group.</p>
+        <p>For background information on AimHigh and other projects you're invited to visit <a href="http://www.nilsbrinkmann.com/" target="_blank">my blog</a>.
+            
+        <hr>
+        <p>If you want to support the project financially or just buy me a beer, feel free to donate:</p>
+        <form target="_blank" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+            <input type="hidden" name="cmd" value="_s-xclick">
+            <input type="hidden" name="hosted_button_id" value="3PW8XUPVSVXTY">
+            <input class="align-center" type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" name="submit" alt="PayPal - The safer, easier way to pay online!">
+            <img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+        </form>
+        <hr>
+        
         <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
     </div>
 </div>
