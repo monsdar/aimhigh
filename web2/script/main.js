@@ -13,7 +13,7 @@ $(document).ready( function () {
         var randomMd5 = md5( Math.random().toString() );
         var userUrl = "http://" + document.domain + '/' + randomMd5;
         window.location.replace(userUrl);
-        $('#bookmark').attr("href", userUrl);
+        $('.bookmark').attr("href", userUrl);
         return;
     }
     
