@@ -14,7 +14,7 @@
     min-width: 300px;
     float: left;
 }
-#introContainer {
+#mainTextContainer {
     width: 100%;
     float: left;
 }
@@ -22,11 +22,6 @@
 .border {
     border-style:solid;
     border-width:5px;
-}
-
-.taskMoreLink {
-    color: black;
-    text-decoration: none;
 }
 
 .text-center {
@@ -93,6 +88,6 @@
   border-left: 10px solid #ED813E;
 }
 
-#introduction {
-  margin: 20;
+#mainText {
+  margin: 20px;
 }

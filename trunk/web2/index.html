@@ -42,18 +42,19 @@
             <a href="#aboutDialog" id="aboutButton" data-role="button" data-rel="dialog" data-transition="pop" data-iconpos="top" data-icon="search" data-inline="true">About</a>
         </div>
         <div class="ui-grid-solo">
-            <div id="introContainer" class="ui-block-a">
-                <p id="introduction">AimHigh helps to build habits by giving you a daily score. Feel free to <a href="" class="bookmark" target="_blank">bookmark this page</a> and enter your progress daily.
-                    <a href="#introPopup1" data-rel="popup" data-position-to="window">Introduction</a></p>
+            <div id="mainTextContainer" class="ui-block-a">
+                <p id="mainText">AimHigh helps to build habits by giving you a daily score. 
+                    Feel free to <a href="" class="bookmark" target="_blank">bookmark this page</a> and enter your progress daily.
+                </p>
             </div>
         </div>
         
         <div id="categories"></div>
         
         <!-- Popups -->
-        <div data-role="popup" id="introPopup1" class="ui-content" data-overlay-theme="a">
+        <div data-role="popup" id="introPopup1" class="introPopup ui-content" data-overlay-theme="a">
             <h2>Welcome to AimHigh!</h2>
-            <p>This short <b>introduction</b> will show you how to use AimHigh at its best.</p>
+            <p><b>AimHigh</b> is a daily race against yourself.</p>
             <hr>
             <p>Before we do anything please note the URL above. It's your personal AimHigh-Profile.<br/>
                 Feel free to <a href="" class="bookmark" target="_blank">bookmark this page</a> and enter your progress daily.
@@ -62,10 +63,10 @@
             <div class="ui-grid-b">
                 <div class="ui-block-a"></div>
                 <div class="ui-block-b">
-                    <a href="#" data-rel="back" data-role="button" data-icon="delete">Close</a>
+                    <a href="#" class="closeDialog" data-rel="back" data-role="button" data-icon="delete">Close</a>
                 </div>
                 <div class="ui-block-c">
-                    <a href="#" data-rel="back" data-role="button" data-icon="arrow-r">Continue...</a>
+                    <a href="#aboutDialog" data-rel="dialog" data-role="button" data-icon="arrow-r">Tell me more...</a>
                 </div>
             </div>
         </div>
@@ -191,7 +192,7 @@
             Drop by if you want to read something about what I'm doing.
         <hr>
         
-        <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
+        <a href="#" class="closeDialog" data-role="button" data-rel="back" data-theme="a">Cancel</a>
     </div>
 </div>
     

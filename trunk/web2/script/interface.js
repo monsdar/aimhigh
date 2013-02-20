@@ -15,12 +15,20 @@ $.extend({
     },
     
     //Touches the user, gets the userkey via $.getUserKey
-    touchUser: function() {
+    //After the data is received and the user is new, it will call the callbacks
+    //  callback();
+    touchUser: function(callbacks) {
         //call the user, it will be created if not already existing
+        var isNewUser = false;
         var postVars = {userkey: $.getUserkey(), request: 'touchUser'};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Touched the user, received the following response: " + data);
+            var answer = $.parseJSON(data);
+            if(answer == true) {
+                isNewUser = true;
+            }
         });
+        return isNewUser;
     },
     
     //Queries and returns the tasks of the given user
