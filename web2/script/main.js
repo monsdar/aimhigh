@@ -4,6 +4,8 @@
 //      Initialization of the page
 //////////////////////////////////////////////
 $(document).ready( function () {
+//TODO: Pageinit should be used rather than ready. Unfortunately it does not work -.- (loads infinitely)
+//$(document).bind("pageinit", function() {
     //This checks if the user exists or if a new one must be created (via redirect)
     if($.getUserkey() == '')
     {
@@ -14,11 +16,13 @@ $(document).ready( function () {
         var userUrl = "http://" + document.domain + '/' + randomMd5;
         window.location.replace(userUrl);
         $('.bookmark').attr("href", userUrl);
+        
         return;
     }
     
     //call the user, it will be created if not already existing
-    $.touchUser();
+    //if the user is new, show the intro popup
+    var isNewUser = $.touchUser();
     
     //setup the Datepicker
     var dateStr = $.getDateString(new Date());
@@ -27,6 +31,11 @@ $(document).ready( function () {
     
     //update the categories/tasks
     $.refreshCategories();
+    
+    //display the Intro-dialog after everything is loaded (not before)
+    if(isNewUser == true) {
+        $('#introPopup1').popup("open");
+    }
 });
 
 ///////////////////////////////////////
@@ -37,6 +46,12 @@ $(document).ready( function () {
 $(document).on('mouseenter', '.task', function() {
     $(this).addClass('linkPointer');
     $(this).find('h3').addClass('underlined');
+});
+
+//TODO: Find a better solution for this
+//This workaround is needed to close the automatically opened dialogs
+$(document).on('tap', '.closeDialog', function() {
+    $.mobile.activePage.dialog('close');
 });
 
 //Visual effects when hovering over a task

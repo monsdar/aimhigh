@@ -27,7 +27,7 @@ class MysqlTaskStorage implements ITaskStorage
         else
         {
             //simply return nothing if the user does not exist
-            echo("User " . $user . " does not exist<br/>");
+            //echo("User " . $user . " does not exist<br/>");
             return;
         }
         
@@ -36,7 +36,7 @@ class MysqlTaskStorage implements ITaskStorage
         $createTaskQuery = sprintf($createTaskQuery, $userId, $category, $newTitle, $newText, $isNegative);
         mysql_query($createTaskQuery);
         
-        echo("New task created successfully<br/>");
+        //echo("New task created successfully<br/>");
     }
 
     public function deleteTask($user, $taskId)
@@ -107,25 +107,30 @@ class MysqlTaskStorage implements ITaskStorage
         $createResult = mysql_query($createUser);
         if($createResult)
         {
-            echo("Created user " . $user . "...<br/>");
+            //echo("Created user " . $user . "...<br/>");
             
             //add some example tasks to the new user
-            $this->createTask($user, "Elevator", "You took the elevator when you could take the stairs instead", "Health", true);
-            $this->createTask($user, "Bicycler", "Instead of hitting the road with your car, you drove by bike!", "Health", false);
-            $this->createTask($user, "Couch Potato", "You skipped your exercise routine!", "Health", true);
-            $this->createTask($user, "Super Size Me", "Eating Fast Food does not help your diet plans", "Food", true);
-            $this->createTask($user, "Cook a meal", "You created Haute Cuisine just by yourself!", "Food", false);
-            $this->createTask($user, "Eat fruit", "One apple a day keeps the doctor away", "Food", false);
-            $this->createTask($user, "Do the Dishes", "It\\'s easier if you do it more often", "Productivity", false);
-            $this->createTask($user, "Vacuum it all", "Vacuum all the rooms in your house", "Productivity", false);
-            $this->createTask($user, "Do it yourself", "Spend some time on your personal projects", "Productivity", false);
-            $this->createTask($user, "Ping a friend", "Contact someone who you haven\\'t talked to in a while", "Social", false);
-            $this->createTask($user, "Explain something", "Explain something to someone. Anything counts.", "Social", false);
-            echo("Added some sample-tasks...<br/>");
+            $this->createTask($user, "Build your Body", "Exercise often, get fitter, faster and stronger", "Health", false);
+            $this->createTask($user, "Eat fruit", "One apple a day keeps the doctor away", "Health", false);
+            $this->createTask($user, "Super Size Me", "Eating Fast Food does not help your diet plans", "Health", true);
+            
+            $this->createTask($user, "I\\'m Positive!", "Click me and see how the Score goes up!", "Introduction", false);
+            $this->createTask($user, "I\\'m Negative... ", "I\\'ll decrease the score, so better avoid me", "Introduction", true);
+            $this->createTask($user, "Streaky", "Create Streaks by completing tasks several days in a row", "Introduction", false);
+            $this->createTask($user, "Change Me", "You can edit tasks with a right mouseclick or long press", "Introduction", false);
+            $this->createTask($user, "Categorize", "Tasks can be ordered in categories, try to create a new task", "Introduction", false);
+            
+            $this->createTask($user, "Procrastination", "Spent the whole day on 9gag and Facebook", "Goals", true);
+            $this->createTask($user, "Do it yourself", "Spend some time on your personal projects", "Goals", false);
+            $this->createTask($user, "Ping a friend", "Contact someone who you haven\\'t talked to in a while", "Goals", false);
+            
+            //echo("Added some sample-tasks...<br/>");
+            return true;
         }
         else
         {
-            echo("User " . $user . " already exists...<br/>");
+            //echo("User " . $user . " already exists...<br/>");
+            return false;
         }
     }
     

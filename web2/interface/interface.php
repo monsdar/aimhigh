@@ -51,7 +51,9 @@ else if($request == 'touchUser')
     //  It creates a file if it does not exist
     //  and opens it, if it exists...
     //So this command just creates a new user if it does not exist yet...
-    $storage->touchUser($user);
+    //It also returns true if a new user has been created, else it returns false
+    $result = $storage->touchUser($user);
+    echo( json_encode($result) );
 }
 else if($request == 'toggleTask')
 {
