@@ -38,12 +38,6 @@ $(document).delegate("#mainPage", "pagebeforeshow", function() {
     
     //update the categories/tasks
     $.refreshCategories();
-    
-   //display the Welcome-dialog, if a new user is visiting the page
-    if(isNewUser == true) {
-        console.log("New user detected, opening welcome-popup...");
-        $('#introPopup').popup( "open" );
-    }
 });    
 
 ///////////////////////////////////////
