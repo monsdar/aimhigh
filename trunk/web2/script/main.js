@@ -3,9 +3,11 @@
 //////////////////////////////////////////////
 //      Initialization of the page
 //////////////////////////////////////////////
-$(document).ready( function () {
-//TODO: Pageinit should be used rather than ready. Unfortunately it does not work -.- (loads infinitely)
-//$(document).bind("pageinit", function() {
+
+//This will change the page to the users page (before anything else will be done)
+$(document).delegate("#mainPage", "pageinit", function() {
+    console.log("PageInit: " + window.location.href);
+    
     //This checks if the user exists or if a new one must be created (via redirect)
     if($.getUserkey() == '')
     {
@@ -14,11 +16,16 @@ $(document).ready( function () {
         //but I couldn't find it...
         var randomMd5 = md5( Math.random().toString() );
         var userUrl = "http://" + document.domain + '/' + randomMd5;
+        console.log("Replacing the Location -> Forward the user to his personal URL");
         window.location.replace(userUrl);
-        $('.bookmark').attr("href", userUrl);
-        
         return;
     }
+    console.log("Nothing to do here...");
+});
+
+//If the page gets initialized, query all the contents of the page
+$(document).delegate("#mainPage", "pagebeforeshow", function() {
+    console.log("PageBeforeShow: " + window.location.href);
     
     //call the user, it will be created if not already existing
     //if the user is new, show the intro popup
@@ -32,11 +39,12 @@ $(document).ready( function () {
     //update the categories/tasks
     $.refreshCategories();
     
-    //display the Intro-dialog after everything is loaded (not before)
+   //display the Welcome-dialog, if a new user is visiting the page
     if(isNewUser == true) {
-        $('#introPopup1').popup("open");
+        console.log("New user detected, opening welcome-popup...");
+        $('#introPopup').popup( "open" );
     }
-});
+});    
 
 ///////////////////////////////////////
 //   Events
@@ -46,12 +54,6 @@ $(document).ready( function () {
 $(document).on('mouseenter', '.task', function() {
     $(this).addClass('linkPointer');
     $(this).find('h3').addClass('underlined');
-});
-
-//TODO: Find a better solution for this
-//This workaround is needed to close the automatically opened dialogs
-$(document).on('tap', '.closeDialog', function() {
-    $.mobile.activePage.dialog('close');
 });
 
 //Visual effects when hovering over a task

@@ -4,9 +4,9 @@
     <meta charset=utf-8 />
     
     <!-- jQuery and jQuery Mobile includes -->
-    <link href="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.css" rel="stylesheet" type="text/css" />
-    <script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.2.0/jquery.mobile-1.2.0.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.js"></script>
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
 
     <!-- Highcharts -->
@@ -23,7 +23,7 @@
     <!-- Google Analytics -->
     <script src="script/googleanalytics.js"></script>
     
-    <title>AimHigh Prototype</title>
+    <title>AimHigh - Build new habits, reach your goals</title>
 </head>
 <body>
       
@@ -52,7 +52,7 @@
         <div id="categories"></div>
         
         <!-- Popups -->
-        <div data-role="popup" id="introPopup1" class="introPopup ui-content" data-overlay-theme="a">
+        <div data-role="popup" id="introPopup" class="ui-content" data-overlay-theme="a" data-history="false">
             <h2>Welcome to AimHigh!</h2>
             <p><b>AimHigh</b> is a daily race against yourself.</p>
             <hr>
@@ -63,10 +63,10 @@
             <div class="ui-grid-b">
                 <div class="ui-block-a"></div>
                 <div class="ui-block-b">
-                    <a href="#" class="closeDialog" data-rel="back" data-role="button" data-icon="delete">Close</a>
+                    <a href="#aboutDialog" data-rel="dialog" data-role="button" data-icon="info">Tell me more...</a>
                 </div>
                 <div class="ui-block-c">
-                    <a href="#aboutDialog" data-rel="dialog" data-role="button" data-icon="arrow-r">Tell me more...</a>
+                    <a href="#" data-rel="back" data-role="button" data-icon="check">Start</a>
                 </div>
             </div>
         </div>
@@ -192,7 +192,7 @@
             Drop by if you want to read something about what I'm doing.
         <hr>
         
-        <a href="#" class="closeDialog" data-role="button" data-rel="back" data-theme="a">Cancel</a>
+        <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
     </div>
 </div>
     
