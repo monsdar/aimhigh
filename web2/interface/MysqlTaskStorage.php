@@ -120,7 +120,7 @@ class MysqlTaskStorage implements ITaskStorage
             $this->createTask($user, "Change Me", "You can edit tasks with a right mouseclick or long press", "Introduction", false);
             $this->createTask($user, "Categorize", "Tasks can be ordered in categories, try to create a new task", "Introduction", false);
             
-            $this->createTask($user, "Procrastination", "Spent the whole day on 9gag and Facebook", "Goals", true);
+            $this->createTask($user, "Procrastination", "You got better things to do than 9Gag and Facebook", "Goals", true);
             $this->createTask($user, "Do it yourself", "Spend some time on your personal projects", "Goals", false);
             $this->createTask($user, "Ping a friend", "Contact someone who you haven\\'t talked to in a while", "Goals", false);
             
