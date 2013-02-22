@@ -304,6 +304,18 @@ $.extend({
         return type;
     },
     
+    //Returns true if the given task is activated at the given date, else false
+    isActivated: function(task, date) {
+        var result = false;
+        $.each(task.activations, function(index, act) {
+            if(act.date == date) {
+                result = true;
+                return false; //break
+            }
+        });
+        return result;
+    },
+    
     //Returns the current streak as a string "Streak+5"
     getStreak: function(task, date) {
         //check if the given task is negative, then call the other function
@@ -315,25 +327,17 @@ $.extend({
         var todayBonus = 0;
         
         //let's search for the current date
-        $.each(task.activations, function(i, act) {
-            if(act.date == date) {
-                todayBonus = 1;
-            }
-        });
+        if($.isActivated(task, date)) {
+            todayBonus = 1;
+        }
         
         //now we get backwards in time until we cannot find an activation
         while(true) {
             date = $.subtractDays(date, 1);
-            var dateFound = false;
-            $.each(task.activations, function(index, act) {
-                if(act.date == date) {
-                    streak += 1;
-                    dateFound = true;
-                }
-            });
-            
-            //if no activation could be found
-            if(!dateFound) {
+            if($.isActivated(task, date)) {
+                streak = streak + 1;
+            }
+            else {
                 break;
             }
         }
@@ -341,7 +345,6 @@ $.extend({
         if(streak + todayBonus <= 0){
             return "";
         }
-        
         return "Streak+" + (streak + todayBonus);
     },
     
@@ -352,21 +355,13 @@ $.extend({
         var streak = 0;
         
         //let's go back in time to search when the task has been lastly activated
-        var doLoop = true;
         //if there are no activations just check if today is activated
+        var containsActivations = true;
         if(task.activations.length == 0) {
-            doLoop = false;
+            containsActivations = false;
         }
-        while(doLoop) {
-            var activated = false;
-            $.each(task.activations, function(index, act) {
-                if(act.date == date) {
-                    activated = true;
-                }
-            });
-
-            //cancel getting the streak if today is activated
-            if(activated) {
+        while(containsActivations) {
+            if($.isActivated(task, date)) {
                 break;
             }
 
