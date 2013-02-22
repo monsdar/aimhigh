@@ -316,13 +316,8 @@ $.extend({
         return result;
     },
     
-    //Returns the current streak as a string "Streak+5"
-    getStreak: function(task, date) {
-        //check if the given task is negative, then call the other function
-        if(task.isNegative == 1) {
-            return $.getNegativeStreak(task, date);
-        }
-        
+    //Returns how long the task has been activated
+    getStreak: function(task, date) {        
         var streak = 0;
         var todayBonus = 0;
         
@@ -342,10 +337,7 @@ $.extend({
             }
         }
         
-        if(streak + todayBonus <= 0){
-            return "";
-        }
-        return "Streak+" + (streak + todayBonus);
+        return (streak + todayBonus);
     },
     
     
@@ -369,17 +361,69 @@ $.extend({
             streak = streak + 1;
         }
         
-        if(streak <= 0) {
+        return streak;
+    },
+    
+    //converts a streak from int to a string like "Streak+5"
+    streakToString: function(streak) {
+        if(streak == 0) {
             return "";
         }
+        
         return "Streak+" + streak;
+    },
+    
+    getDaysSinceLastAct: function(task, date, maxDays) {
+        //if the task haven't been activated yet simply return 1
+        if(task.activations.length <= 1) {
+            return 1;
+        }
+        
+        var days = 1;
+        date = $.subtractDays(date, 1);
+        while(maxDays >= 0) {
+            if($.isActivated(task, date)) {
+                return days;
+            }
+            days = days + 1;
+            date = $.subtractDays(date, 1);
+            maxDays = maxDays - 1;
+        }
+        
+        return maxDays;
+    },
+    
+    getRelativeScore: function(task, date) {
+        var dynamicScore = 1;
+        if(task.isNegative == 0) {
+            dynamicScore = $.getDaysSinceLastAct(task, date, 10);
+        }
+        else {
+            dynamicScore = $.getStreak(task, date);
+        }
+        var baseScore = 1;
+        var result = baseScore + ( (dynamicScore-1) / 10);
+        return (Math.round(result * 100) / 100);
     },
     
     updateScore: function() {
         var score = $('#score');
-        var numNegative = $('#categories').find('.negativeTaskDone').length;
-        var numPositive = $('#categories').find('.positiveTaskDone').length;
-        score.text( numPositive - numNegative);
+        var date = $.getCurrentDate();
+        var scoreNegative = 0;
+        var scorePositive = 0;
+        var htmlTasks = $('#categories').find('.negativeTaskDone, .positiveTaskDone');
+        $.each(htmlTasks, function(index, htmlTask) {
+            var id = "#" + htmlTask.id;
+            var task = $(id).data("task");
+            if(task.isNegative == 0) {
+                scorePositive = scorePositive + $.getRelativeScore(task, date);
+            }
+            else {
+                scoreNegative = scoreNegative + $.getRelativeScore(task, date);
+            } 
+        });
+        
+        score.text( scorePositive - scoreNegative);
     }
 });
 
@@ -394,7 +438,14 @@ $.fn.updateTasks = function() {
         var task = $(id).data("task");
         
         //Streak
-        $(id).find('.streak').text( $.getStreak(task, $.getCurrentDate()) );
+        var streakStr = "";
+        if(task.isNegative == 0) {
+            streakStr = $.streakToString( $.getStreak(task, $.getCurrentDate()));
+        }
+        else {
+            streakStr = $.streakToString( $.getNegativeStreak(task, $.getCurrentDate()));
+        }
+        $(id).find('.streak').text( streakStr );
         
         //Activation
         $(id).removeClass();
@@ -404,12 +455,20 @@ $.fn.updateTasks = function() {
         var catId = "#" + task.category + "List";
         $(catId).listview('refresh');        
     });
+    
+    $.updateScore();
 };
 
 //This appends the given task to the container
 $.fn.appendTask = function(task) {
     //calculate the streak
-    var streak = $.getStreak(task, $.getCurrentDate());
+    var streak = "";
+    if(task.isNegative == 0) {
+        streak = $.streakToString( $.getStreak(task, $.getCurrentDate()));
+    }
+    else {
+        streak = $.streakToString( $.getNegativeStreak(task, $.getCurrentDate()));
+    }
 
     //get activation class
     var type = $.getActivationClass(task);
