@@ -38,7 +38,7 @@ $(document).delegate("#mainPage", "pagebeforeshow", function() {
     
     //update the categories/tasks
     $.refreshCategories();
-});    
+});
 
 ///////////////////////////////////////
 //   Events
@@ -306,6 +306,11 @@ $.extend({
     
     //Returns the current streak as a string "Streak+5"
     getStreak: function(task, date) {
+        //check if the given task is negative, then call the other function
+        if(task.isNegative == 1) {
+            return $.getNegativeStreak(task, date);
+        }
+        
         var streak = 0;
         var todayBonus = 0;
         
@@ -338,6 +343,41 @@ $.extend({
         }
         
         return "Streak+" + (streak + todayBonus);
+    },
+    
+    
+    //Returns how long the task has NOT been activated
+    //as a string "Streak+5"
+    getNegativeStreak: function(task, date) {
+        var streak = 0;
+        
+        //let's go back in time to search when the task has been lastly activated
+        var doLoop = true;
+        //if there are no activations just check if today is activated
+        if(task.activations.length == 0) {
+            doLoop = false;
+        }
+        while(doLoop) {
+            var activated = false;
+            $.each(task.activations, function(index, act) {
+                if(act.date == date) {
+                    activated = true;
+                }
+            });
+
+            //cancel getting the streak if today is activated
+            if(activated) {
+                break;
+            }
+
+            date = $.subtractDays(date, 1);
+            streak = streak + 1;
+        }
+        
+        if(streak <= 0) {
+            return "";
+        }
+        return "Streak+" + streak;
     },
     
     updateScore: function() {
