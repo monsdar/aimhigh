@@ -27,6 +27,10 @@ $(document).delegate("#mainPage", "pageinit", function() {
 $(document).delegate("#mainPage", "pagebeforeshow", function() {
     console.log("PageBeforeShow: " + window.location.href);
     
+    //Init the validation-engine
+    $("#newTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
+    $("#editTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
+    
     //call the user, it will be created if not already existing
     //if the user is new, show the intro popup
     var isNewUser = $.touchUser();
@@ -156,6 +160,10 @@ $(document).on('pagebeforeshow', '#createTask', function() {
 
 //Creates a new Task from CreateTaskDialog
 $(document).on('click', '#newTaskSubmit', function() {
+    if( $("#newTaskForm").validationEngine('validate') == false ) {
+        return;
+    }
+    
     var page = $(this).closest('#createTask');
     var title = page.find('#createTitle').val();
     var text = page.find('#createText').val();
@@ -172,6 +180,8 @@ $(document).on('click', '#newTaskSubmit', function() {
     //create the task, refresh the tasks after that
     $.createTask(title, text, category, isNegative);
     $.refreshCategories();
+    
+    page.dialog('close');
 });
 
 //Initializes the EditTaskDialog with value from the selected task
@@ -185,26 +195,24 @@ $(document).on('pagebeforeshow', '#editTask', function() {
         isNegative = "false";
     }
     
-    console.log("loading: isNegative: " + isNegative);
-    
     dialog.find('#editTitle').val( task.title );
     dialog.find('#editText').val( task.text );
     dialog.find('#editCategory').val( task.category );
     dialog.find('#editIsNegative').val( isNegative ).slider("refresh");
-    
-    
-    console.log("loading: isNegative val: " + dialog.find('#editIsNegative').val());
 });
 
 //Submits an edited task
 $(document).on('click', '#editTaskSubmit', function() {
+    if( $("#editTaskForm").validationEngine('validate') == false ) {
+        return;
+    }
+    
     var page = $(this).closest('#editTask');
     var taskId = window.selectedTask.index;
     var title = page.find('#editTitle').val();
     var text = page.find('#editText').val();
     var category = page.find('#editCategory').val();
     var isNegative = page.find('#editIsNegative').val();
-    console.log("closing: isNegative val: " + page.find('#editIsNegative').val());
     
     if(isNegative == 'true') {
         isNegative = 1;
@@ -213,11 +221,11 @@ $(document).on('click', '#editTaskSubmit', function() {
         isNegative = 0;
     }
     
-    console.log("closing: isNegative: " + isNegative);
-    
     //edit the task, refresh the tasks after that
     $.editTask(taskId, title, text, category, isNegative);
     $.refreshCategories();
+    
+    page.dialog('close');
 });
 
 $(document).on('click', '#deleteTaskSubmit', function() {
