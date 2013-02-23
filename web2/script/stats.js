@@ -36,6 +36,45 @@ $.extend({
     } 
 });
 
+$.fn.updateTopTasks = function(taskContainer) {
+    var table = $(this);
+    
+    //get the tasks from the container
+    var tasks = new Array();
+    var htmlTasks = $(taskContainer).find('.task');
+    $.each(htmlTasks, function(i, htmlTask) {
+        var taskId = "#" + htmlTask.id;
+        var task = $(taskId).data("task");
+        tasks.push(task);
+    });
+    
+    //Sort the tasks
+    tasks.sort( function(a,b) { 
+        var aLen = a.activations.length;
+        var bLen = b.activations.length;
+        var result = (aLen - bLen) * -1;
+        return result;
+    });
+    
+    //clear the table-contents
+    table.find("tbody").empty();
+    
+    //Fill the table
+    $.each(tasks, function(index, task) {
+        //just display the top 10 items
+        if(index > 9) {
+            return false; //break
+        }
+        console.log("Test1");
+        var tableRow = "";
+        tableRow += "<tr>";
+        tableRow +=     "<th>" + (index + 1) + "</th>";
+        tableRow +=     "<td>" + task.title + "</td>";
+        tableRow +=     "<td>" + task.activations.length + "</td>";
+        tableRow += "</tr>";
+        table.find("tbody").append(tableRow);
+    });
+};
 
 $.fn.showGraph = function(taskContainer) {
     var options = {};
@@ -51,7 +90,6 @@ $.fn.showGraph = function(taskContainer) {
         var task = $(taskId).data("task");
         tasks.push(task);
     });
-    console.log("Found " + tasks.length + " tasks");
     
     //push the activations into the graph
     //TODO: get the tasks from data() instead of window...
