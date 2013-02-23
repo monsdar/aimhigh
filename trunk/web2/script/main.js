@@ -143,9 +143,9 @@ $(document).on('change', '#selectedDate', function() {
 });
 
 //Updates the score before the dialog pops up
-$(document).on('pagebeforeshow', '#pageStats', function() {
-    console.log("Opened Statistics dialog");
+$(document).on('popupbeforeposition', '#popupStats', function() {
     $("#graph").showGraph( $("#categories") );
+    $('#activationRanking').updateTopTasks( $("#categories") );
 });
 
 //This clears the CreateTaskDialog before it shows up
@@ -436,10 +436,12 @@ $.extend({
             }
             else {
                 scoreNegative = scoreNegative + $.getRelativeScore(task, date);
-            } 
+            }
         });
         
-        score.text( scorePositive - scoreNegative);
+        var newScore = scorePositive - scoreNegative;
+        newScore = (Math.round(newScore * 100) / 100); //Round the score to 2 digits
+        score.text( newScore );
     }
 });
 
@@ -531,7 +533,7 @@ $.fn.showTasks = function(tasks) {
         var catId = cat + "Container";
         
         var newCat = "";
-        newCat += "<div class='category' id='" + catId + "'>";
+        newCat += "<div class='dynamicContainer category' id='" + catId + "'>";
         newCat +=   "<h3 class='catName' >" + cat + "</h3>";
         newCat +=   "<ul data-role='listview' class='catList' id='" + cat + "List'></ul>";
         newCat += "</div>";
