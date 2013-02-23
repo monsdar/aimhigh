@@ -180,15 +180,20 @@ $(document).on('pagebeforeshow', '#editTask', function() {
     var task = window.selectedTask;
     var dialog = $(this);
     
-    var isNegative = "positive";
-    if(task.isNegative) {
-        isNegative = "negative";
+    var isNegative = "true";
+    if(task.isNegative == 0) {
+        isNegative = "false";
     }
+    
+    console.log("loading: isNegative: " + isNegative);
     
     dialog.find('#editTitle').val( task.title );
     dialog.find('#editText').val( task.text );
     dialog.find('#editCategory').val( task.category );
-    dialog.find('#editIsNegative').val( isNegative );
+    dialog.find('#editIsNegative').val( isNegative ).slider("refresh");
+    
+    
+    console.log("loading: isNegative val: " + dialog.find('#editIsNegative').val());
 });
 
 //Submits an edited task
@@ -199,13 +204,16 @@ $(document).on('click', '#editTaskSubmit', function() {
     var text = page.find('#editText').val();
     var category = page.find('#editCategory').val();
     var isNegative = page.find('#editIsNegative').val();
+    console.log("closing: isNegative val: " + page.find('#editIsNegative').val());
     
-    if(isNegative == 'positive') {
-        isNegative = 0;
-    }
-    else {
+    if(isNegative == 'true') {
         isNegative = 1;
     }
+    else {
+        isNegative = 0;
+    }
+    
+    console.log("closing: isNegative: " + isNegative);
     
     //edit the task, refresh the tasks after that
     $.editTask(taskId, title, text, category, isNegative);
