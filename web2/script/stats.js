@@ -65,7 +65,6 @@ $.fn.updateTopTasks = function(taskContainer) {
         if(index > 9) {
             return false; //break
         }
-        console.log("Test1");
         var tableRow = "";
         tableRow += "<tr>";
         tableRow +=     "<th>" + (index + 1) + "</th>";
