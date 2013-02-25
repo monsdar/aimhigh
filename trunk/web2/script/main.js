@@ -99,22 +99,23 @@ $(document).on('tap', '.task', function() {
     var task = $(this);
     
     //set the new state
-    var classList = task.attr('class').split(/\s+/);
+    var taskLink = task.find('a');
+    var classList = taskLink.attr('class').split(/\s+/);
     $.each( classList, function(index, item){
         if ( item === 'positiveTask') {
-            task.removeClass('positiveTask').addClass('positiveTaskDone');
+            taskLink.removeClass('positiveTask').addClass('positiveTaskDone');
             $.addActivation(task.data("task"), $.getCurrentDate());
         }
         else if ( item === 'positiveTaskDone') {
-            task.removeClass('positiveTaskDone').addClass('positiveTask');
+            taskLink.removeClass('positiveTaskDone').addClass('positiveTask');
             $.removeActivation(task.data("task"), $.getCurrentDate());
         }
         else if ( item === 'negativeTask') {
-            task.removeClass('negativeTask').addClass('negativeTaskDone');
+            taskLink.removeClass('negativeTask').addClass('negativeTaskDone');
             $.addActivation(task.data("task"), $.getCurrentDate());
         }
         else if ( item === 'negativeTaskDone') {
-            task.removeClass('negativeTaskDone').addClass('negativeTask');
+            taskLink.removeClass('negativeTaskDone').addClass('negativeTask');
             $.removeActivation(task.data("task"), $.getCurrentDate());
         }
     });
@@ -427,7 +428,7 @@ $.extend({
         var date = $.getCurrentDate();
         var scoreNegative = 0;
         var scorePositive = 0;
-        var htmlTasks = $('#categories').find('.negativeTaskDone, .positiveTaskDone');
+        var htmlTasks = $('#categories').find('.task');
         $.each(htmlTasks, function(index, htmlTask) {
             var id = "#" + htmlTask.id;
             var task = $(id).data("task");
@@ -466,9 +467,10 @@ $.fn.updateTasks = function() {
         $(id).find('.streak').text( streakStr );
         
         //Activation
-        $(id).removeClass();
-        $(id).addClass('task');
-        $(id).addClass( $.getActivationClass(task) );
+        var taskLink = $(id).find('a');
+        taskLink.removeClass();
+        taskLink.addClass( "ui-link-inherit" );
+        taskLink.addClass( $.getActivationClass(task) );
 
         var catId = "#" + task.category + "List";
         $(catId).listview('refresh');        
@@ -481,23 +483,28 @@ $.fn.updateTasks = function() {
 $.fn.appendTask = function(task) {
     //calculate the streak
     var streak = "";
+    var icon = "";
     if(task.isNegative == 0) {
         streak = $.streakToString( $.getStreak(task, $.getCurrentDate()));
+        icon = "check";
     }
     else {
         streak = $.streakToString( $.getNegativeStreak(task, $.getCurrentDate()));
+        icon = "delete";
     }
 
     //get activation class
     var type = $.getActivationClass(task);
 
     var newTask = "";
-    newTask +=  "<li class='task " + type + "' id='task-" + task.index + "'>";
-    newTask +=      "<div class='ui-grid-a'>";
-    newTask +=          "<div class='ui-block-a'><h3 class='taskTitle'>" + task.title + "</h3></div>";
-    newTask +=          "<div class='ui-block-b text-right streak'>" + streak + "</div>";
-    newTask +=      "</div>";
-    newTask +=      "<p class='taskText'>" + task.text + "</p>";
+    newTask +=  "<li data-icon='" + icon + "' class='task' id='task-" + task.index + "'>";
+    newTask +=      "<a href='#' class='" + type + "'>";
+    newTask +=          "<div class='ui-grid-a'>";
+    newTask +=              "<div class='ui-block-a'><h3 class='taskTitle'>" + task.title + "</h3></div>";
+    newTask +=              "<div class='ui-block-b align-right streak'>" + streak + "</div>";
+    newTask +=          "</div>";
+    newTask +=          "<p class='taskText'>" + task.text + "</p>";
+    newTask +=      "</a>";
     newTask +=  "</li>";
     $('#' + task.category + 'List').append(newTask);
 
@@ -535,7 +542,7 @@ $.fn.showTasks = function(tasks) {
         var newCat = "";
         newCat += "<div class='dynamicContainer category' id='" + catId + "'>";
         newCat +=   "<h3 class='catName' >" + cat + "</h3>";
-        newCat +=   "<ul data-role='listview' class='catList' id='" + cat + "List'></ul>";
+        newCat +=   "<ul data-role='listview' data-inset='true' class='catList' id='" + cat + "List'></ul>";
         newCat += "</div>";
         categories.append(newCat);
     });
