@@ -486,11 +486,11 @@ $.fn.appendTask = function(task) {
     var icon = "";
     if(task.isNegative == 0) {
         streak = $.streakToString( $.getStreak(task, $.getCurrentDate()));
-        icon = "check";
+        icon = "plus";
     }
     else {
         streak = $.streakToString( $.getNegativeStreak(task, $.getCurrentDate()));
-        icon = "delete";
+        icon = "minus";
     }
 
     //get activation class
@@ -545,6 +545,19 @@ $.fn.showTasks = function(tasks) {
         newCat +=   "<ul data-role='listview' data-inset='true' class='catList' id='" + cat + "List'></ul>";
         newCat += "</div>";
         categories.append(newCat);
+    });
+    
+    //sort the tasks (positive up, negative down)
+    tasks.sort( function(a,b) {
+        if(a.isNegative == 0 && b.isNegative != 0) {
+            return -1;
+        }
+        else if (a.isNegative != 0 && b.isNegative == 0){
+            return +1;
+        }
+        
+        //both tasks are equal (positive or negative)
+        return 0;
     });
     
     //add the tasks to the categories
