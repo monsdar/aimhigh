@@ -4,6 +4,120 @@
 //  Highcharts
 
 $.extend({
+    
+    //Adds a activation to the given task and date
+    addActivation: function(task, date) {
+        //the activation.index is not important here
+        var activation = {date: date, index: "0"};
+        task.activations.push( activation );
+    },
+    
+    //Removes an activation for the given task and date
+    removeActivation: function(task, date) {
+        var id = -1;
+        $.each(task.activations, function(index, act) {
+            if(act.date == date) {
+                id = index;
+            }
+        });
+        
+        if(id != -1) {
+            task.activations.splice(id, 1);   
+        }
+    },
+    
+    //Returns true if the given task is activated at the given date, else false
+    isActivated: function(task, date) {
+        var result = false;
+        $.each(task.activations, function(index, act) {
+            if(act.date == date) {
+                result = true;
+                return false; //break
+            }
+        });
+        return result;
+    },
+    
+    //Returns how long the task has been activated
+    getStreak: function(task, date) {        
+        var streak = 0;
+        var todayBonus = 0;
+        
+        //let's search for the current date
+        if($.isActivated(task, date)) {
+            todayBonus = 1;
+        }
+        
+        //now we get backwards in time until we cannot find an activation
+        while(true) {
+            date = $.subtractDays(date, 1);
+            if($.isActivated(task, date)) {
+                streak = streak + 1;
+            }
+            else {
+                break;
+            }
+        }
+        
+        return (streak + todayBonus);
+    },
+    
+    //Returns how long the task has NOT been activated
+    //as a string "Streak+5"
+    getNegativeStreak: function(task, date) {
+        var streak = 0;
+        
+        //let's go back in time to search when the task has been lastly activated
+        //if there are no activations just check if today is activated
+        var containsActivations = true;
+        if(task.activations.length == 0) {
+            containsActivations = false;
+        }
+        while(containsActivations) {
+            if($.isActivated(task, date)) {
+                break;
+            }
+
+            date = $.subtractDays(date, 1);
+            streak = streak + 1;
+        }
+        
+        return streak;
+    },
+    getDaysSinceLastAct: function(task, date, maxDays) {
+        //if the task haven't been activated yet simply return 1
+        if(task.activations.length <= 1) {
+            return 1;
+        }
+        
+        var days = 1;
+        date = $.subtractDays(date, 1);
+        while(maxDays >= 0) {
+            if($.isActivated(task, date)) {
+                return days;
+            }
+            days = days + 1;
+            date = $.subtractDays(date, 1);
+            maxDays = maxDays - 1;
+        }
+        
+        return maxDays;
+    },
+    
+    getRelativeScore: function(task, date) {
+        var dynamicScore = 1;
+        if(task.isNegative == 0) {
+            dynamicScore = $.getDaysSinceLastAct(task, date, 10);
+        }
+        else {
+            dynamicScore = $.getStreak(task, date);
+        }
+        var baseScore = 1;
+        var result = baseScore + ( (dynamicScore-1) / 10);
+        return (Math.round(result * 100) / 100);
+    },
+    
+    
     //Returns the summed up activations for the last x days
     getActivations: function(tasks, lastXDays) {
         //this object will be returned
