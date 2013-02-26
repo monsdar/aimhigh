@@ -39,7 +39,7 @@ $.extend({
     },
     
     //Returns how long the task has been activated
-    getStreak: function(task, date) {        
+    getStreak: function(task, date) {
         var streak = 0;
         var todayBonus = 0;
         
@@ -105,6 +105,10 @@ $.extend({
     },
     
     getRelativeScore: function(task, date) {
+        if($.isActivated(task, date) == false) {
+            return 0;
+        }
+        
         var dynamicScore = 1;
         if(task.isNegative == 0) {
             dynamicScore = $.getDaysSinceLastAct(task, date, 10);
@@ -133,19 +137,24 @@ $.extend({
             dailyActivations[ dateStr ] = 0;
         }
 
-        //sum up the activations
-        $.each(tasks, function(i, task) {
-            $.each(task.activations, function(i, act) {
-                if(act.date in dailyActivations)
-                {
-                    if(task.isNegative == "1") {
-                        dailyActivations[act.date] = dailyActivations[act.date] - 1;
-                    } else {
-                        dailyActivations[act.date] = dailyActivations[act.date] + 1;
-                    }
+        //get the score for each day
+        $.each(dailyActivations, function(key, value) {
+            console.log(key);
+            var dayScore = 0;
+            $.each(tasks, function(i, task) {
+                if(task.isNegative == 0) {
+                    dayScore = dayScore + $.getRelativeScore(task, key);
                 }
+                else {
+                    dayScore = dayScore - $.getRelativeScore(task, key);
+                }
+                console.log(task.title + " --- " + dayScore);
             });
+            
+            console.log("Score: " + dayScore);
+            dailyActivations[key] = dayScore;
         });
+        
         return dailyActivations;
     } 
 });
