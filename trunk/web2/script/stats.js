@@ -139,7 +139,6 @@ $.extend({
 
         //get the score for each day
         $.each(dailyActivations, function(key, value) {
-            console.log(key);
             var dayScore = 0;
             $.each(tasks, function(i, task) {
                 if(task.isNegative == 0) {
@@ -148,10 +147,7 @@ $.extend({
                 else {
                     dayScore = dayScore - $.getRelativeScore(task, key);
                 }
-                console.log(task.title + " --- " + dayScore);
             });
-            
-            console.log("Score: " + dayScore);
             dailyActivations[key] = dayScore;
         });
         
