@@ -278,13 +278,13 @@ $.extend({
         var isActivated = $.isActivated(task, $.getCurrentDate());
         var type = 'positiveTask';
         if(task.isNegative == '1' && !isActivated) {
-            type = 'negativeTask';    
+            type = 'negativeTask';
         }
         else if(task.isNegative == '1' && isActivated) {
-            type = 'negativeTaskDone';    
+            type = 'negativeTaskDone';
         }
         else if(task.isNegative == '0' && isActivated) {
-            type = 'positiveTaskDone';    
+            type = 'positiveTaskDone';
         }
         
         return type;
