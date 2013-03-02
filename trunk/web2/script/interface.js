@@ -14,7 +14,7 @@ $.extend({
         return "http://" + document.domain + '/' + "interface/interface.php";
     },
     
-    //Touches the user, gets the userkey via $.getUserKey
+    //Touches the user, gets the userkey via getUserKey
     //After the data is received and the user is new, it will call the callbacks
     //  callback();
     touchUser: function(callbacks) {
@@ -24,7 +24,7 @@ $.extend({
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Touched the user, received the following response: " + data);
             var answer = $.parseJSON(data);
-            if(answer == true) {
+            if(answer === true) {
                 isNewUser = true;
             }
         });
