@@ -4,36 +4,19 @@
 //      Initialization of the page
 //////////////////////////////////////////////
 
-//This will change the page to the users page (before anything else will be done)
-$(document).delegate("#mainPage", "pageinit", function() {
-    console.log("PageInit: " + window.location.href);
-    
-    //This checks if the user exists or if a new one must be created (via redirect)
-    if($.getUserkey() == '')
-    {
-        //The following code redirects to the new users page...
-        //Perhaps there is a better way to load the URL for a new user,
-        //but I couldn't find it...
-        var randomMd5 = md5( Math.random().toString() );
-        var userUrl = "http://" + document.domain + '/' + randomMd5;
-        console.log("Replacing the Location -> Forward the user to his personal URL");
-        window.location.replace(userUrl);
+//This loads user-specific content (tasks, ...) into the page
+$(document).delegate("#mainPage", "pageinit", function() {    
+    if($.getUserkey() === '') {
+        console.log("No user given, Aimhigh will not initialize");
         return;
     }
-    console.log("Nothing to do here...");
-});
-
-//If the page gets initialized, query all the contents of the page
-$(document).delegate("#mainPage", "pagebeforeshow", function() {
-    console.log("PageBeforeShow: " + window.location.href);
     
     //Init the validation-engine
     $("#newTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
     $("#editTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
     
     //call the user, it will be created if not already existing
-    //if the user is new, show the intro popup
-    var isNewUser = $.touchUser();
+    $.touchUser();
     
     //setup the Datepicker
     var dateStr = $.getDateString(new Date());
