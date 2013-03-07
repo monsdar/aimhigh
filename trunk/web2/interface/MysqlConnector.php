@@ -3,6 +3,7 @@
 class MysqlConnector
 {
     private $isConnected = false;
+    private $mysqlHandle = 0;
     
     public function __construct()
     {
@@ -15,8 +16,12 @@ class MysqlConnector
         $password = "SqlAimhigh!!";
         $address = "localhost";
         $database = "ks01495db3";
-        mysql_connect($address, $username, $password);
-        mysql_select_db($database);
+        $this->mysqlHandle = @new mysqli($address, $username, $password, $database);
+        
+        if(mysqli_connect_errno() != 0)
+        {
+            echo "Failed to connect to MySQL: " . mysqli_connect_error();
+        }
         
         $this->isConnected = true;
     }
@@ -32,6 +37,11 @@ class MysqlConnector
     public function isConnected()
     {
         return $this->isConnected;
+    }
+    
+    public function handle()
+    {
+        return $this->mysqlHandle;
     }
 }
 
