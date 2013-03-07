@@ -12,7 +12,7 @@ class MysqlConnector
         //      by the end-user of this interface...
         //init the MySQL-connection here
         $username = "ks01495db3";
-        $password = "aimhigh!!";
+        $password = "SqlAimhigh!!";
         $address = "localhost";
         $database = "ks01495db3";
         mysql_connect($address, $username, $password);

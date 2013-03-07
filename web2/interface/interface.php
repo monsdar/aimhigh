@@ -2,10 +2,44 @@
 
 require_once("MysqlConnector.php");
 require_once("MysqlTaskStorage.php");
+require_once("Logging.php");
 
 //the connector holds the mysql-connection
 $mysql = new MysqlConnector();
 $storage = new MysqlTaskStorage($mysql);
+
+//check if there are any non-wanted POST-variables
+$whitelist = array();
+$whitelist[] = 'userkey';
+$whitelist[] = 'request';
+$whitelist[] = 'getTasks';
+$whitelist[] = 'removeTask';
+$whitelist[] = 'taskid';
+$whitelist[] = 'updateTask';
+$whitelist[] = 'title';
+$whitelist[] = 'text';
+$whitelist[] = 'isnegative';
+$whitelist[] = 'category';
+$whitelist[] = 'createTask';
+$whitelist[] = 'touchUser';
+$whitelist[] = 'toggleTask';
+$whitelist[] = 'date';
+
+
+//set path and name of log file
+foreach($_POST as $name => $value)
+{
+    if( !in_array($name, $whitelist) )
+    {
+        $log = new Logging();
+        $log->lfile('test.log');
+        $message = "Given entry is not on whitelist!";
+        $log->lwrite($message);
+        $log->lwrite("\t" . $name . " -> " . $value);
+        $log->lclose();
+        exit($message);
+    }
+}
 
 //escape any incoming MySQL-code at first...
 foreach($_POST as $name => $value)
