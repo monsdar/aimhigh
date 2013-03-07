@@ -4,10 +4,6 @@ require_once("MysqlConnector.php");
 require_once("MysqlTaskStorage.php");
 require_once("Logging.php");
 
-//the connector holds the mysql-connection
-$mysql = new MysqlConnector();
-$storage = new MysqlTaskStorage($mysql);
-
 //check if there are any non-wanted POST-variables
 $whitelist = array();
 $whitelist[] = 'userkey';
@@ -41,10 +37,14 @@ foreach($_POST as $name => $value)
     }
 }
 
+//the connector holds the mysql-connection
+$mysql = new MysqlConnector();
+$storage = new MysqlTaskStorage($mysql);
+
 //escape any incoming MySQL-code at first...
 foreach($_POST as $name => $value)
 {
-    $_POST[$name] = mysql_real_escape_string($value);
+    $_POST[$name] = $mysql->handle()->real_escape_string($value);
 }
 
 //check the POST for incoming requests

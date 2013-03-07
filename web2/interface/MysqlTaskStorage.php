@@ -10,7 +10,8 @@ class MysqlTaskStorage implements ITaskStorage
     
     public function __construct($mysqlConnector)
     {
-        $this->mysql = $mysqlConnector;
+        $mysqlConnector = $mysqlConnector;
+        $this->mysql = $mysqlConnector->handle();
     }
     
     public function createTask($user, $newTitle, $newText, $category, $isNegative)
@@ -19,10 +20,11 @@ class MysqlTaskStorage implements ITaskStorage
         $userId = 0;
         $userIdQuery = "SELECT KeyId FROM userkeys WHERE UserKey='%s';";
         $userIdQuery = sprintf($userIdQuery, $user);
-        $userIdResult = mysql_query($userIdQuery);
-        if( $userIdResult && mysql_num_rows($userIdResult) != 0 )
+        $userIdResult = $this->mysql->query($userIdQuery);
+        if( $userIdResult->num_rows != 0 )
         {
-            $userId = (int)mysql_result($userIdResult, 0, 0);
+            $result = $userIdResult->fetch_object();
+            $userId = $result->KeyId;
         }
         else
         {
@@ -34,8 +36,7 @@ class MysqlTaskStorage implements ITaskStorage
         //add the new task
         $createTaskQuery = "INSERT INTO tasks (KeyId, Category, Title, Text, IsNegative) VALUES (%d, '%s', '%s', '%s', %d)";
         $createTaskQuery = sprintf($createTaskQuery, $userId, $category, $newTitle, $newText, $isNegative);
-        mysql_query($createTaskQuery);
-        
+        $this->mysql->query($createTaskQuery);
         //echo("New task created successfully<br/>");
     }
 
@@ -47,12 +48,12 @@ class MysqlTaskStorage implements ITaskStorage
         //TODO: How to prevent someone just deleting anything with a bruteforce? This would suck...
         $removeTaskQuery = "DELETE tasks FROM tasks,userkeys WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
         $removeTaskQuery = sprintf($removeTaskQuery, $taskId, $user);
-        mysql_query($removeTaskQuery);
+        $this->mysql->query($removeTaskQuery);
         
         //delete all the activations belonging to the given task
         $removeActQuery = "DELETE FROM activations WHERE TaskId=%d;";
         $removeActQuery = sprintf($removeActQuery, $taskId);
-        mysql_query($removeActQuery);
+        $this->mysql->query($removeActQuery);
         
         echo("Everything deleted without any problems...<br/>");
     }
@@ -60,33 +61,31 @@ class MysqlTaskStorage implements ITaskStorage
     public function readTasks($user)
     {
         $allTasks = array();
-        
         $readTasksQuery = "SELECT * FROM tasks, userkeys WHERE tasks.KeyId=userkeys.KeyId AND userkeys.UserKey='%s'";
         $readTasksQuery = sprintf($readTasksQuery, $user);
-        $tasksResult = mysql_query($readTasksQuery);
-        while($taskRow = mysql_fetch_array($tasksResult) )
+        $tasksResult = $this->mysql->query($readTasksQuery);
+        while($taskRow = $tasksResult->fetch_object() )
         {
             $newTask = new Task();
-            $newTask->index = $taskRow['TaskId'];
-            $newTask->title = $taskRow['Title'];
-            $newTask->text = $taskRow['Text'];
-            $newTask->category = $taskRow['Category'];
-            $newTask->isNegative = $taskRow['IsNegative'];
+            $newTask->index = $taskRow->TaskId;
+            $newTask->title = $taskRow->Title;
+            $newTask->text = $taskRow->Text;
+            $newTask->category = $taskRow->Category;
+            $newTask->isNegative = $taskRow->IsNegative;
             
             $readActivations = "SELECT ActivationId, ActivationDate FROM activations WHERE TaskId=%d";
-            $readActivations = sprintf($readActivations, $taskRow['TaskId']);
-            $actResult = mysql_query($readActivations);
-            while($actRow = mysql_fetch_array($actResult) )
+            $readActivations = sprintf($readActivations, $taskRow->TaskId);
+            $actResult = $this->mysql->query($readActivations);
+            while($actRow = $actResult->fetch_object() )
             {
                 $newAct = new Activation();
-                $newAct->index = $actRow['ActivationId'];
-                $newAct->date = $actRow['ActivationDate'];
+                $newAct->index = $actRow->ActivationId;
+                $newAct->date = $actRow->ActivationDate;
                 $newTask->activations[] = $newAct;
             }
             
             $allTasks[] = $newTask;
         }
-        
         return $allTasks;
     }
 
@@ -95,7 +94,7 @@ class MysqlTaskStorage implements ITaskStorage
         //Update the given task (do nothing if it does not work... who cares?)
         $updateTask = "UPDATE tasks, userkeys SET Title='%s', Text='%s', Category='%s', IsNegative=%d WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
         $updateTask = sprintf($updateTask, $newTitle, $newText, $category, $isNegative, $taskId, $user);
-        mysql_query($updateTask);
+        $this->mysql->query($updateTask);
         
         echo("Updated task # " . $taskId . " of user " . $user . " successfully<br/>");
     }
@@ -104,7 +103,7 @@ class MysqlTaskStorage implements ITaskStorage
     {
         $createUser = "INSERT INTO userkeys (UserKey) VALUES ('%s')";
         $createUser = sprintf($createUser, $user);
-        $createResult = mysql_query($createUser);
+        $createResult = $this->mysql->query($createUser);
         if($createResult)
         {
             //echo("Created user " . $user . "...<br/>");
@@ -139,8 +138,8 @@ class MysqlTaskStorage implements ITaskStorage
         //check if the user has a task with taskId
         $getTaskQuery = "SELECT * FROM tasks, userkeys WHERE TaskId=%d AND UserKey='%s' AND tasks.KeyId=userkeys.KeyId";
         $getTaskQuery = sprintf($getTaskQuery, $taskId, $user);
-        $taskResult = mysql_query($getTaskQuery);
-        if( !($taskResult && mysql_num_rows($taskResult) != 0))
+        $taskResult = $this->mysql->query($getTaskQuery);
+        if( !$taskResult || $taskResult->num_rows == 0)
         {
             echo("User " . $user . " does not have a task #" . $taskId . "<br/>");
             return;
@@ -150,21 +149,24 @@ class MysqlTaskStorage implements ITaskStorage
         echo('Received the following date: ' . $date);
         $getAct = "SELECT ActivationId FROM activations WHERE activations.TaskId=%d AND ActivationDate='%s'";
         $getAct = sprintf($getAct, $taskId, $date);
-        $actResult = mysql_query($getAct);
-        if($actResult && mysql_num_rows($actResult) != 0)
+        $actResult = $this->mysql->query($getAct);
+        if($actResult && $actResult->num_rows != 0)
         {
-            //remove the activation if it is already existing (and this way deactivating the task for today)
-            $deleteAct = "DELETE FROM activations WHERE ActivationId=%d";
-            $deleteAct = sprintf($deleteAct, mysql_result($actResult, 0, 0));
-            mysql_query($deleteAct);
-            echo("Deactivated task #" . $taskId . ' for ' . $date);
+            while($actRow = $actResult->fetch_object() )
+            {
+                //remove the activation if it is already existing (and this way deactivating the task for today)
+                $deleteAct = "DELETE FROM activations WHERE ActivationId=%d";
+                $deleteAct = sprintf($deleteAct, $actRow->ActivationId);
+                $this->mysql->query($deleteAct);
+                echo("Deactivated task #" . $taskId . ' for ' . $date);
+            }
         }
         else
         {
             //create a new Activation if there isn't one yet
             $createAct = "INSERT INTO activations (TaskId, ActivationDate) VALUES (%d, '%s')";
             $createAct = sprintf($createAct, $taskId, $date);
-            mysql_query($createAct);
+            $this->mysql->query($createAct);
             echo("Activated task #" . $taskId . ' for ' . $date);
         }
     }
