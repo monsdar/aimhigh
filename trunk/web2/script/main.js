@@ -136,6 +136,15 @@ $(document).on('popupbeforeposition', '#popupStats', function() {
 $(document).on('pagebeforeshow', '#createTask', function() {
     console.log("Opened CreateTask dialog");
     var page = $(this);
+    
+    $('#cbCreateMonday').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateTuesday').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateWednesday').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateThursday').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateFriday').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateSaturday').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateSunday').attr('checked', false).checkboxradio( "refresh" );
+    
     page.find('#createTitle').val('');
     page.find('#createText').val('');
     page.find('#createCategory').val('');
@@ -161,8 +170,32 @@ $(document).on('click', '#newTaskSubmit', function() {
         isNegative = 1;
     }
     
+    var offdays = new Array();
+    if($('#cbCreateMonday').is(':checked')) {
+        offdays.push("MONDAY");
+    }
+    if($('#cbCreateTuesday').is(':checked')) {
+        offdays.push("TUESDAY");
+    }
+    if($('#cbCreateWednesday').is(':checked')) {
+        offdays.push("WEDNESDAY");
+    }
+    if($('#cbCreateThursday').is(':checked')) {
+        offdays.push("THURSDAY");
+    }
+    if($('#cbCreateFriday').is(':checked')) {
+        offdays.push("FRIDAY");
+    }
+    if($('#cbCreateSaturday').is(':checked')) {
+        offdays.push("SATURDAY");
+    }
+    if($('#cbCreateSunday').is(':checked')) {
+        offdays.push("SUNDAY");
+    }
+    var offdayStr = offdays.join(',');
+    
     //create the task, refresh the tasks after that
-    $.createTask(title, text, category, isNegative);
+    $.createTask(title, text, category, isNegative, offdayStr);
     $.refreshCategories();
     
     page.dialog('close');

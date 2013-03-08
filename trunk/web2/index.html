@@ -137,11 +137,29 @@
             <input type="text" id="createText" class="validate[maxSize[160]]" placeholder="Text"  />
             <label for="category" class="ui-hidden-accessible">Category:</label>
             <input type="text" id="createCategory" class="validate[required,maxSize[20]]" placeholder="Category"  />
-            <label for="isNegative">Negative Task?</label>
-            <select id="createIsNegative" data-role="slider">
+            <label for="isNegative" class="ui-hidden-accessible">Negative Task?</label>
+            <p>Negative Task?</p>
+            <select id="createIsNegative" data-role="slider" data-mini="true">
                 <option value="positive" selected>No</option>
                 <option value="negative">Yes</option>
             </select>
+            <fieldset data-role="controlgroup" data-type="horizontal">
+                <legend>Off days:</legend>
+                <input type="checkbox" name="cbCreateMonday" id="cbCreateMonday" data-mini="true">
+                <label for="cbCreateMonday">Mon</label>
+                <input type="checkbox" name="cbCreateTuesday" id="cbCreateTuesday" data-mini="true">
+                <label for="cbCreateTuesday">Tue</label>
+                <input type="checkbox" name="cbCreateWednesday" id="cbCreateWednesday" data-mini="true">
+                <label for="cbCreateWednesday">Wed</label>
+                <input type="checkbox" name="cbCreateThursday" id="cbCreateThursday" data-mini="true">
+                <label for="cbCreateThursday">Thu</label>
+                <input type="checkbox" name="cbCreateFriday" id="cbCreateFriday" data-mini="true">
+                <label for="cbCreateFriday">Fri</label>
+                <input type="checkbox" name="cbCreateSaturday" id="cbCreateSaturday" data-mini="true">
+                <label for="cbCreateSaturday">Sat</label>
+                <input type="checkbox" name="cbCreateSunday" id="cbCreateSunday" data-mini="true">
+                <label for="cbCreateSunday">Sun</label>
+            </fieldset>
         </form>
         <hr>
         <a href="#" data-role="button" id="newTaskSubmit" data-theme="b">Submit</a>
