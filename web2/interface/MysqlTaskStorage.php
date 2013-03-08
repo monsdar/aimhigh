@@ -34,7 +34,7 @@ class MysqlTaskStorage implements ITaskStorage
         }
         
         //add the new task
-        $createTaskQuery = "INSERT INTO tasks (KeyId, Category, Title, Text, IsNegative, Offdays) VALUES (%d, '%s', '%s', '%s', %d, %d)";
+        $createTaskQuery = "INSERT INTO tasks (KeyId, Category, Title, Text, IsNegative, Offdays) VALUES (%d, '%s', '%s', '%s', %d, '%s')";
         $createTaskQuery = sprintf($createTaskQuery, $userId, $category, $newTitle, $newText, $isNegative, $offdays);
         $this->mysql->query($createTaskQuery);
         //echo("New task created successfully<br/>");
