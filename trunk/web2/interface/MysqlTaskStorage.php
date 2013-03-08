@@ -14,7 +14,7 @@ class MysqlTaskStorage implements ITaskStorage
         $this->mysql = $mysqlConnector->handle();
     }
     
-    public function createTask($user, $newTitle, $newText, $category, $isNegative)
+    public function createTask($user, $newTitle, $newText, $category, $isNegative, $offdays)
     {        
         //get the ID of the given user
         $userId = 0;
@@ -34,8 +34,8 @@ class MysqlTaskStorage implements ITaskStorage
         }
         
         //add the new task
-        $createTaskQuery = "INSERT INTO tasks (KeyId, Category, Title, Text, IsNegative) VALUES (%d, '%s', '%s', '%s', %d)";
-        $createTaskQuery = sprintf($createTaskQuery, $userId, $category, $newTitle, $newText, $isNegative);
+        $createTaskQuery = "INSERT INTO tasks (KeyId, Category, Title, Text, IsNegative, Offdays) VALUES (%d, '%s', '%s', '%s', %d, %d)";
+        $createTaskQuery = sprintf($createTaskQuery, $userId, $category, $newTitle, $newText, $isNegative, $offdays);
         $this->mysql->query($createTaskQuery);
         //echo("New task created successfully<br/>");
     }
@@ -72,6 +72,7 @@ class MysqlTaskStorage implements ITaskStorage
             $newTask->text = $taskRow->Text;
             $newTask->category = $taskRow->Category;
             $newTask->isNegative = $taskRow->IsNegative;
+            $newTask->offdays = $taskRow->Offdays;
             
             $readActivations = "SELECT ActivationId, ActivationDate FROM activations WHERE TaskId=%d";
             $readActivations = sprintf($readActivations, $taskRow->TaskId);
@@ -89,11 +90,11 @@ class MysqlTaskStorage implements ITaskStorage
         return $allTasks;
     }
 
-    public function updateTask($user, $taskId, $newTitle, $newText, $category, $isNegative)
+    public function updateTask($user, $taskId, $newTitle, $newText, $category, $isNegative, $offdays)
     {        
         //Update the given task (do nothing if it does not work... who cares?)
-        $updateTask = "UPDATE tasks, userkeys SET Title='%s', Text='%s', Category='%s', IsNegative=%d WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
-        $updateTask = sprintf($updateTask, $newTitle, $newText, $category, $isNegative, $taskId, $user);
+        $updateTask = "UPDATE tasks, userkeys SET Title='%s', Text='%s', Category='%s', IsNegative=%d, Offdays='%s' WHERE TaskId=%d AND tasks.KeyId=userkeys.KeyId AND UserKey='%s'";
+        $updateTask = sprintf($updateTask, $newTitle, $newText, $category, $isNegative, $offdays, $taskId, $user);
         $this->mysql->query($updateTask);
         
         echo("Updated task # " . $taskId . " of user " . $user . " successfully<br/>");
