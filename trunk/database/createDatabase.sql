@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 17. Feb 2013 um 16:38
+-- Erstellungszeit: 08. Mrz 2013 um 19:30
 -- Server Version: 5.1.66-0+squeeze1
 -- PHP-Version: 5.3.3-7+squeeze14
 
@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `activations` (
   `ActivationDate` date NOT NULL,
   PRIMARY KEY (`ActivationId`),
   KEY `fk_activations_tasks_idx` (`TaskId`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=911 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1680 ;
 
 -- --------------------------------------------------------
 
@@ -43,12 +43,13 @@ CREATE TABLE IF NOT EXISTS `activations` (
 CREATE TABLE IF NOT EXISTS `tasks` (
   `TaskId` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `KeyId` int(11) NOT NULL,
-  `Category` varchar(20) NOT NULL DEFAULT 'Tasks',
+  `Category` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Tasks',
   `Title` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `Text` varchar(160) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `IsNegative` tinyint(1) NOT NULL DEFAULT '0',
+  `Offdays` set('MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY','SUNDAY') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`TaskId`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3968 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11379 ;
 
 -- --------------------------------------------------------
 
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS `userkeys` (
   `UserKey` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`KeyId`),
   UNIQUE KEY `UserKey` (`UserKey`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=411 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1089 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
