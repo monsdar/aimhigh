@@ -7,6 +7,7 @@ class Task
     public $text = "";
     public $category = "";
     public $isNegative = false;
+    public $offdays = "";
     public $activations = array();
 }
 

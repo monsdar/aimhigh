@@ -66,18 +66,18 @@ $.extend({
     },
     
     //edits a given task
-    editTask: function(taskId, title, text, category, isNegative) {
+    editTask: function(taskId, title, text, category, isNegative, offdays) {
         //send the interface that the task should be created
-        var postVars = {userkey: $.getUserkey(), request: 'updateTask', taskid: taskId, title: title, text: text, category: category, isnegative: isNegative};
+        var postVars = {userkey: $.getUserkey(), request: 'updateTask', taskid: taskId, title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Edited task " + taskId + ", received the following response: " + data);
         });
     },
     
     //creates a task
-    createTask: function(title, text, category, isNegative) {
+    createTask: function(title, text, category, isNegative, offdays) {
         //send the interface that the task should be created
-        var postVars = {userkey: $.getUserkey(), request: 'createTask', title: title, text: text, category: category, isnegative: isNegative};
+        var postVars = {userkey: $.getUserkey(), request: 'createTask', title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Created new task, received the following response: " + data);
         });

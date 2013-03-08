@@ -52,7 +52,7 @@ $(document).on('contextmenu', '.task', function(event) {
 //check if the right mouse button was pressed
 //if so, open the EditDialog
 $(document).on('mouseup', '.task', function(event) {
-    if(event.which == 3) {
+    if(event.which === 3) {
         $.openEditDialog($(this));
     }
 });
@@ -118,7 +118,7 @@ $(document).on('tap', '.task', function() {
 //This checks if the Date has changed and shows the appropriate tasks/activations
 $(document).on('change', '#selectedDate', function() {
     var dateEdit = $(this);
-    if(dateEdit.val() == '') {
+    if(dateEdit.val() === '') {
         dateEdit.val( $.getDateString(new Date()) );
     }
     console.log("Date changed to " + $('#selectedDate').val() );
@@ -144,7 +144,7 @@ $(document).on('pagebeforeshow', '#createTask', function() {
 
 //Creates a new Task from CreateTaskDialog
 $(document).on('click', '#newTaskSubmit', function() {
-    if( $("#newTaskForm").validationEngine('validate') == false ) {
+    if( $("#newTaskForm").validationEngine('validate') === false ) {
         return;
     }
     
@@ -154,7 +154,7 @@ $(document).on('click', '#newTaskSubmit', function() {
     var category = page.find('#createCategory').val();
     var isNegative = page.find('#createIsNegative').val();
     
-    if(isNegative == 'positive') {
+    if(isNegative === 'positive') {
         isNegative = 0;
     }
     else {
@@ -175,8 +175,51 @@ $(document).on('pagebeforeshow', '#editTask', function() {
     var dialog = $(this);
     
     var isNegative = "true";
-    if(task.isNegative == 0) {
+    if(task.isNegative === 0) {
         isNegative = "false";
+    }
+    
+    if(task.offdays.indexOf("MONDAY") >= 0) {
+        $('#cbEditMonday').attr('checked', true).checkboxradio( "refresh" );
+    }
+    else {
+        $('#cbEditMonday').attr('checked', false).checkboxradio( "refresh" );
+    }
+    if(task.offdays.indexOf("TUESDAY") >= 0) {
+        $('#cbEditTuesday').attr('checked', true).checkboxradio( "refresh" );
+    }
+    else {
+        $('#cbEditTuesday').attr('checked', false).checkboxradio( "refresh" );
+    }
+    if(task.offdays.indexOf("WEDNESDAY") >= 0) {
+        $('#cbEditWednesday').attr('checked', true).checkboxradio( "refresh" );
+    }
+    else {
+        $('#cbEditWednesday').attr('checked', false).checkboxradio( "refresh" );
+    }
+    if(task.offdays.indexOf("THURSDAY") >= 0) {
+        $('#cbEditThursday').attr('checked', true).checkboxradio( "refresh" );
+    }
+    else {
+        $('#cbEditThursday').attr('checked', false).checkboxradio( "refresh" );
+    }
+    if(task.offdays.indexOf("FRIDAY") >= 0) {
+        $('#cbEditFriday').attr('checked', true).checkboxradio( "refresh" );
+    }
+    else {
+        $('#cbEditFriday').attr('checked', false).checkboxradio( "refresh" );
+    }
+    if(task.offdays.indexOf("SATURDAY") >= 0) {
+        $('#cbEditSaturday').attr('checked', true).checkboxradio( "refresh" );
+    }
+    else {
+        $('#cbEditSaturday').attr('checked', false).checkboxradio( "refresh" );
+    }
+    if(task.offdays.indexOf("SUNDAY") >= 0) {
+        $('#cbEditSunday').attr('checked', true).checkboxradio( "refresh" );
+    }
+    else {
+        $('#cbEditSunday').attr('checked', false).checkboxradio( "refresh" );
     }
     
     dialog.find('#editTitle').val( task.title );
@@ -187,7 +230,7 @@ $(document).on('pagebeforeshow', '#editTask', function() {
 
 //Submits an edited task
 $(document).on('click', '#editTaskSubmit', function() {
-    if( $("#editTaskForm").validationEngine('validate') == false ) {
+    if( $("#editTaskForm").validationEngine('validate') === false ) {
         return;
     }
     
@@ -198,15 +241,39 @@ $(document).on('click', '#editTaskSubmit', function() {
     var category = page.find('#editCategory').val();
     var isNegative = page.find('#editIsNegative').val();
     
-    if(isNegative == 'true') {
+    if(isNegative === 'true') {
         isNegative = 1;
     }
     else {
         isNegative = 0;
     }
     
+    var offdays = new Array();
+    if($('#cbEditMonday').is(':checked')) {
+        offdays.push("MONDAY");
+    }
+    if($('#cbEditTuesday').is(':checked')) {
+        offdays.push("TUESDAY");
+    }
+    if($('#cbEditWednesday').is(':checked')) {
+        offdays.push("WEDNESDAY");
+    }
+    if($('#cbEditThursday').is(':checked')) {
+        offdays.push("THURSDAY");
+    }
+    if($('#cbEditFriday').is(':checked')) {
+        offdays.push("FRIDAY");
+    }
+    if($('#cbEditSaturday').is(':checked')) {
+        offdays.push("SATURDAY");
+    }
+    if($('#cbEditSunday').is(':checked')) {
+        offdays.push("SUNDAY");
+    }
+    var offdayStr = offdays.join(',');
+    
     //edit the task, refresh the tasks after that
-    $.editTask(taskId, title, text, category, isNegative);
+    $.editTask(taskId, title, text, category, isNegative, offdayStr);
     $.refreshCategories();
     
     page.dialog('close');
@@ -260,13 +327,13 @@ $.extend({
     getActivationClass: function(task) {
         var isActivated = $.isActivated(task, $.getCurrentDate());
         var type = 'positiveTask';
-        if(task.isNegative == '1' && !isActivated) {
+        if(task.isNegative === '1' && !isActivated) {
             type = 'negativeTask';
         }
-        else if(task.isNegative == '1' && isActivated) {
+        else if(task.isNegative === '1' && isActivated) {
             type = 'negativeTaskDone';
         }
-        else if(task.isNegative == '0' && isActivated) {
+        else if(task.isNegative === '0' && isActivated) {
             type = 'positiveTaskDone';
         }
         
@@ -275,7 +342,7 @@ $.extend({
     
     //converts a streak from int to a string like "Streak+5"
     streakToString: function(streak) {
-        if(streak == 0) {
+        if(streak === 0) {
             return "";
         }
         
@@ -291,7 +358,7 @@ $.extend({
         $.each(htmlTasks, function(index, htmlTask) {
             var id = "#" + htmlTask.id;
             var task = $(id).data("task");
-            if(task.isNegative == 0) {
+            if(task.isNegative === 0) {
                 scorePositive = scorePositive + $.getRelativeScore(task, date);
             }
             else {
@@ -317,7 +384,7 @@ $.fn.updateTasks = function() {
         
         //Streak
         var streakStr = "";
-        if(task.isNegative == 0) {
+        if(task.isNegative === 0) {
             streakStr = $.streakToString( $.getStreak(task, $.getCurrentDate()));
         }
         else {
@@ -343,7 +410,7 @@ $.fn.appendTask = function(task) {
     //calculate the streak
     var streak = "";
     var icon = "";
-    if(task.isNegative == 0) {
+    if(task.isNegative === 0) {
         streak = $.streakToString( $.getStreak(task, $.getCurrentDate()));
         icon = "plus";
     }
@@ -388,7 +455,7 @@ $.fn.showTasks = function(tasks) {
     $.each(tasks, function(i, item)
     {
         var currentCat = item.category;
-        if( $.inArray(currentCat, givenCategories) == -1 )
+        if( $.inArray(currentCat, givenCategories) === -1 )
         {
             givenCategories.push(currentCat);
         }
@@ -408,10 +475,10 @@ $.fn.showTasks = function(tasks) {
     
     //sort the tasks (positive up, negative down)
     tasks.sort( function(a,b) {
-        if(a.isNegative == 0 && b.isNegative != 0) {
+        if(a.isNegative === 0 && b.isNegative !== 0) {
             return -1;
         }
-        else if (a.isNegative != 0 && b.isNegative == 0){
+        else if (a.isNegative !== 0 && b.isNegative === 0){
             return +1;
         }
         

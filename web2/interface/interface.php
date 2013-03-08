@@ -20,7 +20,7 @@ $whitelist[] = 'createTask';
 $whitelist[] = 'touchUser';
 $whitelist[] = 'toggleTask';
 $whitelist[] = 'date';
-
+$whitelist[] = 'offdays';
 
 //set path and name of log file
 foreach($_POST as $name => $value)
@@ -68,7 +68,8 @@ else if($request == 'updateTask')
     $newText = $_POST['text'];
     $isNegative = $_POST['isnegative'];
     $category = $_POST['category'];
-    $storage->updateTask($user, $taskId, $newTitle, $newText, $category, $isNegative);
+    $offdays = $_POST['offdays'];
+    $storage->updateTask($user, $taskId, $newTitle, $newText, $category, $isNegative, $offdays);
 }
 else if($request == 'createTask')
 {
@@ -76,7 +77,8 @@ else if($request == 'createTask')
     $newText = $_POST['text'];
     $category = $_POST['category'];
     $isNegative = $_POST['isnegative'];
-    $storage->createTask($user, $newTitle, $newText, $category, $isNegative);
+    $offdays = $_POST['offdays'];
+    $storage->createTask($user, $newTitle, $newText, $category, $isNegative, $offdays);
 }
 else if($request == 'touchUser')
 {
