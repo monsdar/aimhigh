@@ -175,7 +175,7 @@ $(document).on('pagebeforeshow', '#editTask', function() {
     var dialog = $(this);
     
     var isNegative = "true";
-    if(task.isNegative === 0) {
+    if(task.isNegative === "0") {
         isNegative = "false";
     }
     
