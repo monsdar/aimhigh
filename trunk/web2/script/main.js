@@ -137,13 +137,13 @@ $(document).on('pagebeforeshow', '#createTask', function() {
     console.log("Opened CreateTask dialog");
     var page = $(this);
     
-    $('#cbCreateMonday').attr('checked', false).checkboxradio( "refresh" );
-    $('#cbCreateTuesday').attr('checked', false).checkboxradio( "refresh" );
-    $('#cbCreateWednesday').attr('checked', false).checkboxradio( "refresh" );
-    $('#cbCreateThursday').attr('checked', false).checkboxradio( "refresh" );
-    $('#cbCreateFriday').attr('checked', false).checkboxradio( "refresh" );
-    $('#cbCreateSaturday').attr('checked', false).checkboxradio( "refresh" );
-    $('#cbCreateSunday').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateMon').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateTue').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateWed').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateThu').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateFri').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateSat').attr('checked', false).checkboxradio( "refresh" );
+    $('#cbCreateSun').attr('checked', false).checkboxradio( "refresh" );
     
     page.find('#createTitle').val('');
     page.find('#createText').val('');
@@ -171,25 +171,25 @@ $(document).on('click', '#newTaskSubmit', function() {
     }
     
     var offdays = new Array();
-    if($('#cbCreateMonday').is(':checked')) {
+    if($('#cbCreateMon').is(':checked')) {
         offdays.push("MONDAY");
     }
-    if($('#cbCreateTuesday').is(':checked')) {
+    if($('#cbCreateTue').is(':checked')) {
         offdays.push("TUESDAY");
     }
-    if($('#cbCreateWednesday').is(':checked')) {
+    if($('#cbCreateWed').is(':checked')) {
         offdays.push("WEDNESDAY");
     }
-    if($('#cbCreateThursday').is(':checked')) {
+    if($('#cbCreateThu').is(':checked')) {
         offdays.push("THURSDAY");
     }
-    if($('#cbCreateFriday').is(':checked')) {
+    if($('#cbCreateFri').is(':checked')) {
         offdays.push("FRIDAY");
     }
-    if($('#cbCreateSaturday').is(':checked')) {
+    if($('#cbCreateSat').is(':checked')) {
         offdays.push("SATURDAY");
     }
-    if($('#cbCreateSunday').is(':checked')) {
+    if($('#cbCreateSun').is(':checked')) {
         offdays.push("SUNDAY");
     }
     var offdayStr = offdays.join(',');
@@ -213,46 +213,46 @@ $(document).on('pagebeforeshow', '#editTask', function() {
     }
     
     if(task.offdays.indexOf("MONDAY") >= 0) {
-        $('#cbEditMonday').attr('checked', true).checkboxradio( "refresh" );
+        $('#cbEditMon').attr('checked', true).checkboxradio( "refresh" );
     }
     else {
-        $('#cbEditMonday').attr('checked', false).checkboxradio( "refresh" );
+        $('#cbEditMon').attr('checked', false).checkboxradio( "refresh" );
     }
     if(task.offdays.indexOf("TUESDAY") >= 0) {
-        $('#cbEditTuesday').attr('checked', true).checkboxradio( "refresh" );
+        $('#cbEditTue').attr('checked', true).checkboxradio( "refresh" );
     }
     else {
-        $('#cbEditTuesday').attr('checked', false).checkboxradio( "refresh" );
+        $('#cbEditTue').attr('checked', false).checkboxradio( "refresh" );
     }
     if(task.offdays.indexOf("WEDNESDAY") >= 0) {
-        $('#cbEditWednesday').attr('checked', true).checkboxradio( "refresh" );
+        $('#cbEditWed').attr('checked', true).checkboxradio( "refresh" );
     }
     else {
-        $('#cbEditWednesday').attr('checked', false).checkboxradio( "refresh" );
+        $('#cbEditWed').attr('checked', false).checkboxradio( "refresh" );
     }
     if(task.offdays.indexOf("THURSDAY") >= 0) {
-        $('#cbEditThursday').attr('checked', true).checkboxradio( "refresh" );
+        $('#cbEditThu').attr('checked', true).checkboxradio( "refresh" );
     }
     else {
-        $('#cbEditThursday').attr('checked', false).checkboxradio( "refresh" );
+        $('#cbEditThu').attr('checked', false).checkboxradio( "refresh" );
     }
     if(task.offdays.indexOf("FRIDAY") >= 0) {
-        $('#cbEditFriday').attr('checked', true).checkboxradio( "refresh" );
+        $('#cbEditFri').attr('checked', true).checkboxradio( "refresh" );
     }
     else {
-        $('#cbEditFriday').attr('checked', false).checkboxradio( "refresh" );
+        $('#cbEditFri').attr('checked', false).checkboxradio( "refresh" );
     }
     if(task.offdays.indexOf("SATURDAY") >= 0) {
-        $('#cbEditSaturday').attr('checked', true).checkboxradio( "refresh" );
+        $('#cbEditSat').attr('checked', true).checkboxradio( "refresh" );
     }
     else {
-        $('#cbEditSaturday').attr('checked', false).checkboxradio( "refresh" );
+        $('#cbEditSat').attr('checked', false).checkboxradio( "refresh" );
     }
     if(task.offdays.indexOf("SUNDAY") >= 0) {
-        $('#cbEditSunday').attr('checked', true).checkboxradio( "refresh" );
+        $('#cbEditSun').attr('checked', true).checkboxradio( "refresh" );
     }
     else {
-        $('#cbEditSunday').attr('checked', false).checkboxradio( "refresh" );
+        $('#cbEditSun').attr('checked', false).checkboxradio( "refresh" );
     }
     
     dialog.find('#editTitle').val( task.title );
@@ -282,25 +282,25 @@ $(document).on('click', '#editTaskSubmit', function() {
     }
     
     var offdays = new Array();
-    if($('#cbEditMonday').is(':checked')) {
+    if($('#cbEditMon').is(':checked')) {
         offdays.push("MONDAY");
     }
-    if($('#cbEditTuesday').is(':checked')) {
+    if($('#cbEditTue').is(':checked')) {
         offdays.push("TUESDAY");
     }
-    if($('#cbEditWednesday').is(':checked')) {
+    if($('#cbEditWed').is(':checked')) {
         offdays.push("WEDNESDAY");
     }
-    if($('#cbEditThursday').is(':checked')) {
+    if($('#cbEditThu').is(':checked')) {
         offdays.push("THURSDAY");
     }
-    if($('#cbEditFriday').is(':checked')) {
+    if($('#cbEditFri').is(':checked')) {
         offdays.push("FRIDAY");
     }
-    if($('#cbEditSaturday').is(':checked')) {
+    if($('#cbEditSat').is(':checked')) {
         offdays.push("SATURDAY");
     }
-    if($('#cbEditSunday').is(':checked')) {
+    if($('#cbEditSun').is(':checked')) {
         offdays.push("SUNDAY");
     }
     var offdayStr = offdays.join(',');
