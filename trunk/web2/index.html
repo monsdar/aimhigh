@@ -38,28 +38,32 @@
 <div data-role="page" id="mainPage">
     <div data-role="header" data-tap-toggle="false">
         <h1>AimHigh</h1>
-        <a href="#createTask" class="ui-btn-right" data-rel="dialog" data-transition="pop" data-icon="plus">New Task</a>
+        <a href="#popupMenu" class="ui-btn-right" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="bars">Menu</a>
     </div>
     <div data-role="content">
-        <div id="scoreSign">
-            <h1 class="text-center">Daily Score: <span id="score"></span></h1>
+        <div class="align-center text-center">
+            <h1 >Daily Score: <span id="score"></span></h1>
         </div>
-        <div id="navBar" data-role="controlgroup" data-type="horizontal">
-            <a href="#popupStats" id="statsButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-iconpos="top" data-icon="grid" data-inline="true">Statistics</a>
-            <a href="#popupTasks" id="tasksButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-iconpos="top" data-icon="star" data-inline="true">Tasks</a>
-            <a href="#popupAbout" id="aboutButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-iconpos="top" data-icon="search" data-inline="true">About</a>
-        </div>
-        <div class="ui-grid-solo">
-            <div id="mainTextContainer" class="ui-block-a">
-                <p id="mainText">AimHigh helps to build habits by giving you a daily score. 
-                    Feel free to <a href="" class="bookmark" target="_blank">bookmark this page</a> and enter your progress daily.
-                </p>
-            </div>
+        <div class="align-center text-center">
+            <p>AimHigh helps to build habits by giving you a daily score. 
+                Feel free to <a href="" class="bookmark" target="_blank">bookmark this page</a> and enter your progress daily.
+            </p>
         </div>
         
         <div id="categories"></div>
         
         <!-- Popups -->
+        <div data-role="popup" id="popupMenu" class="ui-content" data-overlay-theme="a">
+            <div data-role="content">
+                <div data-role="controlgroup">
+                    <a href="#createTask" id="createTaskButton" data-role="button" data-rel="dialog" data-transition="pop" data-icon="plus">New Task</a>
+                    <a href="#popupStats" id="statsButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="grid">Statistics</a>
+                    <a href="#popupTasks" id="tasksButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="star">Tasks Browser</a>
+                    <a href="#popupAbout" id="aboutButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="search">About</a>
+                </div>
+                <a href="#" data-role="button" data-rel="back" data-theme="a">Go Back</a>
+            </div>
+        </div>
         <div data-role="popup" id="popupStats" class="ui-content" data-overlay-theme="a">
             <div data-role="header" data-tap-toggle="false">
                 <h1>Statistics</h1>

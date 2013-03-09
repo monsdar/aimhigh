@@ -7,21 +7,6 @@
     max-width: 600px !important;
 }
 
-#scoreSign {
-    width: 70%;
-    min-width: 400px;
-    float: left;
-}
-#navBar {
-    width: 25%;
-    min-width: 300px;
-    float: left;
-}
-#mainTextContainer {
-    width: 100%;
-    float: left;
-}
-
 .border {
     border-style:solid;
     border-width:5px;
@@ -93,13 +78,6 @@
 	}
 }
 
-.linkPointer {
-    cursor: pointer;
-}
-.underlined {
-    text-decoration:underline !important;
-}
-
 .date {
   width: 160px !important;
 }
@@ -120,8 +98,4 @@
 .negativeTaskDone {
   background-color: #F2BC9B;
   border-left: 10px solid #ED813E;
-}
-
-#mainText {
-  margin: 20px;
 }
