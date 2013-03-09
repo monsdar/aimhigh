@@ -417,7 +417,7 @@ $.fn.updateTasks = function() {
         
         //Streak
         var streakStr = "";
-        if(task.isNegative === 0) {
+        if(task.isNegative === "0") {
             streakStr = $.streakToString( $.getStreak(task, $.getCurrentDate()));
         }
         else {
@@ -517,10 +517,10 @@ $.fn.showTasks = function(tasks) {
     
     //sort the tasks (positive up, negative down)
     tasks.sort( function(a,b) {
-        if(a.isNegative === 0 && b.isNegative !== 0) {
+        if(a.isNegative === "0" && b.isNegative !== "0") {
             return -1;
         }
-        else if (a.isNegative !== 0 && b.isNegative === 0){
+        else if (a.isNegative !== "0" && b.isNegative === "0"){
             return +1;
         }
         

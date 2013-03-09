@@ -60,6 +60,7 @@ $.extend({
     
     //Returns how long the task has been activated
     getStreak: function(task, date) {
+        console.log("getStreak called");
         var streak = 0;
         var todayBonus = 0;
         
@@ -71,10 +72,10 @@ $.extend({
         //now we get backwards in time until we cannot find an activation
         while(true) {
             date = $.subtractDays(date, 1);
-            if($.isActivated(task, date)) {
+            if($.isActivated(task, date) && $.isEnabled(task, date)) {
                 streak = streak + 1;
             }
-            else {
+            else if( !($.isActivated(task, date)) && $.isEnabled(task, date)) {
                 break;
             }
         }
@@ -83,23 +84,27 @@ $.extend({
     },
     
     //Returns how long the task has NOT been activated
-    //as a string "Streak+5"
+    //Return Type: int
     getNegativeStreak: function(task, date) {
         var streak = 0;
         
         //let's go back in time to search when the task has been lastly activated
-        //if there are no activations just check if today is activated
         var containsActivations = true;
         if(task.activations.length === 0) {
             containsActivations = false;
         }
         while(containsActivations) {
-            if($.isActivated(task, date)) {
+            if($.isActivated(task, date) && $.isEnabled(task, date)) {
                 break;
+            }
+            else if($.isActivated(task, date) && !($.isEnabled(task, date)) ) {
+                containsActivations = containsActivations - 1;
+            }
+            else if( !($.isActivated(task, date)) && ($.isEnabled(task, date))) {
+                streak = streak + 1;
             }
 
             date = $.subtractDays(date, 1);
-            streak = streak + 1;
         }
         
         return streak;
