@@ -328,6 +328,21 @@ $.extend({
     getTaskId: function(task) {
         return task.attr('id').split('-')[1];
     },
+            
+    getCategories: function() {
+        var categories = new Array();
+        
+        var htmlTasks = $('#categories').find('.task');
+        $.each(htmlTasks, function(index, htmlTask) {
+            var id = "#" + htmlTask.id;
+            var task = $(id).data("task");
+            if( categories.indexOf(task.category) === -1  ) {
+                categories.push(task.category);
+            }
+        });
+        
+        return categories;
+    },
     
     //queries the interface for tasks and fills them into the categories-div
     refreshCategories: function() {
