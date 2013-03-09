@@ -391,7 +391,7 @@ $.extend({
         $.each(htmlTasks, function(index, htmlTask) {
             var id = "#" + htmlTask.id;
             var task = $(id).data("task");
-            if(task.isNegative === 0) {
+            if(task.isNegative === '0') {
                 scorePositive = scorePositive + $.getRelativeScore(task, date);
             }
             else {
@@ -425,10 +425,13 @@ $.fn.updateTasks = function() {
         }
         $(id).find('.streak').text( streakStr );
         
+        //Offdays
+        $(id).toggleClass('ui-disabled', !($.isEnabled(task, $.getCurrentDate())) );
+        
         //Activation
         var taskLink = $(id).find('a');
         taskLink.removeClass();
-        taskLink.addClass( "ui-link-inherit" );
+        taskLink.addClass( 'ui-link-inherit' );
         taskLink.addClass( $.getActivationClass(task) );
 
         var catId = "#" + task.category + "List";
@@ -443,7 +446,7 @@ $.fn.appendTask = function(task) {
     //calculate the streak
     var streak = "";
     var icon = "";
-    if(task.isNegative === 0) {
+    if(task.isNegative === '0') {
         streak = $.streakToString( $.getStreak(task, $.getCurrentDate()));
         icon = "plus";
     }
@@ -454,9 +457,15 @@ $.fn.appendTask = function(task) {
 
     //get activation class
     var type = $.getActivationClass(task);
+    
+    //get if the task is disabled for today
+    var disableUi = "";
+    if(! $.isEnabled(task, $.getCurrentDate())) {
+        disableUi = 'ui-disabled';
+    }
 
     var newTask = "";
-    newTask +=  "<li data-icon='" + icon + "' class='task' id='task-" + task.index + "'>";
+    newTask +=  "<li data-icon='" + icon + "' class='task " + disableUi + "' id='task-" + task.index + "'>";
     newTask +=      "<a href='#' class='" + type + "'>";
     newTask +=          "<div class='ui-grid-a'>";
     newTask +=              "<div class='ui-block-a'><h3 class='taskTitle'>" + task.title + "</h3></div>";

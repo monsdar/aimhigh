@@ -16,12 +16,12 @@ $.extend({
     removeActivation: function(task, date) {
         var id = -1;
         $.each(task.activations, function(index, act) {
-            if(act.date == date) {
+            if(act.date === date) {
                 id = index;
             }
         });
         
-        if(id != -1) {
+        if(id !== -1) {
             task.activations.splice(id, 1);   
         }
     },
@@ -30,12 +30,32 @@ $.extend({
     isActivated: function(task, date) {
         var result = false;
         $.each(task.activations, function(index, act) {
-            if(act.date == date) {
+            if(act.date === date) {
                 result = true;
                 return false; //break
             }
         });
         return result;
+    },
+      
+    //checks if the given task is disabled for today
+    isEnabled: function(task, date) {
+        var weekdays = new Array(7);
+        weekdays[0]="SUNDAY";
+        weekdays[1]="MONDAY";
+        weekdays[2]="TUESDAY";
+        weekdays[3]="WEDNESDAY";
+        weekdays[4]="THURSDAY";
+        weekdays[5]="FRIDAY";
+        weekdays[6]="SATURDAY";
+
+        var realDate = new Date( Date.parse(date) );
+        var weekday = weekdays[realDate.getDay()];
+        
+        if(task.offdays.indexOf(weekday) >= 0) {
+            return false;
+        }
+        return true;
     },
     
     //Returns how long the task has been activated
@@ -70,7 +90,7 @@ $.extend({
         //let's go back in time to search when the task has been lastly activated
         //if there are no activations just check if today is activated
         var containsActivations = true;
-        if(task.activations.length == 0) {
+        if(task.activations.length === 0) {
             containsActivations = false;
         }
         while(containsActivations) {
@@ -105,12 +125,12 @@ $.extend({
     },
     
     getRelativeScore: function(task, date) {
-        if($.isActivated(task, date) == false) {
+        if($.isActivated(task, date) === false) {
             return 0;
         }
         
         var dynamicScore = 1;
-        if(task.isNegative == 0) {
+        if(task.isNegative === '0') {
             dynamicScore = $.getDaysSinceLastAct(task, date, 10);
         }
         else {
@@ -141,7 +161,7 @@ $.extend({
         $.each(dailyActivations, function(key, value) {
             var dayScore = 0;
             $.each(tasks, function(i, task) {
-                if(task.isNegative == 0) {
+                if(task.isNegative === '0') {
                     dayScore = dayScore + $.getRelativeScore(task, key);
                 }
                 else {
