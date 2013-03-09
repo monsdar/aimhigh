@@ -118,19 +118,22 @@ $.extend({
         var days = 1;
         date = $.subtractDays(date, 1);
         while(maxDays >= 0) {
-            if($.isActivated(task, date)) {
+            if($.isActivated(task, date) && $.isEnabled(task, date)) {
                 return days;
             }
-            days = days + 1;
+            else if( !($.isActivated(task, date)) && $.isEnabled(task, date) ) {
+                days = days + 1;
+                maxDays = maxDays - 1;
+            }
+            
             date = $.subtractDays(date, 1);
-            maxDays = maxDays - 1;
         }
         
         return maxDays;
     },
     
     getRelativeScore: function(task, date) {
-        if($.isActivated(task, date) === false) {
+        if( !($.isActivated(task, date)) ) {
             return 0;
         }
         
