@@ -132,12 +132,12 @@
         <form id="newTaskForm">
             <p>Let's create a new Task!</p>
             <label for="title" class="ui-hidden-accessible">Title:</label>
-            <input type="text" id="createTitle" class="validate[required,maxSize[30]]" placeholder="Title" />
             <label for="text" class="ui-hidden-accessible">Text:</label>
-            <input type="text" id="createText" class="validate[maxSize[160]]" placeholder="Text"  />
             <label for="category" class="ui-hidden-accessible">Category:</label>
-            <input type="text" id="createCategory" class="validate[required,maxSize[20]]" placeholder="Category"  />
             <label for="isNegative" class="ui-hidden-accessible">Negative Task?</label>
+            <input type="text" id="createTitle" class="validate[required,maxSize[30]]" placeholder="Title" />
+            <input type="text" id="createText" class="validate[maxSize[160]]" placeholder="Text"  />
+            <input type="text" id="createCategory" class="validate[required,maxSize[20]]" placeholder="Category"  />
             <p>Negative Task?</p>
             <select id="createIsNegative" data-role="slider" data-mini="true">
                 <option value="positive" selected>No</option>
@@ -145,20 +145,20 @@
             </select>
             <fieldset data-role="controlgroup" data-type="horizontal">
                 <legend>Off days:</legend>
-                <input type="checkbox" name="cbCreateMonday" id="cbCreateMonday" data-mini="true">
-                <label for="cbCreateMonday">Mon</label>
-                <input type="checkbox" name="cbCreateTuesday" id="cbCreateTuesday" data-mini="true">
-                <label for="cbCreateTuesday">Tue</label>
-                <input type="checkbox" name="cbCreateWednesday" id="cbCreateWednesday" data-mini="true">
-                <label for="cbCreateWednesday">Wed</label>
-                <input type="checkbox" name="cbCreateThursday" id="cbCreateThursday" data-mini="true">
-                <label for="cbCreateThursday">Thu</label>
-                <input type="checkbox" name="cbCreateFriday" id="cbCreateFriday" data-mini="true">
-                <label for="cbCreateFriday">Fri</label>
-                <input type="checkbox" name="cbCreateSaturday" id="cbCreateSaturday" data-mini="true">
-                <label for="cbCreateSaturday">Sat</label>
-                <input type="checkbox" name="cbCreateSunday" id="cbCreateSunday" data-mini="true">
-                <label for="cbCreateSunday">Sun</label>
+                <label for="cbCreateMon">Mon</label>
+                <label for="cbCreateTue">Tue</label>
+                <label for="cbCreateWed">Wed</label>
+                <label for="cbCreateThu">Thu</label>
+                <label for="cbCreateFri">Fri</label>
+                <label for="cbCreateSat">Sat</label>
+                <label for="cbCreateSun">Sun</label>
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateMon" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateTue" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateWed" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateThu" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateFri" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateSat" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateSun" data-mini="true">
             </fieldset>
         </form>
         <hr>
@@ -176,12 +176,12 @@
         <form id="editTaskForm">
             <p>Change the Task!</p>
             <label for="title" class="ui-hidden-accessible">Title:</label>
-            <input type="text" id="editTitle" class="validate[required,maxSize[30]]" placeholder="Title"  />
             <label for="text" class="ui-hidden-accessible">Text:</label>
-            <input type="text" id="editText" class="validate[maxSize[160]]" placeholder="Text"  />
             <label for="category" class="ui-hidden-accessible">Category:</label>
-            <input type="text" id="editCategory" class="validate[required,maxSize[20]]" placeholder="Category"  />
             <label for="isNegative" class="ui-hidden-accessible">Negative Task?</label>
+            <input type="text" id="editTitle" class="validate[required,maxSize[30]]" placeholder="Title"  />
+            <input type="text" id="editText" class="validate[maxSize[160]]" placeholder="Text"  />
+            <input type="text" id="editCategory" class="validate[required,maxSize[20]]" placeholder="Category"  />
             <p>Negative Task?</p>
             <select id="editIsNegative" data-role="slider" data-mini="true">
                 <option value="false" selected>No</option>
@@ -189,20 +189,20 @@
             </select>
             <fieldset data-role="controlgroup" data-type="horizontal">
                 <legend>Off days:</legend>
-                <input type="checkbox" name="cbEditMonday" id="cbEditMonday" data-mini="true">
-                <label for="cbEditMonday">Mon</label>
-                <input type="checkbox" name="cbEditTuesday" id="cbEditTuesday" data-mini="true">
-                <label for="cbEditTuesday">Tue</label>
-                <input type="checkbox" name="cbEditWednesday" id="cbEditWednesday" data-mini="true">
-                <label for="cbEditWednesday">Wed</label>
-                <input type="checkbox" name="cbEditThursday" id="cbEditThursday" data-mini="true">
-                <label for="cbEditThursday">Thu</label>
-                <input type="checkbox" name="cbEditFriday" id="cbEditFriday" data-mini="true">
-                <label for="cbEditFriday">Fri</label>
-                <input type="checkbox" name="cbEditSaturday" id="cbEditSaturday" data-mini="true">
-                <label for="cbEditSaturday">Sat</label>
-                <input type="checkbox" name="cbEditSunday" id="cbEditSunday" data-mini="true">
-                <label for="cbEditSunday">Sun</label>
+                <label for="cbEditMon">Mon</label>
+                <label for="cbEditTue">Tue</label>
+                <label for="cbEditWed">Wed</label>
+                <label for="cbEditThu">Thu</label>
+                <label for="cbEditFri">Fri</label>
+                <label for="cbEditSat">Sat</label>
+                <label for="cbEditSun">Sun</label>
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditMon" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditTue" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditWed" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditThu" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditFri" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditSat" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditSun" data-mini="true">
             </fieldset>
         </form>
         <hr>
