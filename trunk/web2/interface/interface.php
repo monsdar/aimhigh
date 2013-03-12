@@ -1,7 +1,6 @@
 <?php
 
-require_once("MysqlConnector.php");
-require_once("MysqlTaskStorage.php");
+require_once("RedbeanTaskStorage.php");
 require_once("Logging.php");
 
 //check if there are any non-wanted POST-variables
@@ -37,15 +36,8 @@ foreach($_POST as $name => $value)
     }
 }
 
-//the connector holds the mysql-connection
-$mysql = new MysqlConnector();
-$storage = new MysqlTaskStorage($mysql);
-
-//escape any incoming MySQL-code at first...
-foreach($_POST as $name => $value)
-{
-    $_POST[$name] = $mysql->handle()->real_escape_string($value);
-}
+//create a storage
+$storage = new RedbeanTaskStorage();
 
 //check the POST for incoming requests
 $user = $_POST['userkey'];
@@ -60,6 +52,7 @@ else if($request == 'removeTask')
 {
     $taskId = $_POST['taskid'];
     $storage->deleteTask($user, $taskId);
+    echo("Deleted task #" . $taskId . " from user " . $user . "<br/>");
 }
 else if($request == 'updateTask')
 {

@@ -60,7 +60,6 @@ $.extend({
     
     //Returns how long the task has been activated
     getStreak: function(task, date) {
-        console.log("getStreak called");
         var streak = 0;
         var todayBonus = 0;
         
