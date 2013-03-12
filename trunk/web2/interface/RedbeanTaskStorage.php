@@ -23,10 +23,13 @@ class RedbeanTaskStorage implements ITaskStorage
             echo("Not connected to DB<br/>");
         }
         
+        //Prohibit Database changes from RedBean
+        // -> the DB has to be set up beforehand
+        R::freeze(true);
+        
         //This defines that if a task is removed, all its activations will also
         //be removed. The same for a user and his tasks
-        R::dependencies(array('task'=>array('user')));
-        R::dependencies(array('activation'=>array('task')));
+        R::dependencies(array('task'=>array('user'),'activation'=>array('task')));
     }
     
     public function createTask($user, $newTitle, $newText, $category, $isNegative, $offdays)
