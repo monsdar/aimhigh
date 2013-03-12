@@ -2,7 +2,7 @@
 
 - Create a new DB for AimHigh
 - Use database/createDatabase.sql to create the necessary DB layout
-- Enter the MySQL-details in web2/interface/MysqlConnector.php
+- Enter the MySQL-details in web2/interface/RedbeanStorage.php (Line 17) 
 - Enter your Google Analytics Key in web2/script/googleanalytics.js (Line 3)
 - Upload anything from web2 onto your Webserver
 
