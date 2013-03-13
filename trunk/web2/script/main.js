@@ -17,7 +17,13 @@ $(document).delegate("#mainPage", "pageinit", function() {
     
     //call the user, it will be created if not already existing
     var callback = function(isNewUser) {
-        $.initializeTasks(isNewUser);
+        //setup the Datepicker
+        var dateStr = $.getDateString(new Date());
+        console.log("Build the following date: " + dateStr);
+        $("#selectedDate").val( dateStr );
+
+        //update the categories/tasks
+        $.refreshCategories();  
     };
     $.touchUser(callback);
 });
@@ -326,17 +332,7 @@ $(document).on('click', '#deleteTaskSubmit', function() {
 ///////////////////////////////////////
 //  Extensions
 ///////////////////////////////////////
-$.extend({
-    initializeTasks: function(isNewUser) {
-        //setup the Datepicker
-        var dateStr = $.getDateString(new Date());
-        console.log("Build the following date: " + dateStr);
-        $("#selectedDate").val( dateStr );
-
-        //update the categories/tasks
-        $.refreshCategories();  
-    },
-    
+$.extend({    
     //returns the taskId of a given task
     getTaskId: function(task) {
         return task.attr('id').split('-')[1];
