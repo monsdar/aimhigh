@@ -32,6 +32,12 @@ class RedbeanTaskStorage implements ITaskStorage
         R::dependencies(array('task'=>array('user'),'activation'=>array('task')));
     }
     
+    public function __destruct()
+    {
+        //disconnect from the DB
+        R::close();
+    }
+    
     public function createTask($user, $newTitle, $newText, $category, $isNegative, $offdays)
     {
         //search for the user

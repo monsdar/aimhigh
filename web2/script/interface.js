@@ -2,11 +2,6 @@
 //This file has dependencies to
 //  util.js
 
-//The following option sets jQuery to do sync requests (wait until an answer is received)
-//We're using async callbacks, but the page is loading "cleaner", so I'll let this in here for first...
-$.ajaxSetup({async:false});
-
-
 $.extend({
     
     //Returns the URL to the PHP interface
@@ -16,19 +11,19 @@ $.extend({
     
     //Touches the user, gets the userkey via getUserKey
     //After the data is received and the user is new, it will call the callbacks
-    //  callback();
+    //  callback(isNewUser);
     touchUser: function(callbacks) {
         //call the user, it will be created if not already existing
-        var isNewUser = false;
         var postVars = {userkey: $.getUserkey(), request: 'touchUser'};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Touched the user, received the following response: " + data);
             var answer = $.parseJSON(data);
-            if(answer === true) {
-                isNewUser = true;
-            }
+            
+            //call the callbacks
+            $.each( callbacks, function(i, callback) {
+                callback(answer);
+            });
         });
-        return isNewUser;
     },
     
     //Queries and returns the tasks of the given user
@@ -50,36 +45,64 @@ $.extend({
     },
     
     //Toggles a given task
-    toggleTask: function(taskId, selectedDate) {
+    //After the data is received it will call the given callback via
+    //  callback();
+    toggleTask: function(taskId, selectedDate, callbacks) {
         var postVars = {userkey: $.getUserkey(), request: 'toggleTask', taskid: taskId, date: selectedDate};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Toggled task #" + taskId + ", received the following response: " + data);
+            
+            //call the callbacks
+            $.each( callbacks, function(i, callback) {
+                callback();
+            });
         });
     },
 
     //deletes a task by its taskId
-    deleteTask: function(taskId) {
+    //After the data is received it will call the given callback via
+    //  callback();
+    deleteTask: function(taskId, callbacks) {
         var postVars = {userkey: $.getUserkey(), request: 'removeTask', taskid: taskId};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Removed task #" + taskId + ", received the following response: " + data);
+            
+            //call the callbacks
+            $.each( callbacks, function(i, callback) {
+                callback();
+            });
         });
     },
     
     //edits a given task
-    editTask: function(taskId, title, text, category, isNegative, offdays) {
+    //After the data is received it will call the given callback via
+    //  callback();
+    editTask: function(taskId, title, text, category, isNegative, offdays, callbacks) {
         //send the interface that the task should be created
         var postVars = {userkey: $.getUserkey(), request: 'updateTask', taskid: taskId, title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Edited task " + taskId + ", received the following response: " + data);
+            
+            //call the callbacks
+            $.each( callbacks, function(i, callback) {
+                callback();
+            });
         });
     },
     
     //creates a task
-    createTask: function(title, text, category, isNegative, offdays) {
+    //After the data is received it will call the given callback via
+    //  callback();
+    createTask: function(title, text, category, isNegative, offdays, callbacks) {
         //send the interface that the task should be created
         var postVars = {userkey: $.getUserkey(), request: 'createTask', title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Created new task, received the following response: " + data);
+            
+            //call the callbacks
+            $.each( callbacks, function(i, callback) {
+                callback();
+            });
         });
     }    
 });
