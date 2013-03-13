@@ -19,9 +19,7 @@ $(document).delegate("#mainPage", "pageinit", function() {
     var callback = function(isNewUser) {
         $.initializeTasks(isNewUser);
     };
-    var callbacks = new Array();
-    callbacks.push(callback);
-    $.touchUser(callbacks);
+    $.touchUser(callback);
 });
 
 ///////////////////////////////////////
@@ -110,9 +108,7 @@ $(document).on('tap', '.task', function() {
         $('#categories').updateTasks();
         $.updateScore();
     };
-    var callbacks = new Array();
-    callbacks.push(callback);
-    $.toggleTask(taskId, selectedDate, callbacks);
+    $.toggleTask(taskId, selectedDate, callback);
     
 });
 
@@ -199,9 +195,7 @@ $(document).on('click', '#newTaskSubmit', function() {
     var callback = function() {
         $.refreshCategories();
     };
-    var callbacks = new Array();
-    callbacks.push(callback);
-    $.createTask(title, text, category, isNegative, offdayStr, callbacks);
+    $.createTask(title, text, category, isNegative, offdayStr, callback);
     
     page.dialog('close');
 });
@@ -314,9 +308,7 @@ $(document).on('click', '#editTaskSubmit', function() {
     var callback = function() {
         $.refreshCategories();
     };
-    var callbacks = new Array();
-    callbacks.push(callback);
-    $.editTask(taskId, title, text, category, isNegative, offdayStr, callbacks);
+    $.editTask(taskId, title, text, category, isNegative, offdayStr, callback);
     
     page.dialog('close');
 });
@@ -328,9 +320,7 @@ $(document).on('click', '#deleteTaskSubmit', function() {
     var callback = function() {
         $.refreshCategories();
     };
-    var callbacks = new Array();
-    callbacks.push(callback);
-    $.deleteTask(taskId, callbacks);
+    $.deleteTask(taskId, callback);
 });
 
 ///////////////////////////////////////
@@ -372,9 +362,7 @@ $.extend({
         var callback = function (tasks) {
             $('#categories').showTasks(tasks);
         };
-        var callbacks = new Array();
-        callbacks.push(callback);
-        $.queryTasks(callbacks);  
+        $.queryTasks(callback);  
     },
     
     openEditDialog: function(taskHtml) {
