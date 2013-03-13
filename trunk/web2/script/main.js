@@ -16,15 +16,12 @@ $(document).delegate("#mainPage", "pageinit", function() {
     $("#editTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
     
     //call the user, it will be created if not already existing
-    $.touchUser();
-    
-    //setup the Datepicker
-    var dateStr = $.getDateString(new Date());
-    console.log("Build the following date: " + dateStr);
-    $("#selectedDate").val( dateStr );
-    
-    //update the categories/tasks
-    $.refreshCategories();
+    var callback = function(isNewUser) {
+        $.initializeTasks(isNewUser);
+    };
+    var callbacks = new Array();
+    callbacks.push(callback);
+    $.touchUser(callbacks);
 });
 
 ///////////////////////////////////////
@@ -104,15 +101,19 @@ $(document).on('tap', '.task', function() {
     });
 
     //de/activate the task in the DB
+    
     var taskId = task.attr('id').split('-')[1];
     var selectedDate = $.getCurrentDate();
-    $.toggleTask(taskId, selectedDate);
     
-    //update the classes
-    $('#categories').updateTasks();
+    var callback = function() {
+        //update the classes and score
+        $('#categories').updateTasks();
+        $.updateScore();
+    };
+    var callbacks = new Array();
+    callbacks.push(callback);
+    $.toggleTask(taskId, selectedDate, callbacks);
     
-    //update the score
-    $.updateScore();
 });
 
 //This checks if the Date has changed and shows the appropriate tasks/activations
@@ -195,8 +196,12 @@ $(document).on('click', '#newTaskSubmit', function() {
     var offdayStr = offdays.join(',');
     
     //create the task, refresh the tasks after that
-    $.createTask(title, text, category, isNegative, offdayStr);
-    $.refreshCategories();
+    var callback = function() {
+        $.refreshCategories();
+    };
+    var callbacks = new Array();
+    callbacks.push(callback);
+    $.createTask(title, text, category, isNegative, offdayStr, callbacks);
     
     page.dialog('close');
 });
@@ -306,8 +311,12 @@ $(document).on('click', '#editTaskSubmit', function() {
     var offdayStr = offdays.join(',');
     
     //edit the task, refresh the tasks after that
-    $.editTask(taskId, title, text, category, isNegative, offdayStr);
-    $.refreshCategories();
+    var callback = function() {
+        $.refreshCategories();
+    };
+    var callbacks = new Array();
+    callbacks.push(callback);
+    $.editTask(taskId, title, text, category, isNegative, offdayStr, callbacks);
     
     page.dialog('close');
 });
@@ -316,14 +325,28 @@ $(document).on('click', '#deleteTaskSubmit', function() {
     var taskId = window.selectedTask.index;
     
     //delete the task, refresh the tasks after that
-    $.deleteTask(taskId);
-    $.refreshCategories();
+    var callback = function() {
+        $.refreshCategories();
+    };
+    var callbacks = new Array();
+    callbacks.push(callback);
+    $.deleteTask(taskId, callbacks);
 });
 
 ///////////////////////////////////////
 //  Extensions
 ///////////////////////////////////////
 $.extend({
+    initializeTasks: function(isNewUser) {
+        //setup the Datepicker
+        var dateStr = $.getDateString(new Date());
+        console.log("Build the following date: " + dateStr);
+        $("#selectedDate").val( dateStr );
+
+        //update the categories/tasks
+        $.refreshCategories();  
+    },
+    
     //returns the taskId of a given task
     getTaskId: function(task) {
         return task.attr('id').split('-')[1];
