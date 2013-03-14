@@ -77,6 +77,7 @@ $.extend({
             else if( !($.isActivated(task, date)) && $.isEnabled(task, date)) {
                 break;
             }
+            //just ignore all the other cases, these are when the task is not enabled...
         }
         
         return (streak + todayBonus);
@@ -85,27 +86,32 @@ $.extend({
     //Returns how long the task has NOT been activated
     //Return Type: int
     getNegativeStreak: function(task, date) {
-        var streak = 0;
+        var givenDate = new Date(date);
+        var pastDates = new Array();
+                
+        //first get the dates which are in the past
+        $.each(task.activations, function(index, activation) {
+            var actDate = new Date(activation.date);
+            if( actDate < givenDate) {
+                //check if the task is activated on that day
+                if( $.isEnabled(task, activation.date) ) {
+                    pastDates.push(actDate);
+                }
+            }
+        });
         
-        //let's go back in time to search when the task has been lastly activated
-        var containsActivations = true;
-        if(task.activations.length === 0) {
-            containsActivations = false;
-        }
-        while(containsActivations) {
-            if($.isActivated(task, date) && $.isEnabled(task, date)) {
-                break;
-            }
-            else if($.isActivated(task, date) && !($.isEnabled(task, date)) ) {
-                containsActivations = containsActivations - 1;
-            }
-            else if( !($.isActivated(task, date)) && ($.isEnabled(task, date))) {
-                streak = streak + 1;
-            }
-
-            date = $.subtractDays(date, 1);
+        //if there aren't any past dates, return a streak of 0
+        if(pastDates.length === 0) {
+            return 0;
         }
         
+        //sort the array (sorts from new to old)
+        pastDates.sort();
+        
+        //get the first element (the nearest date)
+        var difference = givenDate - pastDates[0];
+        var day = 24*60*60*1000; //the length of a day
+        var streak = Math.floor(difference / day);
         return streak;
     },
     getDaysSinceLastAct: function(task, date, maxDays) {
