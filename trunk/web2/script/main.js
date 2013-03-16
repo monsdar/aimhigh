@@ -457,7 +457,7 @@ $.fn.updateTasks = function() {
         taskLink.addClass( 'ui-link-inherit' );
         taskLink.addClass( $.getActivationClass(task) );
 
-        var catId = "#" + task.category + "List";
+        var catId = "#" + md5(task.category) + "List";
         $(catId).listview('refresh');        
     });
     
@@ -497,7 +497,7 @@ $.fn.appendTask = function(task) {
     newTask +=          "<p class='taskText'>" + task.text + "</p>";
     newTask +=      "</a>";
     newTask +=  "</li>";
-    $('#' + task.category + 'List').append(newTask);
+    $('#' + md5(task.category) + 'List').append(newTask);
 
     //append the task as data to the current HTML-element
     $('#task-' + task.index).data("task", task);
@@ -528,12 +528,12 @@ $.fn.showTasks = function(tasks) {
     
     //add the category-divs
     $.each(givenCategories, function(i, cat) {
-        var catId = cat + "Container";
+        var catId = md5(cat) + "Container";
         
         var newCat = "";
         newCat += "<div class='dynamicContainer category' id='" + catId + "'>";
         newCat +=   "<h3 class='catName' >" + cat + "</h3>";
-        newCat +=   "<ul data-role='listview' data-inset='true' class='catList' id='" + cat + "List'></ul>";
+        newCat +=   "<ul data-role='listview' data-inset='true' class='catList' id='" + md5(cat) + "List'></ul>";
         newCat += "</div>";
         categories.append(newCat);
     });
@@ -553,7 +553,7 @@ $.fn.showTasks = function(tasks) {
     
     //add the tasks to the categories
     $.each(tasks, function(i, task) {
-        var catId = "#" + task.category + "Container";
+        var catId = "#" + md5(task.category) + "Container";
         $(catId).appendTask(task);
     });
     
