@@ -35,6 +35,19 @@
 </head>
 <body>
       
+    <!-- This is to include the Facebook Javascript SDK (needed for the Like-Button -->
+    <div id="fb-root"></div>
+    <script>
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+        (document, 'script', 'facebook-jssdk'));
+    </script>
+    
 <div data-role="page" id="mainPage">
     <div data-role="header" data-tap-toggle="false">
         <h1>AimHigh</h1>
@@ -132,6 +145,9 @@
                     <input class="align-center" type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" name="submit" alt="PayPal - The safer, easier way to pay online!">
                     <img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
                 </form>
+                <hr>
+                    <p>Help spreading the word about AimHigh:</p>
+                    <div class="fb-like" data-href="http://www.facebook.com/AimhighTracker" data-send="false" data-layout="box_count" data-width="450" data-show-faces="true"></div>
                 <hr>
                     I'm also writing about AimHigh and other projects on <a href="http://www.nilsbrinkmann.com/" target="_blank">my blog</a>.
                     Drop by if you want to read something about what I'm doing.
