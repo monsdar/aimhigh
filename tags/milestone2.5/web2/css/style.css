@@ -1,0 +1,101 @@
+
+#popupStats {
+    max-width: 600px !important;
+}
+
+#popupAbout {
+    max-width: 600px !important;
+}
+
+.border {
+    border-style:solid;
+    border-width:5px;
+}
+
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+
+.align-right {
+  position:absolute;
+  right: 10px;
+}
+.align-center {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media all and (min-width: 850px) {
+    .dynamicContainer {
+        width: 400px;
+        float: left;
+        margin-right: 10px;
+        padding-bottom: 20px;
+    }
+    .catList {
+        width: 380px;
+    }
+    #graph {
+        width: 400px;
+        height: 200px;
+        max-width: 470px;
+        margin: 10% auto 15px auto;
+    }
+}
+@media all and (max-width: 849px) {
+    .dynamicContainer {
+        width: 100%;
+        float: left;
+        padding-bottom: 20px;
+    }
+    
+    #graph {
+        width: 100%;
+        height: 200px;
+        max-width: 470px;
+        margin: 10% auto 15px auto;
+    }
+}
+/* This is needed to let the responsive tables not switch to flat mode */
+@media ( min-width: 100px ) {
+	/* Show the table header rows and set all cells to display: table-cell */
+	#activationRanking td,
+	#activationRanking th,
+	#activationRanking tbody th,
+	#activationRanking tbody td,
+	#activationRanking thead td,
+	#activationRanking thead th {
+		display: table-cell;
+		margin: 0;
+	}
+	/* Hide the labels in each cell */
+	#activationRanking td .ui-table-cell-label,
+	#activationRanking th .ui-table-cell-label {
+		display: none;
+	}
+}
+
+.date {
+  width: 160px !important;
+}
+
+.positiveTask {
+  border-left: 10px solid #75A365;
+}
+
+.negativeTask {
+  border-left: 10px solid #ED813E;
+}
+
+.positiveTaskDone {
+  background-color: #9ED989;
+  border-left: 10px solid #75A365;
+}
+
+.negativeTaskDone {
+  background-color: #F2BC9B;
+  border-left: 10px solid #ED813E;
+}

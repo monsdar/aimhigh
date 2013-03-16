@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=utf-8 />
+    
+    <!-- Before anything else happens, we'll init the user (this changes the URL if needed) -->
+    <script src="script/md5.js"></script>
+    <script src="script/usermanagement.js"></script>
+    
+    <!-- jQuery and jQuery Mobile includes -->
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.css" />
+    <script src="http://code.jquery.com/jquery-1.8.2.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.js"></script>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+    
+    <!-- Validation -->
+    <script src="script/validation/jquery.validationEngine-en.js" type="text/javascript" charset="utf-8"></script>
+    <script src="script/validation/jquery.validationEngine.js" type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/validationEngine.jquery.css" type="text/css"/>
+    
+    <!-- Highcharts -->
+    <script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+    
+    <!-- Custom content -->
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <script src="script/util.js"></script>
+    <script src="script/interface.js"></script>
+    <script src="script/stats.js"></script>
+    <script src="script/main.js"></script>
+    
+    <!-- Google Analytics -->
+    <script src="script/googleanalytics.js"></script>
+    
+    <title>AimHigh - Build new habits, reach your goals!</title>
+</head>
+<body>
+      
+    <!-- This is to include the Facebook Javascript SDK (needed for the Like-Button -->
+    <div id="fb-root"></div>
+    <script>
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/de_DE/all.js#xfbml=1";
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+        (document, 'script', 'facebook-jssdk'));
+    </script>
+    
+<div data-role="page" id="mainPage">
+    <div data-role="header" data-tap-toggle="false">
+        <h1>AimHigh</h1>
+        <a href="#popupMenu" class="ui-btn-right" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="bars">Menu</a>
+    </div>
+    <div data-role="content">
+        <div class="align-center text-center">
+            <h1 >Daily Score: <span id="score"></span>
+                <a href="#popupInfoScore" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="info" data-iconpos="notext" data-inline="true">Info about Score</a>
+            </h1>            
+        </div>
+        <div class="align-center text-center">
+            <p>AimHigh helps to build habits by giving you a daily score. 
+                Feel free to <a href="" class="bookmark" target="_blank">bookmark this page</a> and enter your progress daily.
+            </p>
+        </div>
+        
+        <div id="categories"></div>
+        
+        <!-- Popups -->
+        <div data-role="popup" id="popupInfoScore" class="ui-content" data-overlay-theme="a">
+            <div data-role="content">
+                <h2>The higher the Score, the better your day was!</h2>
+                <ul data-role='listview' data-inset='true'>
+                    <li data-icon='plus'>
+                        <a href='#' class='positiveTaskDone' style="font-weight: normal">
+                            <h3>Positive tasks</h3>
+                            <ul>
+                                <li>Increase your Score</li>
+                                <li>Become more valuable over time</li>
+                            </ul>
+                        </a>
+                    </li>
+                    <li data-icon='minus'>
+                        <a href='#' class='negativeTaskDone' style="font-weight: normal">
+                            <h3>Negative tasks</h3>
+                            <ul>
+                                <li>Decrease your Score</li>
+                                <li>Streaks will damage your Score</li>
+                            </ul>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-role="popup" id="popupMenu" class="ui-content" data-overlay-theme="a">
+            <div data-role="content">
+                <div data-role="controlgroup">
+                    <a href="#createTask" id="createTaskButton" data-role="button" data-rel="dialog" data-transition="pop" data-icon="plus">New Task</a>
+                    <a href="#popupStats" id="statsButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="grid">Statistics</a>
+                    <a href="#popupTasks" id="tasksButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="star">Tasks Browser</a>
+                    <a href="#popupAbout" id="aboutButton" data-role="button" data-rel="popup" data-position-to="window" data-transition="pop" data-icon="search">About</a>
+                </div>
+                <a href="#" data-role="button" data-rel="back" data-theme="a">Go Back</a>
+            </div>
+        </div>
+        <div data-role="popup" id="popupStats" class="ui-content" data-overlay-theme="a">
+            <div data-role="header" data-tap-toggle="false">
+                <h1>Statistics</h1>
+            </div>
+            <div data-role="content">
+                <div class="align-center" id="graph" ></div>
+                <div class="align-center" id="actRankingContainer">
+                    <table data-role="table" id="activationRanking" data-mode="reflow" class="table-stroke">
+                        <thead>
+                          <tr>
+                            <th data-priority="1">Rank</th>
+                            <th data-priority="persist">Task</th>
+                            <th data-priority="2">Activations</th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <a href="#" data-role="button" data-rel="back" data-theme="a">Go Back</a>
+            </div>
+        </div>
+           
+        <div data-role="popup" id="popupAbout" class="ui-content" data-overlay-theme="a">
+            <div data-role="header" data-tap-toggle="false">
+                <h1>About</h1>
+            </div>
+            <div data-role="content">
+                <p>You are using <b>AimHigh Milestone 2.5 (work in progress)</b></p>
+                <hr>
+                <p>I started AimHigh as a personal education project to learn more about creating dynamic webpages.
+                    With more and more time spent on the project, it grew up to a solid web application.<br/><br/>
+                    The whole code is open source, so you can see how everything works or contribute by visiting the <a href="http://code.google.com/p/aimhigh/" target="_blank">Google Code</a> project.
+                    If you have a question, feedback or feature requests feel free to contact me.
+                    There's a <a href="https://groups.google.com/forum/?fromgroups#!forum/aimhigh-discuss" target="_blank">AimHigh Group</a> on Google Groups. <br/><br/>
+                    AimHigh is ad-free, if you want to support the project financially or just buy me a beer, feel free to donate:</p>
+                <form target="_blank" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="3PW8XUPVSVXTY">
+                    <input class="align-center" type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/de_DE/i/scr/pixel.gif" width="1" height="1">
+                </form>
+                <hr>
+                    <p>Help spreading the word about AimHigh:</p>
+                    <div class="fb-like" data-href="http://www.facebook.com/AimhighTracker" data-send="false" data-layout="box_count" data-width="450" data-show-faces="true"></div>
+                <hr>
+                    I'm also writing about AimHigh and other projects on <a href="http://www.nilsbrinkmann.com/" target="_blank">my blog</a>.
+                    Drop by if you want to read something about what I'm doing.
+                <hr>
+
+                <a href="#" data-role="button" data-rel="back" data-theme="a">Go Back</a>
+            </div>
+        </div>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <h4 class="text-center">Build new habits, reach your goals!</h4>
+            </div>
+            <div class="ui-block-b">
+                <label for="selectedDate" class="ui-hidden-accessible">Date:</label>
+                <input type="date" class="date align-right" id="selectedDate"/>
+            </div>
+        </div>
+    </div>
+</div> 
+    
+<div data-role="page" id="createTask">
+    <div data-role="header" data-position="fixed">
+        <h1>New Task</h1>
+    </div>
+    <div data-role="content">
+        <form id="newTaskForm">
+            <p>Let's create a new Task!</p>
+            <label for="title" class="ui-hidden-accessible">Title:</label>
+            <label for="text" class="ui-hidden-accessible">Text:</label>
+            <label for="category" class="ui-hidden-accessible">Category:</label>
+            <label for="isNegative" class="ui-hidden-accessible">Negative Task?</label>
+            <input type="text" id="createTitle" class="validate[required,maxSize[30]]" placeholder="Title" />
+            <input type="text" id="createText" class="validate[maxSize[160]]" placeholder="Text"  />
+            <input type="text" id="createCategory" class="validate[required,maxSize[20]]" placeholder="Category"  />
+            <p>Negative Task?</p>
+            <select id="createIsNegative" data-role="slider" data-mini="true">
+                <option value="positive" selected>No</option>
+                <option value="negative">Yes</option>
+            </select>
+            <fieldset data-role="controlgroup" data-type="horizontal">
+                <legend>Off days:</legend>
+                <label for="cbCreateMon">Mon</label>
+                <label for="cbCreateTue">Tue</label>
+                <label for="cbCreateWed">Wed</label>
+                <label for="cbCreateThu">Thu</label>
+                <label for="cbCreateFri">Fri</label>
+                <label for="cbCreateSat">Sat</label>
+                <label for="cbCreateSun">Sun</label>
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateMon" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateTue" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateWed" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateThu" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateFri" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateSat" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbCreateOffday" id="cbCreateSun" data-mini="true">
+            </fieldset>
+        </form>
+        <hr>
+        <a href="#" data-role="button" id="newTaskSubmit" data-theme="b">Submit</a>
+        <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
+    </div>
+</div>
+
+    
+<div data-role="page" id="editTask">
+    <div data-role="header" data-position="fixed">
+        <h1>Edit Task</h1>
+    </div>
+    <div data-role="content">
+        <form id="editTaskForm">
+            <p>Change the Task!</p>
+            <label for="title" class="ui-hidden-accessible">Title:</label>
+            <label for="text" class="ui-hidden-accessible">Text:</label>
+            <label for="category" class="ui-hidden-accessible">Category:</label>
+            <label for="isNegative" class="ui-hidden-accessible">Negative Task?</label>
+            <input type="text" id="editTitle" class="validate[required,maxSize[30]]" placeholder="Title"  />
+            <input type="text" id="editText" class="validate[maxSize[160]]" placeholder="Text"  />
+            <input type="text" id="editCategory" class="validate[required,maxSize[20]]" placeholder="Category"  />
+            <p>Negative Task?</p>
+            <select id="editIsNegative" data-role="slider" data-mini="true">
+                <option value="false" selected>No</option>
+                <option value="true">Yes</option>
+            </select>
+            <fieldset data-role="controlgroup" data-type="horizontal">
+                <legend>Off days:</legend>
+                <label for="cbEditMon">Mon</label>
+                <label for="cbEditTue">Tue</label>
+                <label for="cbEditWed">Wed</label>
+                <label for="cbEditThu">Thu</label>
+                <label for="cbEditFri">Fri</label>
+                <label for="cbEditSat">Sat</label>
+                <label for="cbEditSun">Sun</label>
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditMon" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditTue" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditWed" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditThu" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditFri" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditSat" data-mini="true">
+                <input type="checkbox" class="validate[maxCheckbox[6]]" name="cbEditOffday" id="cbEditSun" data-mini="true">
+            </fieldset>
+        </form>
+        <hr>
+        <div class="ui-grid-a">
+            <div class="ui-block-a">
+                <a href="#" data-role="button" data-rel="back" id="deleteTaskSubmit" data-theme="b" data-inline="true">Delete</a>
+            </div>
+            <div class="ui-block-b">
+                <div class="align-right">
+                    <a href="#" data-role="button" id="editTaskSubmit" data-theme="b" data-inline="true">Edit</a>
+                </div>
+            </div>
+        </div>
+        <a href="#" data-role="button" data-rel="back" data-theme="a">Cancel</a>
+    </div>
+</div>
+ 
+    
+</body>
+</html>
