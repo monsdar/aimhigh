@@ -5,18 +5,19 @@
 //////////////////////////////////////////////
 
 //This loads user-specific content (tasks, ...) into the page
-$(document).delegate("#mainPage", "pageinit", function() {    
+$(document).delegate("#mainPage", "pageinit", function() {
+    //Init the validation-engine
+    $("#newTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
+    $("#editTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
+    
+    //check if the userkey is empty (shouldn't be the possible, but you never know...)
     if($.getUserkey() === '') {
         console.log("No user given, Aimhigh will not initialize");
         return;
     }
     
-    //Init the validation-engine
-    $("#newTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
-    $("#editTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
-    
     //call the user, it will be created if not already existing
-    var callback = function(isNewUser) {
+    var touchCallback = function(isNewUser) {
         //setup the Datepicker
         var dateStr = $.getDateString(new Date());
         console.log("Build the following date: " + dateStr);
@@ -25,7 +26,7 @@ $(document).delegate("#mainPage", "pageinit", function() {
         //update the categories/tasks
         $.refreshCategories();  
     };
-    $.touchUser(callback);
+    $.touchUser(touchCallback);
 });
 
 ///////////////////////////////////////
