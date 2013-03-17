@@ -14,7 +14,7 @@ $.extend({
     //  callback(isNewUser);
     touchUser: function(callback) {
         //call the user, it will be created if not already existing
-        var postVars = {userkey: $.getUserkey(), request: 'touchUser'};
+        var postVars = {userkey: getUserkey(), request: 'touchUser'};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Touched the user, received the following response: " + data);
             var answer = $.parseJSON(data);
@@ -29,7 +29,7 @@ $.extend({
     //  callback(tasks);
     queryTasks: function(callback) {
         var tasks;
-        var postVars = {userkey: $.getUserkey(), request: 'getTasks'};
+        var postVars = {userkey: getUserkey(), request: 'getTasks'};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             var tasks = $.parseJSON(data);
             console.log("queryTasks() received the following tasks:");
@@ -44,7 +44,7 @@ $.extend({
     //After the data is received it will call the given callback via
     //  callback();
     toggleTask: function(taskId, selectedDate, callback) {
-        var postVars = {userkey: $.getUserkey(), request: 'toggleTask', taskid: taskId, date: selectedDate};
+        var postVars = {userkey: getUserkey(), request: 'toggleTask', taskid: taskId, date: selectedDate};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Toggled task #" + taskId + ", received the following response: " + data);
             
@@ -57,7 +57,7 @@ $.extend({
     //After the data is received it will call the given callback via
     //  callback();
     deleteTask: function(taskId, callback) {
-        var postVars = {userkey: $.getUserkey(), request: 'removeTask', taskid: taskId};
+        var postVars = {userkey: getUserkey(), request: 'removeTask', taskid: taskId};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Removed task #" + taskId + ", received the following response: " + data);
             
@@ -71,7 +71,7 @@ $.extend({
     //  callback();
     editTask: function(taskId, title, text, category, isNegative, offdays, callback) {
         //send the interface that the task should be created
-        var postVars = {userkey: $.getUserkey(), request: 'updateTask', taskid: taskId, title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
+        var postVars = {userkey: getUserkey(), request: 'updateTask', taskid: taskId, title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Edited task " + taskId + ", received the following response: " + data);
             
@@ -85,7 +85,7 @@ $.extend({
     //  callback();
     createTask: function(title, text, category, isNegative, offdays, callback) {
         //send the interface that the task should be created
-        var postVars = {userkey: $.getUserkey(), request: 'createTask', title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
+        var postVars = {userkey: getUserkey(), request: 'createTask', title: title, text: text, category: category, isnegative: isNegative, offdays: offdays};
         $.post($.getInterfaceUrl(), postVars, function(data) {
             console.log("Created new task, received the following response: " + data);
             
