@@ -11,7 +11,7 @@ $(document).delegate("#mainPage", "pageinit", function() {
     $("#editTaskForm").validationEngine('attach', {promptPosition : "topLeft"});
     
     //check if the userkey is empty (shouldn't be the possible, but you never know...)
-    if($.getUserkey() === '') {
+    if(getUserkey() === '') {
         console.log("No user given, Aimhigh will not initialize");
         return;
     }
